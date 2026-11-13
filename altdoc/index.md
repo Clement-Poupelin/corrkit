@@ -1,6 +1,9 @@
 ---
 toc: false
+page-layout: full
 ---
+
+::: {.home}
 
 ::: {.grid}
 
@@ -32,6 +35,8 @@ toc: false
 ## Statut
 
 - ![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
+
+:::
 
 :::
 
