@@ -172,7 +172,7 @@ ggplot(rep_tab, aes(method, est, fill = method)) +
   labs(title = "Sampling distribution over 200 simulated samples",
        subtitle = "True linear correlation r = 0.5, n = 100; right: 5 outliers pulling in the opposite direction",
        x = NULL, y = "Coefficient") +
-  theme_pub(11) + rotate_x(30)
+  theme_pub(11) + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
 Avec cinq valeurs extrêmes placées à contre-sens, le r de Pearson s'effondre (et change parfois de signe), tandis que biweight et percentage bend restent proches de la valeur sans valeurs extrêmes.
