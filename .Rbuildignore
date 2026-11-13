@@ -2,10 +2,11 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-^_pkgdown\.yml$
 ^docs$
-^pkgdown$
 ^\.github$
 ^doc$
 ^Meta$
 ^\.quarto$
+^data-raw$
+^altdoc$
+^_quarto$

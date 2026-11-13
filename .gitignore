@@ -1,9 +1,10 @@
-doc
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
 docs
 inst/doc
+doc
 Meta
 .quarto
-.RData
-.Rhistory
-.Rproj.user
-.Ruserdata
+_quarto
