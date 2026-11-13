@@ -1,18 +1,21 @@
 ---
 title: "Corrélations croisées et partielles"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Corrélations croisées et partielles}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    fig.width: 8
+    fig.height: 5.5
+    dpi: 96
+    out.width: "100%"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 8, fig.height = 5.5, dpi = 96,
-                      out.width = "100%")
-```
-
-```{r setup}
+```{r}
+#| label: setup
 library(corrkit)
 d   <- simulate_cor_data(n = 200)
 lab <- attr(d, "labels")
@@ -29,7 +32,8 @@ cc0 <- cor_cross(d, biomarkers, scores, labels = lab)
 cc0
 ```
 
-```{r, fig.height = 6}
+```{r}
+#| fig-height: 6
 plot_cor_cross(cc0)$plot
 ```
 
@@ -65,7 +69,8 @@ Pour Spearman, x, y **et** z sont d'abord remplacés par leurs rangs (comme dans
 cc_adj <- cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab)
 ```
 
-```{r, fig.height = 6}
+```{r}
+#| fig-height: 6
 res <- plot_cor_cross(cc_adj)
 res$plot
 ```
@@ -76,7 +81,8 @@ Le sous-titre passe de « unadjusted » à « partial, adjusted for Age, Sex »,
 
 `plot_cor_pair()` montre ce que mesure le coefficient. Sans covariable, c'est un nuage de points ; avec covariables, c'est le graphique des résidus (*added-variable plot*), dont la corrélation **est** la corrélation partielle :
 
-```{r, fig.height = 5}
+```{r}
+#| fig-height: 5
 plot_cor_pair(d, "NfL", "cognition", labels = lab, meth = "pearson")
 plot_cor_pair(d, "NfL", "cognition", covariates = "age", labels = lab, meth = "pearson")
 ```
@@ -92,7 +98,8 @@ fit  <- lm(cognition ~ NfL + age + sex, data = d)
 c(residuals = base$p.value, lm_slope = summary(fit)$coefficients["NfL", "Pr(>|t|)"])
 ```
 
-```{r, eval = requireNamespace("ppcor", quietly = TRUE)}
+```{r}
+#| eval: !expr requireNamespace("ppcor", quietly = TRUE)
 pp <- partial_cor_test(d$NfL, d$cognition, Z, meth = "pearson", engine = "ppcor")
 c(ppcor = pp$estimate, residuals = base$estimate)
 ```
@@ -103,7 +110,8 @@ c(ppcor = pp$estimate, residuals = base$estimate)
 
 Le package **correlation** propose aussi des corrélations partielles, mais avec une autre définition de z : chaque paire est ajustée sur **toutes les autres variables** du jeu de données, pas sur des covariables choisies. Makowski et al. (2020) précisent que la partialisation y est une étape séparée qui crée un nouveau jeu de données, si bien que les t et les p peuvent différer d'autres implémentations comme `ppcor`, même si le coefficient est le même. Pour des covariables choisies (âge, sexe…), `corrkit` utilise donc `ppcor::pcor.test()`.
 
-```{r, eval = requireNamespace("correlation", quietly = TRUE) && requireNamespace("ppcor", quietly = TRUE)}
+```{r}
+#| eval: !expr requireNamespace("correlation", quietly = TRUE) && requireNamespace("ppcor", quietly = TRUE)
 sub <- na.omit(d[, c("NfL", "cognition", "age")])
 cr  <- as.data.frame(correlation::correlation(sub, partial = TRUE, p_adjust = "none"))
 cr[cr$Parameter1 == "NfL" & cr$Parameter2 == "cognition", c("r", "p")]
@@ -126,7 +134,8 @@ tbl_cor_long(cc_adj, sort_by = "abs")
 
 `tbl_cor_cross()` et `tbl_cor_long()` acceptent aussi directement la liste renvoyée par `plot_cor_cross()` :
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 res <- plot_cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab)
 res$plot
 tbl_cor_cross(res)
@@ -137,7 +146,9 @@ cat(res$note)        # note complète sur les variables binaires
 
 `meth = "kendall"` fonctionne partout ; les versions partielles demandent `ppcor`. Le test est alors un z (approximation normale) et la légende l'indique.
 
-```{r, eval = requireNamespace("ppcor", quietly = TRUE), fig.height = 6}
+```{r}
+#| eval: !expr requireNamespace("ppcor", quietly = TRUE)
+#| fig-height: 6
 plot_cor_cross(d, biomarkers, scores, covariates = "age", labels = lab, meth = "kendall")$plot
 ```
 

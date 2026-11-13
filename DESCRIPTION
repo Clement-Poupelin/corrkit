@@ -3,7 +3,7 @@ Title: Correlation Analyses with Annotated Heatmaps and Tables
 Version: 0.1.0
 Authors@R:
     person("Clément", "Poupelin", email = "clementjc.poupelin@gmail.com",
-           role = c("aut", "cre"))
+           role = c("aut", "cre"), comment = c(ORCID = "0009-0005-7308-0368"))
 Description: A thin layer over validated correlation engines (stats::cor.test(),
     ppcor::pcor.test(), psych::corr.test(), correlation::correlation()) that adds
     one way of working: an explicit multiple-testing family, a dedicated reading
@@ -13,6 +13,8 @@ Description: A thin layer over validated correlation engines (stats::cor.test(),
     Notation follows Makowski, Ben-Shachar, Patil and Lüdecke (2020)
     <doi:10.21105/joss.02306>.
 License: MIT + file LICENSE
+URL: https://clement-poupelin.github.io/corrkit/, https://github.com/clement-poupelin/corrkit
+BugReports: https://github.com/clement-poupelin/corrkit/issues
 Encoding: UTF-8
 Depends:
     R (>= 4.1.0)
@@ -32,9 +34,11 @@ Suggests:
     knitr,
     ppcor,
     psych,
+    quarto (>= 1.4),
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: quarto
+Config/Needs/website: pkgdown
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

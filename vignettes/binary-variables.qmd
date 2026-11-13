@@ -1,18 +1,21 @@
 ---
 title: "Variables binaires dans une analyse de corrélation"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Variables binaires dans une analyse de corrélation}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    fig.width: 8
+    fig.height: 5
+    dpi: 96
+    out.width: "100%"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 8, fig.height = 5, dpi = 96,
-                      out.width = "100%")
-```
-
-```{r setup}
+```{r}
+#| label: setup
 library(corrkit)
 library(ggplot2)
 d   <- simulate_cor_data(n = 200)
@@ -124,7 +127,8 @@ plot_cor_pair(d, "BIN_IL6", "fatigue", labels = lab)
 
 Les cases qui font intervenir une variable binaire sont regroupées dans un bloc à part, et la légende donne la formule du coefficient réellement calculé :
 
-```{r, fig.height = 6}
+```{r}
+#| fig-height: 6
 res <- plot_cor_cross(d, c("CRP", "IL6", "BIN_CRP", "BIN_IL6"), c("depression", "fatigue"), labels = lab)
 res$plot
 ```

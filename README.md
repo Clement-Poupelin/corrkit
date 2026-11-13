@@ -1,8 +1,14 @@
-# corrkit
+# corrkit <img src="man/figures/logo.png" align="right" height="139" alt="logo corrkit" />
 
-Analyses de corrélation avec des heatmaps et des tableaux qui expliquent ce qu'ils montrent.
+<!-- badges: start -->
+[![pkgdown](https://github.com/clement-poupelin/corrkit/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/clement-poupelin/corrkit/actions/workflows/pkgdown.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/clement-poupelin/corrkit/blob/main/LICENSE.md)
+<!-- badges: end -->
 
-`corrkit` ne recalcule rien : chaque coefficient, chaque p-value et chaque intervalle vient d'une fonction existante et validée (`stats::cor.test()`, `ppcor::pcor.test()`, `psych::corr.test()`, `correlation::correlation()`, `stats::p.adjust()`, `effectsize::rank_biserial()`). Le package ajoute par-dessus :
+**corrkit** réalise des analyses de corrélation avec des heatmaps et des tableaux qui expliquent ce qu'ils montrent.
+
+Le package ne recalcule rien : chaque coefficient, chaque p-value et chaque intervalle vient d'une fonction existante et validée (`stats::cor.test()`, `ppcor::pcor.test()`, `psych::corr.test()`, `correlation::correlation()`, `stats::p.adjust()`, `effectsize::rank_biserial()`). Il ajoute par-dessus :
 
 * **une famille de tests explicite** pour l'ajustement des p-values (`adjust_by`, Benjamini-Hochberg par défaut) ;
 * **un traitement à part des variables binaires** (biomarqueur haut/bas, sexe) : blocs séparés, marque `[0/1]`, note de lecture, tailles d'effet à rapporter ;
@@ -10,57 +16,78 @@ Analyses de corrélation avec des heatmaps et des tableaux qui expliquent ce qu'
 
 ## Installation
 
+Version de développement, depuis GitHub :
+
 ```r
-# depuis le dossier du package
-install.packages(c("dplyr", "ggplot2", "gt", "purrr", "tibble", "tidyr"))
-install.packages(c("ppcor", "psych", "correlation", "effectsize"))   # recommandés
-devtools::document()      # génère man/ à partir des commentaires roxygen
-devtools::install(build_vignettes = TRUE)
+# install.packages("pak")
+pak::pak("clement-poupelin/corrkit")
 ```
 
-## En bref
+Packages recommandés (moteurs et intervalles ; `corrkit` a un repli en R de base sans eux) :
+
+```r
+install.packages(c("ppcor", "psych", "correlation", "effectsize"))
+```
+
+## Données d'exemple
+
+`simulate_cor_data()` génère des biomarqueurs, des scores cliniques et des covariables dont on connaît la structure (effet confondant de l'âge, versions binaires des marqueurs coupées à 50/50 et 20/80).
 
 ```r
 library(corrkit)
 d   <- simulate_cor_data(200)
-lab <- attr(d, "labels")
+lab <- attr(d, "labels")      # libellés des variables
+```
 
-# Toutes les paires
+## Démarrage rapide
+
+**Toutes les paires** d'un ensemble de variables :
+
+```r
 cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"), method = "spearman")
-plot_cor_heatmap(cm, labels = lab)
-tbl_cor_matrix(cm, labels = lab)
-tbl_cor_long(cm, labels = lab)
+plot_cor_heatmap(cm, labels = lab)   # heatmap annotée (ggplot)
+tbl_cor_matrix(cm, labels = lab)     # même résultat en tableau (gt)
+tbl_cor_long(cm, labels = lab)       # une ligne par paire : IC, p brute, p ajustée
+```
 
-# Biomarqueurs x scores, ajustés sur l'âge et le sexe
+**Biomarqueurs × scores**, ajustés sur l'âge et le sexe :
+
+```r
 cc <- cor_cross(d, c("CRP", "IL6", "NfL", "BIN_CRP"), c("depression", "fatigue", "cognition"),
                 covariates = c("age", "sex"), labels = lab)
 plot_cor_cross(cc)$plot
 tbl_cor_cross(cc)
-tbl_cor_long(cc)
+```
 
-# Une paire, et ce que mesure son coefficient
+**Une paire**, et ce que mesure son coefficient :
+
+```r
 plot_cor_pair(d, "NfL", "cognition", covariates = "age", meth = "pearson", labels = lab)
+```
 
-# Variables binaires : ce qu'il faut rapporter
+**Variables binaires** : ce qu'il faut rapporter à la place de la corrélation :
+
+```r
 tbl_cor_binary(cor_binary_effects(d, "BIN_CRP", c("depression", "fatigue")), labels = lab)
 ```
 
-## Fonctions
+## Pour aller plus loin
 
-| Famille | Fonctions |
-|---|---|
-| Calcul | `cor_test_matrix()`, `cor_cross()`, `partial_cor_test()`, `cor_binary_effects()` |
-| Graphiques (`ggplot`) | `plot_cor_heatmap()`, `plot_cor_cross()`, `plot_cor_pair()` |
-| Tableaux (`gt`) | `tbl_cor_matrix()`, `tbl_cor_cross()`, `tbl_cor_long()`, `tbl_cor_binary()` |
-| Notes et outils | `cor_binary_note()`, `cor_var_type()`, `as_cor_numeric()`, `mark_binary()`, `p_to_stars()`, `theme_pub()`, `COR_PAL` |
-| Données | `simulate_cor_data()` |
+* [Prise en main](https://clement-poupelin.github.io/corrkit/articles/corrkit.html) : moteurs, heatmaps, tableaux, tests multiples ;
+* [Corrélations croisées et partielles](https://clement-poupelin.github.io/corrkit/articles/partial-cross.html) : familles d'ajustement, équivalences ppcor / résidus / `lm()` ;
+* [Variables binaires](https://clement-poupelin.github.io/corrkit/articles/binary-variables.html) : atténuation, r rang-bisérial, ce qu'il faut rapporter ;
+* [Référence des fonctions](https://clement-poupelin.github.io/corrkit/reference/index.html).
 
-## Vignettes
+## Citation
 
-* `vignette("corrkit")` : prise en main, moteurs, tests multiples ;
-* `vignette("partial-cross")` : corrélations croisées et partielles, familles d'ajustement, équivalences ppcor / résidus / `lm()` ;
-* `vignette("binary-variables")` : variables binaires, atténuation, r rang-bisérial.
+```r
+citation("corrkit")
+```
 
-## Depuis `03_correlation.R`
+Citez aussi les moteurs utilisés (indiqués dans le sous-titre de chaque graphique et tableau), en particulier :
 
-Toutes les fonctions du fichier d'origine existent, avec des signatures compatibles (nouveaux arguments ajoutés en fin de liste) (`cor_var_type()`, `as_cor_numeric()`, `mark_binary()`, `cor_binary_note()`, `partial_cor_test()`, `partial_rank_cor()`, `cor_test_matrix()`, `plot_cor_heatmap()`, `plot_cor_cross()`, `COR_PAL`). Ajouts : argument `ci` et colonnes `ci_low` / `ci_high`, méthode Kendall, moteur `correlation`, classes `cor_matrix` / `cor_cross` avec `print()`, et `plot_cor_cross()` accepte aussi un objet `cor_cross`. Les helpers externes (`keep_existing()`, `get_label()`, `p_to_stars()`, `theme_pub()`, `rotate_x()`, `%||%`) sont maintenant internes au package.
+Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020). Methods and algorithms for correlation analysis in R. *Journal of Open Source Software* 5(51):2306. [doi:10.21105/joss.02306](https://doi.org/10.21105/joss.02306)
+
+## Licence
+
+MIT © Clément Poupelin ([ORCID 0009-0005-7308-0368](https://orcid.org/0009-0005-7308-0368))

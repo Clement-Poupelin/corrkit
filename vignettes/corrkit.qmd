@@ -1,18 +1,21 @@
 ---
 title: "Prise en main de corrkit"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Prise en main de corrkit}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    fig.width: 8
+    fig.height: 6.5
+    dpi: 96
+    out.width: "100%"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 8, fig.height = 6.5, dpi = 96,
-                      out.width = "100%")
-```
-
-```{r setup}
+```{r}
+#| label: setup
 library(corrkit)
 ```
 
@@ -61,7 +64,8 @@ L'objet contient les matrices `r`, `p` (brutes), `p_adj`, `n`, les bornes d'inte
 
 ### La heatmap
 
-```{r, fig.height = 8}
+```{r}
+#| fig-height: 8
 plot_cor_heatmap(cm, labels = lab)
 ```
 
@@ -127,7 +131,8 @@ all.equal(a$r, b$r)
 
 Pour Pearson et Spearman, `engine = "auto"` choisit `psych::corr.test()`, puis `correlation::correlation()`, puis `stats::cor.test()`. Pour Kendall, `psych` n'est pas utilisé (il teste τ avec la formule t de r). Les autres méthodes du package **correlation** (`"biweight"`, `"percentage"`, `"shepherd"`, `"blomqvist"`, `"hoeffding"`, `"gaussian"`, `"distance"`) passent par `correlation::correlation()` :
 
-```{r, eval = requireNamespace("correlation", quietly = TRUE)}
+```{r}
+#| eval: !expr requireNamespace("correlation", quietly = TRUE)
 cm_rob <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "depression", "fatigue"), method = "biweight")
 plot_cor_heatmap(cm_rob, labels = lab, title = "Robust correlations (biweight midcorrelation)")
 ```

@@ -1,0 +1,8 @@
+bibentry(
+  bibtype = "Manual",
+  title   = "corrkit: Correlation Analyses with Annotated Heatmaps and Tables",
+  author  = person("Clément", "Poupelin", comment = c(ORCID = "0009-0005-7308-0368")),
+  year    = "2026",
+  note    = "R package version 0.1.0",
+  url     = "https://clement-poupelin.github.io/corrkit/"
+)
