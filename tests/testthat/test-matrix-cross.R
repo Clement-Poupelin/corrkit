@@ -2,8 +2,9 @@ d <- simulate_cor_data(150)
 vars <- c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP")
 
 test_that("cor_test_matrix: symmetric, adjusted p >= raw p, engines agree", {
-  cm <- cor_test_matrix(d, vars, engine = "stats")
+  cm <- cor_test_matrix(d, vars, engine = "stats", p_adjust = "BH")
   expect_s3_class(cm, "cor_matrix")
+  expect_equal(cor_test_matrix(d, vars, engine = "stats")$p_adjust, "none")
   expect_equal(cm$r, t(cm$r))
   expect_equal(nrow(cm$long), choose(length(vars), 2))
   expect_true(all(cm$long$p_adj >= cm$long$p - 1e-12))
@@ -24,15 +25,18 @@ test_that("cor_test_matrix with the correlation engine", {
 })
 
 test_that("cor_cross: adjustment within the chosen family", {
-  cc <- cor_cross(d, c("CRP", "IL6", "BIN_CRP"), c("depression", "fatigue"), adjust_by = "y")
+  cc <- cor_cross(d, c("CRP", "IL6", "BIN_CRP"), c("depression", "fatigue"), p_adjust = "BH", adjust_by = "y")
   expect_s3_class(cc, "cor_cross")
   tab <- cc$table
   for (s in unique(tab$Y)) {
     sub <- tab[tab$Y == s, ]
     expect_equal(sub$p_adj, stats::p.adjust(sub$p, "BH"))
   }
-  none <- cor_cross(d, c("CRP", "IL6"), "fatigue", adjust_by = "none")
+  none <- cor_cross(d, c("CRP", "IL6"), "fatigue", p_adjust = "BH", adjust_by = "none")
   expect_equal(none$table$p_adj, none$table$p)
+  raw <- cor_cross(d, c("CRP", "IL6"), "fatigue")          # default: raw p-values
+  expect_equal(raw$table$p_adj, raw$table$p)
+  expect_equal(raw$meta$p_adjust, "none")
 })
 
 test_that("binary effects: r_s = r_rb * sqrt(3pq) without ties", {

@@ -1,0 +1,184 @@
+---
+title: "Analyse complète d'une matrice de corrélation"
+vignette: >
+  %\VignetteIndexEntry{Analyse complète d'une matrice de corrélation}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+fig-width: 8
+fig-height: 8
+---
+
+Cette vignette reprend le début de [Prise en main](corrkit.qmd) et le détaille : d'où viennent les calculs, toutes les sorties d'une matrice de corrélation, leurs options et leur lecture.
+
+## L'idée : ne rien recalculer, tout expliquer
+
+`corrkit` ne contient **aucun nouvel estimateur**. Chaque coefficient, chaque p-value et chaque intervalle vient d'une fonction existante et validée ; le package ajoute par-dessus une manière de travailler et des sorties qui disent ce qu'elles montrent.
+
+| Ce qui est calculé | Fonction utilisée | Repli si le package manque |
+|---|---|---|
+| Une paire, sans ajustement | `stats::cor.test()` | — |
+| Une paire, partielle | `ppcor::pcor.test()` (Kim 2015) | corrélation des résidus de `stats::lm.fit()` |
+| Toutes les paires (matrice) | `psych::corr.test(adjust = "none")` ou `correlation::correlation(p_adjust = "none")` (Makowski et al. 2020) | `stats::cor.test()` paire par paire |
+| Intervalle de confiance | `correlation::cor_to_ci()` | transformation z de Fisher en R de base |
+| Ajustement pour tests multiples (sur demande) | `stats::p.adjust()` | — |
+| Effets des variables binaires | `stats::t.test()`, `stats::wilcox.test()`, `effectsize::rank_biserial()` | IC de r_rb non calculé |
+
+Les fonctions suivent toutes le même schéma : `cor_*()` calcule, `plot_*()` dessine (un `ggplot`), `tbl_*()` met en forme (un tableau `gt`).
+
+## Données et calcul
+
+`simulate_cor_data()` génère des données dont on connaît la structure : une inflammation latente qui pilote CRP, IL-6, BDNF et le score de dépression ; IL-6 qui pilote la fatigue ; l'âge qui pilote à la fois NfL et la cognition ; et deux versions binaires des marqueurs (CRP coupée à la médiane, IL-6 coupée au 80^e^ percentile).
+
+```{r}
+#| label: setup
+library(corrkit)
+d   <- simulate_cor_data(n = 200)
+lab <- attr(d, "labels")
+str(d)
+```
+
+`lab` est un vecteur nommé variable → libellé ; toutes les fonctions l'acceptent via `labels`.
+
+```{r}
+vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition", "BIN_CRP", "BIN_IL6")
+cm <- cor_test_matrix(d, vars, method = "spearman")
+cm
+```
+
+Les arguments principaux de `cor_test_matrix()` :
+
+| Argument | Défaut | Rôle |
+|---|---|---|
+| `method` | `"spearman"` | `"pearson"`, `"kendall"`, ou une méthode robuste du package correlation (voir [Comparer les coefficients](methods-comparison.qmd)) |
+| `p_adjust` | `"none"` | p-values brutes ; `"BH"`, `"holm"`, `"bonferroni"`… pour un ajustement sur les k(k − 1)/2 paires (voir [Corrections pour tests multiples](p-values.qmd)) |
+| `engine` | `"auto"` | `psych::corr.test()`, puis `correlation::correlation()`, puis `stats::cor.test()` |
+| `ci` | `0.95` | niveau des intervalles de confiance (`NULL` = aucun) |
+
+## Les sorties
+
+::: {.panel-tabset}
+
+
+### Heatmap
+
+```{r}
+plot_cor_heatmap(cm, labels = lab)
+```
+
+### Tableau matrice
+
+Le même résultat que la heatmap, avec la même échelle de couleurs.
+
+```{r}
+tbl_cor_matrix(cm, labels = lab)
+```
+
+### Tableau long
+
+Une ligne par paire, avec n, l'intervalle de confiance et la p-value ; lignes significatives en gras.
+
+```{r}
+tbl_cor_long(cm, labels = lab, sort_by = "abs")
+```
+
+### Console
+
+```{r}
+print(cm)
+```
+
+### Données
+
+Le tableau long, pour filtrer, trier ou exporter (`write.csv(cm$long, ...)`).
+
+```{r}
+head(as.data.frame(cm$long), 10)
+```
+
+:::
+
+## Lire une heatmap
+
+* **le sous-titre** donne la méthode, l'effectif (complet par paire : il varie avec les valeurs manquantes) et la fonction qui a fait le calcul ;
+* **chaque case** affiche le coefficient et les étoiles de la p-value ; la couleur suit une échelle unique de −1 (bleu) à +1 (rouge) ;
+* **les variables binaires** sont regroupées dans un bloc à part, car leur coefficient n'est pas sur la même échelle (voir [Variables binaires](binary-variables.qmd)) ;
+* **la légende du bas** rappelle le statut des p-values (brutes, ou ajustées et sur quelle famille), l'ordre des variables, la formule du coefficient et la lecture des cases binaires.
+
+Le sous-titre et les notes des tableaux sont construits par les mêmes fonctions internes que la légende de la heatmap : un graphique et son tableau ne peuvent pas se contredire.
+
+## Options de la heatmap
+
+::: {.panel-tabset}
+
+
+### Ordre d'origine
+
+Par défaut, les variables sont ordonnées par classification hiérarchique (Ward, distance 1 − r) à l'intérieur de chaque bloc, ce qui rapproche les variables qui se ressemblent. `order = "original"` garde l'ordre donné.
+
+```{r}
+plot_cor_heatmap(cm, labels = lab, order = "original")
+```
+
+### Séparateur simple
+
+`separator = "line"` remplace les facettes par deux traits et garde des cases carrées.
+
+```{r}
+plot_cor_heatmap(cm, labels = lab, separator = "line")
+```
+
+### Sans valeurs
+
+`show_values = FALSE` ne garde que les couleurs, pour une vue d'ensemble d'une grande matrice.
+
+```{r}
+plot_cor_heatmap(cm, labels = lab, show_values = FALSE)
+```
+
+### Palette et titre
+
+`palette` (couleurs des corrélations négatives et positives), `title`, `base_size`, `value_size` et `caption_width` règlent l'apparence. Le résultat est un `ggplot` : on peut lui ajouter des couches et des thèmes.
+
+```{r}
+plot_cor_heatmap(cm, labels = lab, palette = c(low = "#1B7837", high = "#762A83"),
+                 title = "Biomarqueurs et scores", base_size = 11)
+```
+
+:::
+
+## Choisir le moteur
+
+Les moteurs donnent les mêmes coefficients ; on peut le vérifier :
+
+```{r}
+a <- cor_test_matrix(d, vars, engine = "stats")
+b <- cor_test_matrix(d, vars, engine = "auto")    # psych si installé
+all.equal(a$r, b$r)
+```
+
+Pour Kendall, `psych` n'est pas utilisé (il teste τ avec la formule t de r) : `engine = "auto"` passe par `correlation::correlation()` ou `stats::cor.test()`.
+
+```{r}
+ck <- cor_test_matrix(d, vars, method = "kendall")
+plot_cor_heatmap(ck, labels = lab, title = "Kendall correlations")
+```
+
+## Récapitulatif des fonctions
+
+| Je veux… | Fonction |
+|---|---|
+| toutes les paires d'un ensemble de variables | `cor_test_matrix()` → `plot_cor_heatmap()`, `tbl_cor_matrix()`, `tbl_cor_long()` |
+| des prédicteurs × des scores, éventuellement ajustés | `cor_cross()` → `plot_cor_cross()`, `tbl_cor_cross()`, `tbl_cor_long()` |
+| voir une paire et ce que mesure son coefficient | `plot_cor_pair()` |
+| un test pour une paire | `partial_cor_test()` |
+| les effets des variables binaires | `cor_binary_effects()` → `tbl_cor_binary()` |
+| une note de lecture des variables binaires (en ou fr) | `cor_binary_note()` |
+
+## Références
+
+* Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020). Methods and algorithms for correlation analysis in R. *Journal of Open Source Software* 5(51):2306. doi:10.21105/joss.02306
+* Kim S (2015). ppcor: an R package for a fast calculation to semi-partial correlation coefficients. *Communications for Statistical Applications and Methods* 22(6):665-674. doi:10.5351/CSAM.2015.22.6.665

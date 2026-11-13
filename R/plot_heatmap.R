@@ -152,7 +152,7 @@ plot_cor_heatmap <- function(cm, labels = NULL, use_adj = TRUE, order = c("hclus
 #'                       covariates = c("age", "sex"), labels = attr(d, "labels"))
 #' res$plot
 plot_cor_cross <- function(data, x_vars, y_vars, covariates = NULL, labels = NULL,
-                           p_adjust = "BH", adjust_by = c("y", "x", "all", "none"),
+                           p_adjust = "none", adjust_by = c("y", "x", "all", "none"),
                            meth = c("spearman", "pearson", "kendall"), engine = c("ppcor", "base"),
                            base_size = 10, title = NULL, value_size = 2.8, show_note = TRUE,
                            bin_mark = " [0/1]", split_binary = TRUE,

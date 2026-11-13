@@ -4,17 +4,19 @@
 
 #' Cross correlations X x Y (e.g. biomarkers x scores), optionally partial
 #'
-#' Every pair (x, y) is tested with [partial_cor_test()]; p-values are then
-#' adjusted with [stats::p.adjust()] within the family chosen by `adjust_by`.
-#' The result feeds [plot_cor_cross()], [tbl_cor_cross()] and [tbl_cor_long()].
+#' Every pair (x, y) is tested with [partial_cor_test()]; if `p_adjust` is not
+#' `"none"`, p-values are then adjusted with [stats::p.adjust()] within the
+#' family chosen by `adjust_by`.
+#' p-values are raw by default (`p_adjust = "none"`). The result feeds
+#' [plot_cor_cross()], [tbl_cor_cross()] and [tbl_cor_long()].
 #'
 #' @param data data frame
 #' @param x_vars predictors (rows of the heatmap, e.g. biomarkers)
 #' @param y_vars outcomes (columns, e.g. scores)
 #' @param covariates covariates of the partial correlation (`NULL` = unadjusted)
 #' @param labels named vector variable -> display label
-#' @param p_adjust method of [stats::p.adjust()]
-#' @param adjust_by family of the adjustment: `"y"` (the predictors of each
+#' @param p_adjust method of [stats::p.adjust()]: `"none"` (default, raw p) or e.g. `"BH"`, `"holm"`
+#' @param adjust_by family of the adjustment (used only if `p_adjust` is not `"none"`): `"y"` (the predictors of each
 #'   score, default, as in univariable forest plots), `"x"` (the scores of each
 #'   predictor), `"all"` (every test), `"none"`
 #' @param meth `"spearman"` (default), `"pearson"` or `"kendall"`
@@ -32,10 +34,11 @@
 #'                 covariates = c("age", "sex"), labels = attr(d, "labels"))
 #' cc
 cor_cross <- function(data, x_vars, y_vars, covariates = NULL, labels = NULL,
-                      p_adjust = "BH", adjust_by = c("y", "x", "all", "none"),
+                      p_adjust = "none", adjust_by = c("y", "x", "all", "none"),
                       meth = c("spearman", "pearson", "kendall"), engine = c("ppcor", "base"),
                       ci = 0.95, bin_mark = " [0/1]") {
   meth <- match.arg(meth); adjust_by <- match.arg(adjust_by); engine <- match.arg(engine)
+  if (identical(p_adjust, "none")) adjust_by <- "none"
   x_vars <- keep_existing(x_vars, names(data), "cor_cross")
   y_vars <- keep_existing(y_vars, names(data), "cor_cross")
   if (!length(x_vars) || !length(y_vars)) stop("cor_cross: no usable x_vars or y_vars.", call. = FALSE)

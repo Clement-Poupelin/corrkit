@@ -21,7 +21,7 @@ test_that("tables are gt tables", {
   expect_s3_class(tbl_cor_long(cm), "gt_tbl")
   expect_s3_class(tbl_cor_cross(cc), "gt_tbl")
   expect_s3_class(tbl_cor_long(cc), "gt_tbl")
-  expect_s3_class(tbl_cor_long(cor_cross(d, "CRP", c("depression", "fatigue"), adjust_by = "x")), "gt_tbl")
+  expect_s3_class(tbl_cor_long(cor_cross(d, "CRP", c("depression", "fatigue"), p_adjust = "BH", adjust_by = "x")), "gt_tbl")
   res <- plot_cor_cross(cc)
   expect_s3_class(tbl_cor_cross(res), "gt_tbl")
   eff <- cor_binary_effects(d, "BIN_CRP", c("depression", "fatigue"))

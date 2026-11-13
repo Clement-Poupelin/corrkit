@@ -8,15 +8,15 @@ knitr:
   opts_chunk:
     collapse: true
     comment: "#>"
-    fig.width: 8
-    fig.height: 5.5
-    dpi: 96
-    out.width: "100%"
+fig-width: 8
+fig-height: 5.5
 ---
 
 ```{r}
 #| label: setup
 library(corrkit)
+has_ppcor <- requireNamespace("ppcor", quietly = TRUE)
+has_cor   <- requireNamespace("correlation", quietly = TRUE)
 d   <- simulate_cor_data(n = 200)
 lab <- attr(d, "labels")
 biomarkers <- c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP", "BIN_IL6")
@@ -37,23 +37,25 @@ cc0
 plot_cor_cross(cc0)$plot
 ```
 
-Les biomarqueurs binaires forment un bloc séparé (facette « Binary [0/1] »), pour la raison détaillée dans `vignette("binary-variables")`.
+Les biomarqueurs binaires forment un bloc séparé (facette « Binary [0/1] »), pour la raison détaillée dans [Variables binaires](binary-variables.qmd).
 
-### Quelle famille pour l'ajustement ?
+### Ajuster ou non les p-values
 
-L'argument `adjust_by` fixe l'ensemble de tests sur lequel `stats::p.adjust()` est appliqué. C'est un choix scientifique, et la légende le nomme :
+Par défaut, les p-values sont **brutes** (`p_adjust = "none"`). Si vous demandez un ajustement (`p_adjust = "BH"`, `"holm"`…), l'argument `adjust_by` fixe la famille de tests sur laquelle `stats::p.adjust()` est appliqué, et la légende la nomme :
 
 | `adjust_by` | Famille | Quand l'utiliser |
 |---|---|---|
-| `"y"` (défaut) | les prédicteurs de chaque score (une colonne) | chaque score est une question à part : « quels biomarqueurs expliquent la dépression ? » ; c'est la famille des forest plots univariés |
+| `"y"` (défaut) | les prédicteurs de chaque score (une colonne) | chaque score est une question à part : « quels biomarqueurs sont liés à la dépression ? » |
 | `"x"` | les scores de chaque prédicteur (une ligne) | chaque biomarqueur est une question à part : « à quoi CRP est-il lié ? » |
 | `"all"` | tous les tests du tableau | une seule question globale, ou un criblage |
-| `"none"` | aucun ajustement | analyses préspécifiées ou purement descriptives |
 
 ```{r}
-sapply(c("y", "x", "all", "none"),
-       function(a) sum(cor_cross(d, biomarkers, scores, adjust_by = a)$table$p_adj < 0.05))
+c(raw = sum(cor_cross(d, biomarkers, scores)$table$p < 0.05),
+  sapply(c(y = "y", x = "x", all = "all"),
+         function(a) sum(cor_cross(d, biomarkers, scores, p_adjust = "BH", adjust_by = a)$table$p_adj < 0.05)))
 ```
+
+Le choix entre p brutes et p ajustées, et celui de la méthode, sont détaillés dans [Corrections pour tests multiples](p-values.qmd).
 
 ## Corrélations partielles
 
@@ -99,7 +101,7 @@ c(residuals = base$p.value, lm_slope = summary(fit)$coefficients["NfL", "Pr(>|t|
 ```
 
 ```{r}
-#| eval: !expr requireNamespace("ppcor", quietly = TRUE)
+#| eval: !expr has_ppcor
 pp <- partial_cor_test(d$NfL, d$cognition, Z, meth = "pearson", engine = "ppcor")
 c(ppcor = pp$estimate, residuals = base$estimate)
 ```
@@ -111,7 +113,7 @@ c(ppcor = pp$estimate, residuals = base$estimate)
 Le package **correlation** propose aussi des corrélations partielles, mais avec une autre définition de z : chaque paire est ajustée sur **toutes les autres variables** du jeu de données, pas sur des covariables choisies. Makowski et al. (2020) précisent que la partialisation y est une étape séparée qui crée un nouveau jeu de données, si bien que les t et les p peuvent différer d'autres implémentations comme `ppcor`, même si le coefficient est le même. Pour des covariables choisies (âge, sexe…), `corrkit` utilise donc `ppcor::pcor.test()`.
 
 ```{r}
-#| eval: !expr requireNamespace("correlation", quietly = TRUE) && requireNamespace("ppcor", quietly = TRUE)
+#| eval: !expr has_cor && has_ppcor
 sub <- na.omit(d[, c("NfL", "cognition", "age")])
 cr  <- as.data.frame(correlation::correlation(sub, partial = TRUE, p_adjust = "none"))
 cr[cr$Parameter1 == "NfL" & cr$Parameter2 == "cognition", c("r", "p")]
@@ -120,16 +122,22 @@ unlist(partial_cor_test(sub$NfL, sub$cognition, sub["age"], meth = "pearson")[c(
 
 ## Les tableaux
 
-Le tableau large reprend la heatmap (même échelle de couleurs, mêmes étoiles) ; les notes répètent la famille de l'ajustement, la formule et la lecture des variables binaires :
+Le tableau large reprend la heatmap (même échelle de couleurs, mêmes étoiles) ; les notes répètent le statut des p-values, la formule et la lecture des variables binaires :
 
 ```{r}
 tbl_cor_cross(cc_adj)
 ```
 
-Le tableau long donne, pour chaque paire, n, le coefficient, son intervalle de confiance (z de Fisher sur n − k), la p brute et la p ajustée. Les lignes sont regroupées par famille d'ajustement, ce qui permet de relire l'ajustement à la main :
+Le tableau long donne, pour chaque paire, n, le coefficient, son intervalle de confiance (z de Fisher sur n − k) et la p-value :
 
 ```{r}
 tbl_cor_long(cc_adj, sort_by = "abs")
+```
+
+Avec un ajustement, une colonne « p (adjusted) » s'ajoute et les lignes sont regroupées par famille, ce qui permet de relire l'ajustement à la main :
+
+```{r}
+tbl_cor_long(cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab, p_adjust = "BH"))
 ```
 
 `tbl_cor_cross()` et `tbl_cor_long()` acceptent aussi directement la liste renvoyée par `plot_cor_cross()` :
@@ -147,7 +155,7 @@ cat(res$note)        # note complète sur les variables binaires
 `meth = "kendall"` fonctionne partout ; les versions partielles demandent `ppcor`. Le test est alors un z (approximation normale) et la légende l'indique.
 
 ```{r}
-#| eval: !expr requireNamespace("ppcor", quietly = TRUE)
+#| eval: !expr has_ppcor
 #| fig-height: 6
 plot_cor_cross(d, biomarkers, scores, covariates = "age", labels = lab, meth = "kendall")$plot
 ```

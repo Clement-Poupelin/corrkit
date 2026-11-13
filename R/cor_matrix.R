@@ -4,8 +4,9 @@
 
 #' Correlation and p-value matrices of all pairs (pairwise complete observations)
 #'
-#' The engine always returns **raw** p-values; corrkit then adjusts them with
-#' [stats::p.adjust()] over the k(k - 1)/2 distinct pairs, as
+#' The engine always returns **raw** p-values. By default they are kept as
+#' they are (`p_adjust = "none"`); with another `p_adjust`, corrkit adjusts
+#' them with [stats::p.adjust()] over the k(k - 1)/2 distinct pairs, as
 #' `psych::corr.test()` does above its diagonal.
 #'
 #' Engines (`engine = "auto"` picks the first available in this order):
@@ -22,7 +23,8 @@
 #' @param data data frame
 #' @param vars variables to correlate
 #' @param method correlation method (see above)
-#' @param p_adjust method of [stats::p.adjust()] (`"BH"` by default, `"none"` for raw p)
+#' @param p_adjust method of [stats::p.adjust()]: `"none"` (default, raw p-values, as in most
+#'   correlation analyses), or e.g. `"BH"`, `"holm"`, `"bonferroni"`
 #' @param engine `"auto"`, `"psych"`, `"correlation"` or `"stats"`
 #' @param ci confidence level of the intervals (`NULL` = none)
 #' @return object of class `cor_matrix`: list(r, p, p_adj, n, ci_low, ci_high,
@@ -34,7 +36,7 @@
 #' cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"), method = "spearman")
 #' cm
 #' head(cm$long)
-cor_test_matrix <- function(data, vars, method = "spearman", p_adjust = "BH",
+cor_test_matrix <- function(data, vars, method = "spearman", p_adjust = "none",
                             engine = c("auto", "psych", "correlation", "stats"), ci = 0.95) {
   engine <- match.arg(engine)
   method <- match.arg(method, c(.core_methods, .extra_methods))
@@ -132,8 +134,9 @@ print.cor_matrix <- function(x, digits = 2, ...) {
   k <- nrow(x$r)
   cat(sprintf("<cor_matrix> %s correlations, %d variables (%d binary), %d pairs\n",
               .meth_name(x$method), k, sum(x$types == "binary"), k * (k - 1) / 2))
-  cat(sprintf("  engine: %s | p adjustment: %s over the %d pairs | N = %s\n",
-              .cor_engine_txt(x$engine), .p_adjust_name(x$p_adjust), k * (k - 1) / 2,
+  cat(sprintf("  engine: %s | %s | N = %s\n", .cor_engine_txt(x$engine),
+              if (identical(x$p_adjust, "none")) "raw p-values (no adjustment)"
+              else sprintf("p adjustment: %s over the %d pairs", .p_adjust_name(x$p_adjust), k * (k - 1) / 2),
               .n_range_txt(x$n[upper.tri(x$n)])))
   lab <- matrix(paste0(sprintf(paste0("%.", digits, "f"), x$r), p_to_stars(x$p_adj, ns = "")), k, k,
                 dimnames = dimnames(x$r))

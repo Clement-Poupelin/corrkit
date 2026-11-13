@@ -9,12 +9,13 @@
 #' * one pair, partial: `ppcor::pcor.test()` (Kim 2015, doi:10.5351/CSAM.2015.22.6.665)
 #' * matrix of all pairs: `psych::corr.test()` or `correlation::correlation()`
 #'   (Makowski et al. 2020, doi:10.21105/joss.02306), always with raw p-values;
-#'   the adjustment is done by corrkit with [stats::p.adjust()] over an explicit family
+#'   an optional adjustment is done by corrkit with [stats::p.adjust()] over an explicit family
 #' * binary effect sizes: [stats::t.test()], [stats::wilcox.test()],
 #'   `effectsize::rank_biserial()` for the confidence interval
 #'
 #' **What corrkit adds**
-#' * an explicit multiple-testing family (`adjust_by`, BH by default);
+#' * raw p-values by default and, on request, an adjustment over an explicit
+#'   family of tests (`p_adjust`, `adjust_by`);
 #' * a dedicated treatment of binary (0/1) variables: separate blocks in the
 #'   plots, a `[0/1]` marker, a reading note ([cor_binary_note()]) and the
 #'   effect sizes to report instead of the correlation ([cor_binary_effects()]);

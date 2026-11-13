@@ -1,0 +1,195 @@
+---
+title: "Corrections pour tests multiples"
+vignette: >
+  %\VignetteIndexEntry{Corrections pour tests multiples}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+fig-width: 8
+fig-height: 5
+---
+
+```{r}
+#| label: setup
+library(corrkit)
+library(ggplot2)
+d   <- simulate_cor_data(n = 200)
+lab <- attr(d, "labels")
+vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition", "BIN_CRP", "BIN_IL6")
+```
+
+Une matrice de 9 variables contient 36 corrélations, donc 36 tests. Plus on fait de tests, plus on a de chances d'en trouver un « significatif » par hasard. Cette vignette explique pourquoi `corrkit` affiche par défaut des p-values **brutes**, ce que font les corrections disponibles, et comment choisir.
+
+## Le problème
+
+Si les m tests sont indépendants et que toutes les hypothèses nulles sont vraies, la probabilité d'obtenir **au moins un** faux positif au seuil α est
+
+$$P(\text{au moins un faux positif}) = 1 - (1 - \alpha)^m.$$
+
+```{r}
+m <- 1:100
+ggplot(data.frame(m = m, p = 1 - (1 - 0.05)^m), aes(m, p)) +
+  geom_line(colour = COR_PAL[["high"]], linewidth = 1) +
+  geom_vline(xintercept = choose(9, 2), linetype = "dashed", colour = "grey50") +
+  annotate("text", x = choose(9, 2) + 2, y = 0.3, hjust = 0, size = 3.5,
+           label = sprintf("9 variables = %d tests : %.0f %%", choose(9, 2), 100 * (1 - 0.95^choose(9, 2)))) +
+  scale_y_continuous(labels = function(v) paste0(100 * v, " %"), limits = c(0, 1)) +
+  labs(title = "Chance of at least one false positive", subtitle = "Independent tests, all null hypotheses true, α = 0.05",
+       x = "Number of tests m", y = NULL) +
+  theme_pub(11)
+```
+
+Avec 36 tests, on a 84 % de chances d'avoir au moins une étoile alors qu'aucune corrélation n'existe.
+
+## Pourquoi des p-values brutes par défaut
+
+Dans la pratique, la plupart des analyses de corrélation publiées rapportent des p-values brutes, et les fonctions de base aussi :
+
+| Fonction | Ajustement par défaut |
+|---|---|
+| `stats::cor.test()`, `ppcor::pcor.test()`, `Hmisc::rcorr()` | aucun (p brute) |
+| `ggcorrplot::cor_pmat()`, `corrplot::cor.mtest()` | aucun : les étoiles ou croix de **ggcorrplot** et **corrplot** portent sur des p **brutes** |
+| `psych::corr.test()` | `adjust = "holm"` ; matrice symétrique : p brutes sous la diagonale, ajustées au-dessus |
+| `correlation::correlation()` | `p_adjust = "holm"` |
+| `ggstatsplot::ggcorrmat()` | `p.adjust.method = "holm"` |
+
+Une matrice de corrélation est souvent **descriptive** : on regarde la structure d'ensemble, pas chaque case comme une découverte. `corrkit` affiche donc par défaut des p-values brutes (`p_adjust = "none"`), et **le dit dans la légende** (« Raw p (no multiple-testing adjustment) »). Dès que les étoiles servent à conclure (« CRP est associé à la fatigue »), un ajustement est préférable, et il suffit d'un argument.
+
+## Deux façons de contrôler l'erreur
+
+* **FWER** (*family-wise error rate*) : la probabilité d'avoir **au moins un** faux positif dans la famille. Strict : adapté aux conclusions confirmatoires, quand un seul faux positif coûte cher.
+* **FDR** (*false discovery rate*) : la **proportion attendue** de faux positifs parmi les résultats déclarés significatifs. Plus permissif : adapté à une exploration où l'on accepte quelques fausses pistes parmi beaucoup de vraies.
+
+## Les méthodes de `stats::p.adjust()`
+
+Avec les m p-values triées $p_{(1)} \le \dots \le p_{(m)}$, les p-values ajustées $\tilde p$ sont (chacune bornée à 1) :
+
+| `p_adjust` | Contrôle | p-value ajustée | Hypothèse sur la dépendance |
+|---|---|---|---|
+| `"bonferroni"` | FWER | $\tilde p_{i} = m\, p_{i}$ | aucune |
+| `"holm"` | FWER | $\tilde p_{(i)} = \max_{j \le i} (m - j + 1)\, p_{(j)}$ | aucune ; toujours au moins aussi puissante que Bonferroni |
+| `"hochberg"` | FWER | $\tilde p_{(i)} = \min_{j \ge i} (m - j + 1)\, p_{(j)}$ | indépendance ou dépendance positive |
+| `"hommel"` | FWER | procédure fermée fondée sur le test de Simes | indépendance ou dépendance positive |
+| `"BH"` (= `"fdr"`) | FDR | $\tilde p_{(i)} = \min_{j \ge i} \frac{m}{j}\, p_{(j)}$ | indépendance ou dépendance positive |
+| `"BY"` | FDR | BH multiplié par $\sum_{k=1}^{m} 1/k$ | aucune |
+
+Sur les données d'exemple, les p ajustées par chaque méthode, en fonction des p brutes :
+
+```{r}
+cm <- cor_test_matrix(d, vars)
+meths <- c("bonferroni", "holm", "hochberg", "BH", "BY")
+pp <- do.call(rbind, lapply(meths, function(m)
+  data.frame(method = m, raw = cm$long$p, adjusted = p.adjust(cm$long$p, m))))
+pp$method <- factor(pp$method, levels = meths)
+ggplot(pp, aes(raw, adjusted, colour = method)) +
+  geom_abline(linetype = "dashed", colour = "grey60") +
+  geom_hline(yintercept = 0.05, colour = "grey40", linewidth = 0.3) +
+  geom_step(linewidth = 0.8) + geom_point(size = 1.2) +
+  scale_x_log10() + scale_y_log10() +
+  scale_colour_manual(values = c(bonferroni = "#B2182B", holm = "#EF8A62", hochberg = "#FDB863",
+                                 BH = "#2166AC", BY = "#67A9CF")) +
+  labs(title = "Adjusted vs raw p-values, 36 pairs", subtitle = "Dashed line: no adjustment; grey line: 0.05",
+       x = "Raw p (log scale)", y = "Adjusted p (log scale)", colour = NULL) +
+  theme_pub(11)
+```
+
+```{r}
+sapply(c(none = "none", setNames(meths, meths)),
+       function(m) sum(cor_test_matrix(d, vars, p_adjust = m)$long$p_adj < 0.05))
+```
+
+## Ce que l'on gagne et ce que l'on perd : simulation
+
+On simule 200 jeux de 10 variables (n = 100), dont 5 paires vraiment corrélées (r = 0,3) et 40 paires indépendantes, et l'on compte, pour chaque méthode, les vrais positifs (paires corrélées détectées) et les faux positifs.
+
+```{r}
+set.seed(2026)
+sim_one <- function(n = 100, rho = 0.3) {
+  X <- matrix(rnorm(n * 10), n, 10, dimnames = list(NULL, paste0("V", 1:10)))
+  for (k in 1:5) X[, 2 * k] <- rho * X[, 2 * k - 1] + sqrt(1 - rho^2) * X[, 2 * k]   # pairs (1,2), (3,4)...
+  L <- cor_test_matrix(as.data.frame(X), colnames(X), method = "pearson", engine = "stats", ci = NULL)$long
+  truth <- paste(L$Var1, L$Var2) %in% paste0("V", 2 * (1:5) - 1, " V", 2 * (1:5))
+  do.call(rbind, lapply(c("none", "holm", "BH"), function(m) {
+    sig <- p.adjust(L$p, m) < 0.05
+    data.frame(method = m, true_pos = sum(sig & truth), false_pos = sum(sig & !truth))
+  }))
+}
+res <- do.call(rbind, replicate(200, sim_one(), simplify = FALSE))
+res$method <- factor(res$method, levels = c("none", "holm", "BH"))
+summ <- aggregate(cbind(true_pos, false_pos) ~ method, data = res, FUN = mean)
+summ$at_least_one_fp <- tapply(res$false_pos > 0, res$method, mean)[as.character(summ$method)]
+summ
+```
+
+```{r}
+long <- rbind(data.frame(method = res$method, what = "True positives (out of 5)", value = res$true_pos),
+              data.frame(method = res$method, what = "False positives (out of 40)", value = res$false_pos))
+ggplot(long, aes(method, value, fill = method)) +
+  geom_boxplot(width = 0.5, show.legend = FALSE, outlier.size = 0.8) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3, fill = "white") +
+  facet_wrap(~ what, scales = "free_y") +
+  scale_fill_manual(values = c(none = "grey80", holm = "#EF8A62", BH = "#67A9CF")) +
+  labs(title = "Detections over 200 simulated data sets",
+       subtitle = "10 variables, n = 100, 5 pairs with r = 0.3, 40 independent pairs; diamond = mean",
+       x = NULL, y = "Number of pairs with p < 0.05") +
+  theme_pub(11)
+```
+
+Sans correction, on détecte le plus de vraies corrélations, mais presque chaque jeu de données contient au moins un faux positif. Holm élimine presque tous les faux positifs, au prix de corrélations réelles manquées. BH se situe entre les deux.
+
+## Corriger dans corrkit
+
+### Une matrice
+
+`p_adjust` ajuste sur les k(k − 1)/2 paires distinctes ; les étoiles portent alors sur les p ajustées, et la légende donne la méthode et la famille.
+
+```{r}
+#| fig-height: 8
+plot_cor_heatmap(cor_test_matrix(d, vars, p_adjust = "BH"), labels = lab, title = "Correlation matrix, BH-adjusted p")
+```
+
+`use_adj = FALSE` affiche les étoiles des p brutes d'un objet ajusté ; le tableau long montre les deux colonnes côte à côte :
+
+```{r}
+tbl_cor_long(cor_test_matrix(d, vars, p_adjust = "holm"), labels = lab, sort_by = "abs")
+```
+
+### Des prédicteurs × des scores : choisir la famille
+
+Pour `cor_cross()`, la question n'est pas seulement « quelle méthode ? » mais « **sur quel ensemble de tests ?** ». C'est l'argument `adjust_by` :
+
+| `adjust_by` | Famille | Question |
+|---|---|---|
+| `"y"` (défaut) | les prédicteurs de chaque score (une colonne) | « quels biomarqueurs sont liés à la dépression ? », un score à la fois |
+| `"x"` | les scores de chaque prédicteur (une ligne) | « à quoi CRP est-il lié ? », un biomarqueur à la fois |
+| `"all"` | tous les tests du tableau | une seule question globale, ou un criblage |
+
+```{r}
+bio <- c("CRP", "IL6", "BDNF", "NfL"); sc <- c("depression", "fatigue", "cognition")
+c(raw = sum(cor_cross(d, bio, sc)$table$p < 0.05),
+  sapply(c(y = "y", x = "x", all = "all"),
+         function(a) sum(cor_cross(d, bio, sc, p_adjust = "holm", adjust_by = a)$table$p_adj < 0.05)))
+```
+
+```{r}
+tbl_cor_long(cor_cross(d, bio, sc, labels = lab, p_adjust = "BH", adjust_by = "y"))
+```
+
+## En pratique
+
+* **Analyse descriptive ou exploratoire**, matrice regardée dans son ensemble : p brutes (défaut), en le disant (la légende le fait) et sans conclure case par case.
+* **Criblage** de nombreuses associations pour sélectionner des pistes : `p_adjust = "BH"`.
+* **Conclusions confirmatoires** sur quelques associations : `p_adjust = "holm"` (préférable à Bonferroni, qu'il domine toujours).
+* **Hypothèses fixées à l'avance**, une ou deux corrélations : pas de correction nécessaire, mais il faut l'avoir dit avant de regarder les données.
+* Dans tous les cas, **nommer la famille** : « BH sur les 6 prédicteurs de chaque score » n'a pas le même sens que « BH sur les 36 paires ».
+
+## Références
+
+* Holm S (1979). A simple sequentially rejective multiple test procedure. *Scandinavian Journal of Statistics* 6(2):65-70.
+* Hochberg Y (1988). A sharper Bonferroni procedure for multiple tests of significance. *Biometrika* 75(4):800-802.
+* Hommel G (1988). A stagewise rejective multiple test procedure based on a modified Bonferroni test. *Biometrika* 75(2):383-386.
+* Benjamini Y, Hochberg Y (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society B* 57(1):289-300.
+* Benjamini Y, Yekutieli D (2001). The control of the false discovery rate in multiple testing under dependency. *Annals of Statistics* 29(4):1165-1188.

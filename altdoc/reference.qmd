@@ -1,0 +1,58 @@
+---
+title: "Référence des fonctions"
+toc: true
+---
+
+::: {.ref-index}
+
+## Calculer
+
+Chaque fonction appelle un moteur existant (stats, ppcor, psych, correlation). Les p-values sont brutes par défaut ; un ajustement sur une famille explicite est disponible (`p_adjust`, `adjust_by`).
+
+| Fonction | Rôle |
+|---|---|
+| [`cor_test_matrix()`](man/cor_test_matrix.qmd) | Corrélations, p-values, effectifs et intervalles de toutes les paires d'un ensemble de variables |
+| [`cor_cross()`](man/cor_cross.qmd) | Corrélations croisées prédicteurs × scores, éventuellement partielles |
+| [`partial_cor_test()`](man/partial_cor_test.qmd) | Test d'une paire, simple ou partiel (`partial_rank_cor()` : ancien nom) |
+| [`cor_binary_effects()`](man/cor_binary_effects.qmd) | Tailles d'effet des variables binaires : différence de moyennes, r rang-bisérial |
+
+## Graphiques
+
+Objets ggplot, avec un sous-titre (méthode, moteur, N) et une légende de lecture.
+
+| Fonction | Rôle |
+|---|---|
+| [`plot_cor_heatmap()`](man/plot_cor_heatmap.qmd) | Heatmap triangulaire d'une matrice de corrélation |
+| [`plot_cor_cross()`](man/plot_cor_cross.qmd) | Heatmap des corrélations croisées |
+| [`plot_cor_pair()`](man/plot_cor_pair.qmd) | Une paire : nuage de points, valeurs par groupe ou graphique des résidus |
+
+## Tableaux
+
+Tableaux gt, avec la même échelle de couleurs que les heatmaps et des notes de bas de tableau.
+
+| Fonction | Rôle |
+|---|---|
+| [`tbl_cor_matrix()`](man/tbl_cor_matrix.qmd) | Matrice de corrélation (triangle inférieur) |
+| [`tbl_cor_cross()`](man/tbl_cor_cross.qmd) | Corrélations croisées, une ligne par prédicteur |
+| [`tbl_cor_long()`](man/tbl_cor_long.qmd) | Une ligne par paire : coefficient, intervalle, p brute et ajustée |
+| [`tbl_cor_binary()`](man/tbl_cor_binary.qmd) | Tailles d'effet des variables binaires |
+
+## Notes de lecture et utilitaires
+
+| Fonction | Rôle |
+|---|---|
+| [`cor_binary_note()`](man/cor_binary_note.qmd) | Note de lecture d'une corrélation avec une variable binaire (en / fr) |
+| [`cor_var_type()`](man/cor_var_type.qmd) | Type d'une variable : binaire, ordinale, nominale ou continue |
+| [`as_cor_numeric()`](man/as_cor_numeric.qmd) | Codage numérique pour une corrélation (binaire en 0/1) |
+| [`mark_binary()`](man/mark_binary.qmd) | Ajoute la marque `[0/1]` aux libellés des variables binaires |
+| [`p_to_stars()`](man/p_to_stars.qmd) | Étoiles de significativité |
+| [`theme_pub()`](man/theme_pub.qmd) | Thème ggplot2 des figures |
+| [`COR_PAL`](man/COR_PAL.qmd) | Palette des heatmaps et des tableaux |
+
+## Données d'exemple
+
+| Fonction | Rôle |
+|---|---|
+| [`simulate_cor_data()`](man/simulate_cor_data.qmd) | Biomarqueurs, scores et covariables simulés, de structure connue |
+
+:::

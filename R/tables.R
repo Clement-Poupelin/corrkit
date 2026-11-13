@@ -109,7 +109,8 @@ tbl_cor_cross <- function(x, labels = NULL, digits = 2, palette = COR_PAL, show_
 #'
 #' Works for [cor_cross()] / [plot_cor_cross()] outputs (rows grouped by the
 #' family of the adjustment) and for [cor_test_matrix()] outputs (all pairs).
-#' Rows with an adjusted p below `alpha` are in bold.
+#' Rows with a p-value (adjusted, if an adjustment was requested) below
+#' `alpha` are in bold; the adjusted column is hidden when p-values are raw.
 #'
 #' @param x output of [cor_cross()], [plot_cor_cross()] or [cor_test_matrix()]
 #' @param labels named vector variable -> label
@@ -168,6 +169,8 @@ tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = C
   d$coef <- ifelse(is.na(d$r), "", sprintf(fmt, d$r))
   d$ci   <- ifelse(is.na(d$ci_low), "", sprintf(paste0("[", fmt, ", ", fmt, "]"), d$ci_low, d$ci_high))
   d$p_txt    <- .fmt_p(d$p)
+  raw_only <- identical(if (inherits(x, "cor_matrix")) x$p_adjust else m$p_adjust, "none")
+  if (raw_only) d$p_txt <- paste0(d$p_txt, ifelse(is.na(d$p), "", paste0(" ", p_to_stars(d$p, ns = ""))))
   d$padj_txt <- paste0(.fmt_p(d$p_adj), ifelse(is.na(d$p_adj), "", paste0(" ", p_to_stars(d$p_adj, ns = ""))))
   grouped <- any(nzchar(d$group))
   # the variable that defines the row groups is not repeated in a column
@@ -191,9 +194,11 @@ tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = C
   sig <- which(!is.na(d$p_adj) & d$p_adj < alpha)
   if (length(sig)) g <- gt::tab_style(g, style = gt::cell_text(weight = "bold"), locations = gt::cells_body(rows = sig))
   if (!any(nzchar(d$ci))) g <- gt::cols_hide(g, "ci")
+  if (raw_only) g <- gt::cols_hide(g, "padj_txt")
   g <- .gt_notes(g, list(
     if (grouped) sprintf("Row groups = family of the p adjustment (%s).", if (!inherits(x, "cor_matrix")) m$family else ""),
-    sprintf("Pair: cont = continuous, bin = binary%s. Bold = adjusted p < %g.", trimws(bin_mark), alpha),
+    sprintf("Pair: cont = continuous, bin = binary%s. Bold = %s < %g.", trimws(bin_mark),
+            if (raw_only) "p" else "adjusted p", alpha),
     p_line, formula, ci_line,
     if (has_bin) .cor_binary_lines(meth, bin_mark),
     .cor_ref_line()))
