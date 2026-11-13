@@ -49,6 +49,11 @@ website:
 format:
   html:
     theme: [cosmo, custom.scss]
+    # column widths: text 1000px + table of contents 250px (pkgdown: about 990 + 330)
+    grid:
+      body-width: 1000px
+      margin-width: 250px
+      gutter-width: 2rem
     toc: true
     toc-location: right
     toc-title: "Sur cette page"

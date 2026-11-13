@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -205,16 +205,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><p>Tout <code>corrkit</code> part d’un seul objet : le résultat de <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix()</a></code>. Il contient les coefficients, les p-values, les effectifs et les intervalles de confiance de toutes les paires de variables. Les graphiques et les tableaux ne font que le mettre en forme.</p>
+</header><p>Tout <code>corrkit</code> part d’un seul objet : le résultat de <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code>. Il contient les coefficients, les p-values, les effectifs et les intervalles de confiance de toutes les paires de variables. Les graphiques et les tableaux ne font que le mettre en forme.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://clement-poupelin.github.io/corrkit/">corrkit</a></span><span class="op">)</span></span>
-<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>     <span class="co"># biomarqueurs, scores et covariables simulés</span></span>
+<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>     <span class="co"># biomarqueurs, scores et covariables simulés</span></span>
 <span><span class="va">lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span>              <span class="co"># libellés des variables</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="calculer-toutes-les-corrélations" class="level2"><h2 class="anchored" data-anchor-id="calculer-toutes-les-corrélations">Calculer toutes les corrélations</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
 <span><span class="va">cm</span></span>
 <span><span class="co">#&gt; &lt;cor_matrix&gt; Spearman correlations, 9 variables (2 binary), 36 pairs</span></span>
 <span><span class="co">#&gt;   engine: psych::corr.test() {psych} | raw p-values (no adjustment) | N = 188–194</span></span>
@@ -397,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="la-matrice-de-corrélation" class="level2"><h2 class="anchored" data-anchor-id="la-matrice-de-corrélation">La matrice de corrélation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="corrkit_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>

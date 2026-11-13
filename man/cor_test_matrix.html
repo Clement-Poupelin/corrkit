@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -273,15 +273,15 @@ confidence level of the intervals (<code>NULL</code> = none)
 <p>other methods of the correlation package (<code>“biweight”</code>, <code>“percentage”</code>, <code>“blomqvist”</code>, <code>“hoeffding”</code>, <code>“gaussian”</code>, <code>“shepherd”</code>, <code>“distance”</code>): <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code> only.</p>
 </li>
 </ul>
-<p>Binary variables are coded 0/1 (see <code><a href="https://clement-poupelin.github.io/corrkit/reference/as_cor_numeric.html">as_cor_numeric()</a></code>) and flagged in <code>types</code>.</p>
+<p>Binary variables are coded 0/1 (see <code><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric()</a></code>) and flagged in <code>types</code>.</p>
 </section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
 <p>object of class <code>cor_matrix</code>: list(r, p, p_adj, n, ci_low, ci_high, long, types, method, p_adjust, engine, ci, ci_engine); <code>long</code> = one row per pair (i &lt; j) with Var1, Var2, type1, type2, r, ci_low, ci_high, p, p_adj, n.</p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">120</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">120</span><span class="op">)</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
 <span><span class="va">cm</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;cor_matrix&gt; Spearman correlations, 5 variables (1 binary), 10 pairs

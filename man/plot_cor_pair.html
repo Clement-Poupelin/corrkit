@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>two continuous variables, unadjusted: scatter plot of the raw values, least-squares line (Pearson) or LOESS curve (Spearman, Kendall: monotonic trend);</p>
 </li>
 <li>
-<p>one binary variable, unadjusted: the continuous variable by group (box, points, diamond = mean), with r_rb and the difference in means (<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code>);</p>
+<p>one binary variable, unadjusted: the continuous variable by group (box, points, diamond = mean), with r_rb and the difference in means (<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>);</p>
 </li>
 <li>
 <p>with covariates: added-variable plot, i.e.&nbsp;residuals of y against residuals of x on the covariates (ranks for Spearman), whose correlation IS the partial correlation.</p>
@@ -322,22 +322,22 @@ colours (named low / high); <code>high</code> is used for the line and the means
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"IL6"</span>, <span class="st">"fatigue"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"IL6"</span>, <span class="st">"fatigue"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"depression"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"depression"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid figure-img" width="768"></p>

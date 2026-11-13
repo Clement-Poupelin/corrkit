@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -248,15 +248,15 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://clement-poupelin.github.io/corrkit/">corrkit</a></span><span class="op">)</span></span>
 <span><span class="va">has_ppcor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"ppcor"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">has_cor</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"correlation"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span><span class="va">lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span></span>
 <span><span class="va">biomarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span></span>
 <span><span class="va">scores</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="corrélations-croisées-des-prédicteurs-des-scores" class="level2"><h2 class="anchored" data-anchor-id="corrélations-croisées-des-prédicteurs-des-scores">Corrélations croisées : des prédicteurs × des scores</h2>
-<p>Quand la question est « quels biomarqueurs sont liés à quels scores ? », la matrice complète mélange des paires sans intérêt (biomarqueur × biomarqueur). <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross()</a></code> ne teste que les croisements :</p>
+<p>Quand la question est « quels biomarqueurs sont liés à quels scores ? », la matrice complète mélange des paires sans intérêt (biomarqueur × biomarqueur). <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code> ne teste que les croisements :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cc0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cc0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
 <span><span class="va">cc0</span></span>
 <span><span class="co">#&gt; &lt;cor_cross&gt; 6 x 3 Spearman correlations (unadjusted)</span></span>
 <span><span class="co">#&gt;   Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.</span></span>
@@ -269,7 +269,7 @@ window.Quarto = {
 <span><span class="co">#&gt;  BIN_IL6    0.35*** 0.35***     -0.04</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">cc0</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">cc0</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="partial-cross_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
@@ -311,9 +311,9 @@ window.Quarto = {
 </tbody>
 </table>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>raw <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span><span class="op">)</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>raw <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span><span class="op">)</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"y"</span>, x <span class="op">=</span> <span class="st">"x"</span>, all <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>         <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, p_adjust <span class="op">=</span> <span class="st">"BH"</span>, adjust_by <span class="op">=</span> <span class="va">a</span><span class="op">)</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">p_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>         <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, p_adjust <span class="op">=</span> <span class="st">"BH"</span>, adjust_by <span class="op">=</span> <span class="va">a</span><span class="op">)</span><span class="op">$</span><span class="va">table</span><span class="op">$</span><span class="va">p_adj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; raw   y   x all </span></span>
 <span><span class="co">#&gt;  11  11  11  11</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -324,10 +324,10 @@ window.Quarto = {
 <p><span class="math display">\[r_{xy.z} = r(e_{x.z},\, e_{y.z}).\]</span></p>
 <p>Pour Spearman, x, y <strong>et</strong> z sont d’abord remplacés par leurs rangs (comme dans <code>ppcor</code>). Le test est un t à n − 2 − k degrés de liberté, k étant le nombre de colonnes de covariables (un facteur à m niveaux compte pour m − 1).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cc_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cc_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">cc_adj</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">cc_adj</span><span class="op">)</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -338,16 +338,16 @@ window.Quarto = {
 </div>
 <p>Le sous-titre passe de « unadjusted » à « partial, adjusted for Age, Sex », et la formule de la légende devient celle de la corrélation partielle, avec le nombre k de termes de covariables.</p>
 </section><section id="voir-une-corrélation-partielle" class="level3"><h3 class="anchored" data-anchor-id="voir-une-corrélation-partielle">Voir une corrélation partielle</h3>
-<p><code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair()</a></code> montre ce que mesure le coefficient. Sans covariable, c’est un nuage de points ; avec covariables, c’est le graphique des résidus (<em>added-variable plot</em>), dont la corrélation <strong>est</strong> la corrélation partielle :</p>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair()</a></code> montre ce que mesure le coefficient. Sans covariable, c’est un nuage de points ; avec covariables, c’est le graphique des résidus (<em>added-variable plot</em>), dont la corrélation <strong>est</strong> la corrélation partielle :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="partial-cross_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="partial-cross_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="768"></p>
@@ -356,17 +356,17 @@ window.Quarto = {
 </div>
 </div>
 </section><section id="trois-calculs-un-même-résultat" class="level3"><h3 class="anchored" data-anchor-id="trois-calculs-un-même-résultat">Trois calculs, un même résultat</h3>
-<p>Pour Pearson, la corrélation partielle et la pente de x dans <code>lm(y ~ x + z)</code> ont <strong>le même test</strong> (théorème de Frisch-Waugh-Lovell : même t, mêmes degrés de liberté). On peut le vérifier avec les deux moteurs de <code><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test()</a></code> :</p>
+<p>Pour Pearson, la corrélation partielle et la pente de x dans <code>lm(y ~ x + z)</code> ont <strong>le même test</strong> (théorème de Frisch-Waugh-Lovell : même t, mêmes degrés de liberté). On peut le vérifier avec les deux moteurs de <code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test()</a></code> :</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">Z</span>, meth <span class="op">=</span> <span class="st">"pearson"</span>, engine <span class="op">=</span> <span class="st">"base"</span><span class="op">)</span></span>
+<span><span class="va">base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">Z</span>, meth <span class="op">=</span> <span class="st">"pearson"</span>, engine <span class="op">=</span> <span class="st">"base"</span><span class="op">)</span></span>
 <span><span class="va">fit</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">cognition</span> <span class="op">~</span> <span class="va">NfL</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>residuals <span class="op">=</span> <span class="va">base</span><span class="op">$</span><span class="va">p.value</span>, lm_slope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="st">"NfL"</span>, <span class="st">"Pr(&gt;|t|)"</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  residuals   lm_slope </span></span>
 <span><span class="co">#&gt; 0.04001382 0.04001382</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">Z</span>, meth <span class="op">=</span> <span class="st">"pearson"</span>, engine <span class="op">=</span> <span class="st">"ppcor"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">Z</span>, meth <span class="op">=</span> <span class="st">"pearson"</span>, engine <span class="op">=</span> <span class="st">"ppcor"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>ppcor <span class="op">=</span> <span class="va">pp</span><span class="op">$</span><span class="va">estimate</span>, residuals <span class="op">=</span> <span class="va">base</span><span class="op">$</span><span class="va">estimate</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      ppcor  residuals </span></span>
 <span><span class="co">#&gt; -0.1507324 -0.1507324</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -380,32 +380,32 @@ window.Quarto = {
 <span><span class="va">cr</span><span class="op">[</span><span class="va">cr</span><span class="op">$</span><span class="va">Parameter1</span> <span class="op">==</span> <span class="st">"NfL"</span> <span class="op">&amp;</span> <span class="va">cr</span><span class="op">$</span><span class="va">Parameter2</span> <span class="op">==</span> <span class="st">"cognition"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"r"</span>, <span class="st">"p"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;            r          p</span></span>
 <span><span class="co">#&gt; 1 -0.1509717 0.03863221</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">sub</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">sub</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">sub</span><span class="op">[</span><span class="st">"age"</span><span class="op">]</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"p.value"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">sub</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">sub</span><span class="op">$</span><span class="va">cognition</span>, <span class="va">sub</span><span class="op">[</span><span class="st">"age"</span><span class="op">]</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"p.value"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    estimate     p.value </span></span>
 <span><span class="co">#&gt; -0.15097173  0.03916004</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section><section id="les-tableaux" class="level2"><h2 class="anchored" data-anchor-id="les-tableaux">Les tableaux</h2>
 <p>Le tableau large reprend la heatmap (même échelle de couleurs, mêmes étoiles) ; les notes répètent le statut des p-values, la formule et la lecture des variables binaires :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">cc_adj</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">cc_adj</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="bcfgynwinu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#bcfgynwinu table {
+<div id="ewshejhmpm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ewshejhmpm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#bcfgynwinu thead, #bcfgynwinu tbody, #bcfgynwinu tfoot, #bcfgynwinu tr, #bcfgynwinu td, #bcfgynwinu th {
+#ewshejhmpm thead, #ewshejhmpm tbody, #ewshejhmpm tfoot, #ewshejhmpm tr, #ewshejhmpm td, #ewshejhmpm th {
   border-style: none;
 }
 
-#bcfgynwinu p {
+#ewshejhmpm p {
   margin: 0;
   padding: 0;
 }
 
-#bcfgynwinu .gt_table {
+#ewshejhmpm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -431,12 +431,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_caption {
+#ewshejhmpm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#bcfgynwinu .gt_title {
+#ewshejhmpm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -448,7 +448,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#bcfgynwinu .gt_subtitle {
+#ewshejhmpm .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -460,7 +460,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#bcfgynwinu .gt_heading {
+#ewshejhmpm .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -472,13 +472,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_bottom_border {
+#ewshejhmpm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_col_headings {
+#ewshejhmpm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -493,7 +493,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_col_heading {
+#ewshejhmpm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -513,7 +513,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#bcfgynwinu .gt_column_spanner_outer {
+#ewshejhmpm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -525,15 +525,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#bcfgynwinu .gt_column_spanner_outer:first-child {
+#ewshejhmpm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bcfgynwinu .gt_column_spanner_outer:last-child {
+#ewshejhmpm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bcfgynwinu .gt_column_spanner {
+#ewshejhmpm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -545,11 +545,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#bcfgynwinu .gt_spanner_row {
+#ewshejhmpm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#bcfgynwinu .gt_group_heading {
+#ewshejhmpm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -575,7 +575,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#bcfgynwinu .gt_empty_group_heading {
+#ewshejhmpm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -590,15 +590,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#bcfgynwinu .gt_from_md > :first-child {
+#ewshejhmpm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bcfgynwinu .gt_from_md > :last-child {
+#ewshejhmpm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bcfgynwinu .gt_row {
+#ewshejhmpm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -617,7 +617,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#bcfgynwinu .gt_stub {
+#ewshejhmpm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -630,7 +630,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#bcfgynwinu .gt_stub_row_group {
+#ewshejhmpm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -644,15 +644,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#bcfgynwinu .gt_row_group_first td {
+#ewshejhmpm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#bcfgynwinu .gt_row_group_first th {
+#ewshejhmpm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#bcfgynwinu .gt_summary_row {
+#ewshejhmpm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -662,16 +662,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#bcfgynwinu .gt_first_summary_row {
+#ewshejhmpm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_first_summary_row.thick {
+#ewshejhmpm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#bcfgynwinu .gt_last_summary_row {
+#ewshejhmpm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -681,7 +681,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_grand_summary_row {
+#ewshejhmpm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -691,7 +691,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#bcfgynwinu .gt_first_grand_summary_row {
+#ewshejhmpm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -701,7 +701,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_last_grand_summary_row_top {
+#ewshejhmpm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -711,11 +711,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_striped {
+#ewshejhmpm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bcfgynwinu .gt_table_body {
+#ewshejhmpm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -724,7 +724,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_footnotes {
+#ewshejhmpm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -738,7 +738,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_footnote {
+#ewshejhmpm .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -747,7 +747,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#bcfgynwinu .gt_sourcenotes {
+#ewshejhmpm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -761,7 +761,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#bcfgynwinu .gt_sourcenote {
+#ewshejhmpm .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -769,72 +769,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#bcfgynwinu .gt_left {
+#ewshejhmpm .gt_left {
   text-align: left;
 }
 
-#bcfgynwinu .gt_center {
+#ewshejhmpm .gt_center {
   text-align: center;
 }
 
-#bcfgynwinu .gt_right {
+#ewshejhmpm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bcfgynwinu .gt_font_normal {
+#ewshejhmpm .gt_font_normal {
   font-weight: normal;
 }
 
-#bcfgynwinu .gt_font_bold {
+#ewshejhmpm .gt_font_bold {
   font-weight: bold;
 }
 
-#bcfgynwinu .gt_font_italic {
+#ewshejhmpm .gt_font_italic {
   font-style: italic;
 }
 
-#bcfgynwinu .gt_super {
+#ewshejhmpm .gt_super {
   font-size: 65%;
 }
 
-#bcfgynwinu .gt_footnote_marks {
+#ewshejhmpm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#bcfgynwinu .gt_asterisk {
+#ewshejhmpm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#bcfgynwinu .gt_indent_1 {
+#ewshejhmpm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#bcfgynwinu .gt_indent_2 {
+#ewshejhmpm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#bcfgynwinu .gt_indent_3 {
+#ewshejhmpm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#bcfgynwinu .gt_indent_4 {
+#ewshejhmpm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#bcfgynwinu .gt_indent_5 {
+#ewshejhmpm .gt_indent_5 {
   text-indent: 25px;
 }
 
-#bcfgynwinu .katex-display {
+#ewshejhmpm .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#bcfgynwinu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ewshejhmpm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -926,25 +926,25 @@ window.Quarto = {
 </div>
 <p>Le tableau long donne, pour chaque paire, n, le coefficient, son intervalle de confiance (z de Fisher sur n − k) et la p-value :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cc_adj</span>, sort_by <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cc_adj</span>, sort_by <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="oyqajztmgk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#oyqajztmgk table {
+<div id="mpfugmvqea" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mpfugmvqea table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#oyqajztmgk thead, #oyqajztmgk tbody, #oyqajztmgk tfoot, #oyqajztmgk tr, #oyqajztmgk td, #oyqajztmgk th {
+#mpfugmvqea thead, #mpfugmvqea tbody, #mpfugmvqea tfoot, #mpfugmvqea tr, #mpfugmvqea td, #mpfugmvqea th {
   border-style: none;
 }
 
-#oyqajztmgk p {
+#mpfugmvqea p {
   margin: 0;
   padding: 0;
 }
 
-#oyqajztmgk .gt_table {
+#mpfugmvqea .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -970,12 +970,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_caption {
+#mpfugmvqea .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#oyqajztmgk .gt_title {
+#mpfugmvqea .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -987,7 +987,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#oyqajztmgk .gt_subtitle {
+#mpfugmvqea .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -999,7 +999,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#oyqajztmgk .gt_heading {
+#mpfugmvqea .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1011,13 +1011,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_bottom_border {
+#mpfugmvqea .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_col_headings {
+#mpfugmvqea .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1032,7 +1032,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_col_heading {
+#mpfugmvqea .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1052,7 +1052,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#oyqajztmgk .gt_column_spanner_outer {
+#mpfugmvqea .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1064,15 +1064,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#oyqajztmgk .gt_column_spanner_outer:first-child {
+#mpfugmvqea .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#oyqajztmgk .gt_column_spanner_outer:last-child {
+#mpfugmvqea .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#oyqajztmgk .gt_column_spanner {
+#mpfugmvqea .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1084,11 +1084,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#oyqajztmgk .gt_spanner_row {
+#mpfugmvqea .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#oyqajztmgk .gt_group_heading {
+#mpfugmvqea .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1114,7 +1114,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#oyqajztmgk .gt_empty_group_heading {
+#mpfugmvqea .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1129,15 +1129,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#oyqajztmgk .gt_from_md > :first-child {
+#mpfugmvqea .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#oyqajztmgk .gt_from_md > :last-child {
+#mpfugmvqea .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#oyqajztmgk .gt_row {
+#mpfugmvqea .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1156,7 +1156,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#oyqajztmgk .gt_stub {
+#mpfugmvqea .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1169,7 +1169,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#oyqajztmgk .gt_stub_row_group {
+#mpfugmvqea .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1183,15 +1183,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#oyqajztmgk .gt_row_group_first td {
+#mpfugmvqea .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#oyqajztmgk .gt_row_group_first th {
+#mpfugmvqea .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#oyqajztmgk .gt_summary_row {
+#mpfugmvqea .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1201,16 +1201,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#oyqajztmgk .gt_first_summary_row {
+#mpfugmvqea .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_first_summary_row.thick {
+#mpfugmvqea .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#oyqajztmgk .gt_last_summary_row {
+#mpfugmvqea .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1220,7 +1220,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_grand_summary_row {
+#mpfugmvqea .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1230,7 +1230,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#oyqajztmgk .gt_first_grand_summary_row {
+#mpfugmvqea .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1240,7 +1240,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_last_grand_summary_row_top {
+#mpfugmvqea .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1250,11 +1250,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_striped {
+#mpfugmvqea .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#oyqajztmgk .gt_table_body {
+#mpfugmvqea .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1263,7 +1263,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_footnotes {
+#mpfugmvqea .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1277,7 +1277,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_footnote {
+#mpfugmvqea .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -1286,7 +1286,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#oyqajztmgk .gt_sourcenotes {
+#mpfugmvqea .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1300,7 +1300,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#oyqajztmgk .gt_sourcenote {
+#mpfugmvqea .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1308,72 +1308,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#oyqajztmgk .gt_left {
+#mpfugmvqea .gt_left {
   text-align: left;
 }
 
-#oyqajztmgk .gt_center {
+#mpfugmvqea .gt_center {
   text-align: center;
 }
 
-#oyqajztmgk .gt_right {
+#mpfugmvqea .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oyqajztmgk .gt_font_normal {
+#mpfugmvqea .gt_font_normal {
   font-weight: normal;
 }
 
-#oyqajztmgk .gt_font_bold {
+#mpfugmvqea .gt_font_bold {
   font-weight: bold;
 }
 
-#oyqajztmgk .gt_font_italic {
+#mpfugmvqea .gt_font_italic {
   font-style: italic;
 }
 
-#oyqajztmgk .gt_super {
+#mpfugmvqea .gt_super {
   font-size: 65%;
 }
 
-#oyqajztmgk .gt_footnote_marks {
+#mpfugmvqea .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#oyqajztmgk .gt_asterisk {
+#mpfugmvqea .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#oyqajztmgk .gt_indent_1 {
+#mpfugmvqea .gt_indent_1 {
   text-indent: 5px;
 }
 
-#oyqajztmgk .gt_indent_2 {
+#mpfugmvqea .gt_indent_2 {
   text-indent: 10px;
 }
 
-#oyqajztmgk .gt_indent_3 {
+#mpfugmvqea .gt_indent_3 {
   text-indent: 15px;
 }
 
-#oyqajztmgk .gt_indent_4 {
+#mpfugmvqea .gt_indent_4 {
   text-indent: 20px;
 }
 
-#oyqajztmgk .gt_indent_5 {
+#mpfugmvqea .gt_indent_5 {
   text-indent: 25px;
 }
 
-#oyqajztmgk .katex-display {
+#mpfugmvqea .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#oyqajztmgk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mpfugmvqea div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1585,25 +1585,25 @@ window.Quarto = {
 </div>
 <p>Avec un ajustement, une colonne « p (adjusted) » s’ajoute et les lignes sont regroupées par famille, ce qui permet de relire l’ajustement à la main :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span>, p_adjust <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span>, p_adjust <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="czgsdlohah" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#czgsdlohah table {
+<div id="mgzqgjagla" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mgzqgjagla table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#czgsdlohah thead, #czgsdlohah tbody, #czgsdlohah tfoot, #czgsdlohah tr, #czgsdlohah td, #czgsdlohah th {
+#mgzqgjagla thead, #mgzqgjagla tbody, #mgzqgjagla tfoot, #mgzqgjagla tr, #mgzqgjagla td, #mgzqgjagla th {
   border-style: none;
 }
 
-#czgsdlohah p {
+#mgzqgjagla p {
   margin: 0;
   padding: 0;
 }
 
-#czgsdlohah .gt_table {
+#mgzqgjagla .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1629,12 +1629,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_caption {
+#mgzqgjagla .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#czgsdlohah .gt_title {
+#mgzqgjagla .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1646,7 +1646,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#czgsdlohah .gt_subtitle {
+#mgzqgjagla .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -1658,7 +1658,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#czgsdlohah .gt_heading {
+#mgzqgjagla .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1670,13 +1670,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_bottom_border {
+#mgzqgjagla .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_col_headings {
+#mgzqgjagla .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1691,7 +1691,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_col_heading {
+#mgzqgjagla .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1711,7 +1711,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#czgsdlohah .gt_column_spanner_outer {
+#mgzqgjagla .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1723,15 +1723,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#czgsdlohah .gt_column_spanner_outer:first-child {
+#mgzqgjagla .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#czgsdlohah .gt_column_spanner_outer:last-child {
+#mgzqgjagla .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#czgsdlohah .gt_column_spanner {
+#mgzqgjagla .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1743,11 +1743,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#czgsdlohah .gt_spanner_row {
+#mgzqgjagla .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#czgsdlohah .gt_group_heading {
+#mgzqgjagla .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1773,7 +1773,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#czgsdlohah .gt_empty_group_heading {
+#mgzqgjagla .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1788,15 +1788,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#czgsdlohah .gt_from_md > :first-child {
+#mgzqgjagla .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#czgsdlohah .gt_from_md > :last-child {
+#mgzqgjagla .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#czgsdlohah .gt_row {
+#mgzqgjagla .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1815,7 +1815,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#czgsdlohah .gt_stub {
+#mgzqgjagla .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1828,7 +1828,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#czgsdlohah .gt_stub_row_group {
+#mgzqgjagla .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1842,15 +1842,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#czgsdlohah .gt_row_group_first td {
+#mgzqgjagla .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#czgsdlohah .gt_row_group_first th {
+#mgzqgjagla .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#czgsdlohah .gt_summary_row {
+#mgzqgjagla .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1860,16 +1860,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#czgsdlohah .gt_first_summary_row {
+#mgzqgjagla .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_first_summary_row.thick {
+#mgzqgjagla .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#czgsdlohah .gt_last_summary_row {
+#mgzqgjagla .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1879,7 +1879,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_grand_summary_row {
+#mgzqgjagla .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1889,7 +1889,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#czgsdlohah .gt_first_grand_summary_row {
+#mgzqgjagla .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1899,7 +1899,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_last_grand_summary_row_top {
+#mgzqgjagla .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1909,11 +1909,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_striped {
+#mgzqgjagla .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#czgsdlohah .gt_table_body {
+#mgzqgjagla .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1922,7 +1922,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_footnotes {
+#mgzqgjagla .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1936,7 +1936,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_footnote {
+#mgzqgjagla .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -1945,7 +1945,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#czgsdlohah .gt_sourcenotes {
+#mgzqgjagla .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1959,7 +1959,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#czgsdlohah .gt_sourcenote {
+#mgzqgjagla .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1967,72 +1967,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#czgsdlohah .gt_left {
+#mgzqgjagla .gt_left {
   text-align: left;
 }
 
-#czgsdlohah .gt_center {
+#mgzqgjagla .gt_center {
   text-align: center;
 }
 
-#czgsdlohah .gt_right {
+#mgzqgjagla .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#czgsdlohah .gt_font_normal {
+#mgzqgjagla .gt_font_normal {
   font-weight: normal;
 }
 
-#czgsdlohah .gt_font_bold {
+#mgzqgjagla .gt_font_bold {
   font-weight: bold;
 }
 
-#czgsdlohah .gt_font_italic {
+#mgzqgjagla .gt_font_italic {
   font-style: italic;
 }
 
-#czgsdlohah .gt_super {
+#mgzqgjagla .gt_super {
   font-size: 65%;
 }
 
-#czgsdlohah .gt_footnote_marks {
+#mgzqgjagla .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#czgsdlohah .gt_asterisk {
+#mgzqgjagla .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#czgsdlohah .gt_indent_1 {
+#mgzqgjagla .gt_indent_1 {
   text-indent: 5px;
 }
 
-#czgsdlohah .gt_indent_2 {
+#mgzqgjagla .gt_indent_2 {
   text-indent: 10px;
 }
 
-#czgsdlohah .gt_indent_3 {
+#mgzqgjagla .gt_indent_3 {
   text-indent: 15px;
 }
 
-#czgsdlohah .gt_indent_4 {
+#mgzqgjagla .gt_indent_4 {
   text-indent: 20px;
 }
 
-#czgsdlohah .gt_indent_5 {
+#mgzqgjagla .gt_indent_5 {
   text-indent: 25px;
 }
 
-#czgsdlohah .katex-display {
+#mgzqgjagla .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#czgsdlohah div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mgzqgjagla div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2254,17 +2254,17 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross()</a></code> et <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long()</a></code> acceptent aussi directement la liste renvoyée par <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross()</a></code> :</p>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross()</a></code> et <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long()</a></code> acceptent aussi directement la liste renvoyée par <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code> :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">plot</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">note</span><span class="op">)</span>        <span class="co"># note complète sur les variables binaires</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="kendall" class="level2"><h2 class="anchored" data-anchor-id="kendall">Kendall</h2>
 <p><code>meth = "kendall"</code> fonctionne partout ; les versions partielles demandent <code>ppcor</code>. Le test est alors un z (approximation normale) et la légende l’indique.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">biomarkers</span>, <span class="va">scores</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="va">lab</span>, meth <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="partial-cross_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>

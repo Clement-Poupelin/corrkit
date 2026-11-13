@@ -27,6 +27,9 @@ h3 { margin-top: 1.5rem; font-size: 1.2rem; }
 div.sourceCode { border: 1px solid #e9ecef; border-radius: .375rem; }
 .cell-output pre { background: #ffffff; border-left: 3px solid #dee2e6; padding-left: .75rem; }
 
+// home page: README + right column, centred, about as wide as the other pages
+.home { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+
 // right column of the home page (Links, Licence, Citation, Developer)
 .home-sidebar h2 { font-size: 1.05rem; border-bottom: none; margin-top: 1.5rem; margin-bottom: .4rem; }
 .home-sidebar ul { list-style: none; padding-left: 0; font-size: .95rem; }

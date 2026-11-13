@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -253,7 +253,7 @@ marker of binary variables used in the text (same as <code>bin_mark</code> of th
 </td>
 </tr>
 </tbody></table></section><section id="details" class="level3"><h3 class="anchored" data-anchor-id="details">Details</h3>
-<p>In every case the effect size to report is r_rb or the difference between groups (<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code>), not the correlation.</p>
+<p>In every case the effect size to report is r_rb or the difference between groups (<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>), not the correlation.</p>
 </section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
 <p>a character string</p>
 </section><section id="references" class="level3"><h3 class="anchored" data-anchor-id="references">References</h3>
@@ -263,11 +263,11 @@ marker of binary variables used in the text (same as <code>bin_mark</code> of th
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, short <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, short <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "[0/1] binary: r_s ≈ Mann-Whitney (rank difference between groups); |r_s| ≤ √(3pq) ≤ 0.87, not comparable with continuous variables"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"pearson"</span>, lang <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"pearson"</span>, lang <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Variables binaires (notées [0/1], classe haute = 1) : le r de Pearson est la corrélation point-bisériale. Son test est le test t de Student entre les deux groupes (variances égales) et, ajusté sur des covariables, le test de la pente de lm(score ~ groupe + covariables) : même t, mêmes degrés de liberté. Sa valeur dépend de la répartition p/q entre groupes : pour un biomarqueur catégorisé à partir d'une mesure continue, r_pb = r × φ(c) / √(pq) (c = seuil en unités d'écart-type), soit au plus 0,80 × r à la médiane et 0,70 × r pour une répartition 20/80. Il n'est donc pas comparable au r d'un biomarqueur continu : la taille de l'effet se lit sur la différence de score moyen entre groupes. (Kerby 2014, Comprehensive Psychology, doi:10.2466/11.IT.3.1; Babchishin &amp; Helmus 2016, Behav Res Methods, doi:10.3758/s13428-015-0627-7).</code></pre>
 </div>

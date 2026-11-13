@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -198,7 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score">Table of cross correlations X x Y (wide: one row per predictor, one column per score)</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Same content and same colour scale as <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross()</a></code>. Binary predictors are grouped under "Binary 0/1" and carry a footnote.</p>
+<p>Same content and same colour scale as <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>. Binary predictors are grouped under "Binary 0/1" and carry a footnote.</p>
 </section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">tbl_cor_cross(
   x,
@@ -218,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <code id="x">x</code>
 </td>
 <td>
-output of <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross()</a></code> or <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross()</a></code>
+output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code> or <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>
 </td>
 </tr>
 <tr>
@@ -226,7 +226,7 @@ output of <code><a href="https://clement-poupelin.github.io/corrkit/reference/co
 <code id="labels">labels</code>
 </td>
 <td>
-named vector variable -&gt; label (default: those given to <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross()</a></code>)
+named vector variable -&gt; label (default: those given to <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code>)
 </td>
 </tr>
 <tr>
@@ -275,28 +275,28 @@ header of the row labels
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>,</span>
+<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
+<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>,</span>
 <span>                covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="ipqxfrmtpj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ipqxfrmtpj table {
+<div id="qapjpjhjmg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qapjpjhjmg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ipqxfrmtpj thead, #ipqxfrmtpj tbody, #ipqxfrmtpj tfoot, #ipqxfrmtpj tr, #ipqxfrmtpj td, #ipqxfrmtpj th {
+#qapjpjhjmg thead, #qapjpjhjmg tbody, #qapjpjhjmg tfoot, #qapjpjhjmg tr, #qapjpjhjmg td, #qapjpjhjmg th {
   border-style: none;
 }
 
-#ipqxfrmtpj p {
+#qapjpjhjmg p {
   margin: 0;
   padding: 0;
 }
 
-#ipqxfrmtpj .gt_table {
+#qapjpjhjmg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -322,12 +322,12 @@ header of the row labels
   border-left-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_caption {
+#qapjpjhjmg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ipqxfrmtpj .gt_title {
+#qapjpjhjmg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -339,7 +339,7 @@ header of the row labels
   border-bottom-width: 0;
 }
 
-#ipqxfrmtpj .gt_subtitle {
+#qapjpjhjmg .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -351,7 +351,7 @@ header of the row labels
   border-top-width: 0;
 }
 
-#ipqxfrmtpj .gt_heading {
+#qapjpjhjmg .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -363,13 +363,13 @@ header of the row labels
   border-right-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_bottom_border {
+#qapjpjhjmg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_col_headings {
+#qapjpjhjmg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -384,7 +384,7 @@ header of the row labels
   border-right-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_col_heading {
+#qapjpjhjmg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -404,7 +404,7 @@ header of the row labels
   overflow-x: hidden;
 }
 
-#ipqxfrmtpj .gt_column_spanner_outer {
+#qapjpjhjmg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -416,15 +416,15 @@ header of the row labels
   padding-right: 4px;
 }
 
-#ipqxfrmtpj .gt_column_spanner_outer:first-child {
+#qapjpjhjmg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ipqxfrmtpj .gt_column_spanner_outer:last-child {
+#qapjpjhjmg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ipqxfrmtpj .gt_column_spanner {
+#qapjpjhjmg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -436,11 +436,11 @@ header of the row labels
   width: 100%;
 }
 
-#ipqxfrmtpj .gt_spanner_row {
+#qapjpjhjmg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ipqxfrmtpj .gt_group_heading {
+#qapjpjhjmg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -466,7 +466,7 @@ header of the row labels
   text-align: left;
 }
 
-#ipqxfrmtpj .gt_empty_group_heading {
+#qapjpjhjmg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -481,15 +481,15 @@ header of the row labels
   vertical-align: middle;
 }
 
-#ipqxfrmtpj .gt_from_md > :first-child {
+#qapjpjhjmg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ipqxfrmtpj .gt_from_md > :last-child {
+#qapjpjhjmg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ipqxfrmtpj .gt_row {
+#qapjpjhjmg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -508,7 +508,7 @@ header of the row labels
   overflow-x: hidden;
 }
 
-#ipqxfrmtpj .gt_stub {
+#qapjpjhjmg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -521,7 +521,7 @@ header of the row labels
   padding-right: 5px;
 }
 
-#ipqxfrmtpj .gt_stub_row_group {
+#qapjpjhjmg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -535,15 +535,15 @@ header of the row labels
   vertical-align: top;
 }
 
-#ipqxfrmtpj .gt_row_group_first td {
+#qapjpjhjmg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ipqxfrmtpj .gt_row_group_first th {
+#qapjpjhjmg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ipqxfrmtpj .gt_summary_row {
+#qapjpjhjmg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -553,16 +553,16 @@ header of the row labels
   padding-right: 5px;
 }
 
-#ipqxfrmtpj .gt_first_summary_row {
+#qapjpjhjmg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_first_summary_row.thick {
+#qapjpjhjmg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ipqxfrmtpj .gt_last_summary_row {
+#qapjpjhjmg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -572,7 +572,7 @@ header of the row labels
   border-bottom-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_grand_summary_row {
+#qapjpjhjmg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -582,7 +582,7 @@ header of the row labels
   padding-right: 5px;
 }
 
-#ipqxfrmtpj .gt_first_grand_summary_row {
+#qapjpjhjmg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -592,7 +592,7 @@ header of the row labels
   border-top-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_last_grand_summary_row_top {
+#qapjpjhjmg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -602,11 +602,11 @@ header of the row labels
   border-bottom-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_striped {
+#qapjpjhjmg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ipqxfrmtpj .gt_table_body {
+#qapjpjhjmg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -615,7 +615,7 @@ header of the row labels
   border-bottom-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_footnotes {
+#qapjpjhjmg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -629,7 +629,7 @@ header of the row labels
   border-right-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_footnote {
+#qapjpjhjmg .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -638,7 +638,7 @@ header of the row labels
   padding-right: 5px;
 }
 
-#ipqxfrmtpj .gt_sourcenotes {
+#qapjpjhjmg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -652,7 +652,7 @@ header of the row labels
   border-right-color: #D3D3D3;
 }
 
-#ipqxfrmtpj .gt_sourcenote {
+#qapjpjhjmg .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -660,72 +660,72 @@ header of the row labels
   padding-right: 5px;
 }
 
-#ipqxfrmtpj .gt_left {
+#qapjpjhjmg .gt_left {
   text-align: left;
 }
 
-#ipqxfrmtpj .gt_center {
+#qapjpjhjmg .gt_center {
   text-align: center;
 }
 
-#ipqxfrmtpj .gt_right {
+#qapjpjhjmg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ipqxfrmtpj .gt_font_normal {
+#qapjpjhjmg .gt_font_normal {
   font-weight: normal;
 }
 
-#ipqxfrmtpj .gt_font_bold {
+#qapjpjhjmg .gt_font_bold {
   font-weight: bold;
 }
 
-#ipqxfrmtpj .gt_font_italic {
+#qapjpjhjmg .gt_font_italic {
   font-style: italic;
 }
 
-#ipqxfrmtpj .gt_super {
+#qapjpjhjmg .gt_super {
   font-size: 65%;
 }
 
-#ipqxfrmtpj .gt_footnote_marks {
+#qapjpjhjmg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ipqxfrmtpj .gt_asterisk {
+#qapjpjhjmg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ipqxfrmtpj .gt_indent_1 {
+#qapjpjhjmg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ipqxfrmtpj .gt_indent_2 {
+#qapjpjhjmg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ipqxfrmtpj .gt_indent_3 {
+#qapjpjhjmg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ipqxfrmtpj .gt_indent_4 {
+#qapjpjhjmg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ipqxfrmtpj .gt_indent_5 {
+#qapjpjhjmg .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ipqxfrmtpj .katex-display {
+#qapjpjhjmg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ipqxfrmtpj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qapjpjhjmg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

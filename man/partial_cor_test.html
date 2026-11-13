@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -206,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>covariates: <code><a href="https://rdrr.io/pkg/ppcor/man/pcor.test.html">ppcor::pcor.test()</a></code> (default engine); fallback or <code>engine = “base”</code>: correlation of the residuals of x and y on Z (for Spearman x, y AND Z are ranked, as in ppcor), t-test with n - 2 - k df. For Pearson this is exactly the slope test of <code>lm(y ~ x + Z)</code> (Frisch-Waugh-Lovell theorem). Kendall partial correlations need ppcor.</p>
 </li>
 </ul>
-<p><code><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_rank_cor()</a></code> is the former name, kept for backward compatibility.</p>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_rank_cor()</a></code> is the former name, kept for backward compatibility.</p>
 </section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">partial_cor_test(
   x,
@@ -226,7 +226,7 @@ partial_rank_cor(x, y, Z = NULL, meth = c("spearman", "pearson"))
 <code id="x">x</code>, <code id="y">y</code>
 </td>
 <td>
-numeric vectors (binary: 0/1, see <code><a href="https://clement-poupelin.github.io/corrkit/reference/as_cor_numeric.html">as_cor_numeric()</a></code>)
+numeric vectors (binary: 0/1, see <code><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric()</a></code>)
 </td>
 </tr>
 <tr>
@@ -267,8 +267,8 @@ confidence level of the interval (<code>NULL</code> = none); Fisher z on n - k
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">IL6</span>, <span class="va">d</span><span class="op">$</span><span class="va">fatigue</span>, meth <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">IL6</span>, <span class="va">d</span><span class="op">$</span><span class="va">fatigue</span>, meth <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$estimate
 [1] 0.5246237
@@ -294,7 +294,7 @@ $engine
 $ci_engine
 [1] "correlation::cor_to_ci"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, Z <span class="op">=</span> <span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">]</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">NfL</span>, <span class="va">d</span><span class="op">$</span><span class="va">cognition</span>, Z <span class="op">=</span> <span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">]</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$estimate
 [1] -0.04689676

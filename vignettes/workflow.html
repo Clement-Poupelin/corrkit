@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -264,10 +264,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>Les fonctions suivent toutes le même schéma : <code>cor_*()</code> calcule, <code>plot_*()</code> dessine (un <code>ggplot</code>), <code>tbl_*()</code> met en forme (un tableau <code>gt</code>).</p>
 </section><section id="données-et-calcul" class="level2"><h2 class="anchored" data-anchor-id="données-et-calcul">Données et calcul</h2>
-<p><code><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data()</a></code> génère des données dont on connaît la structure : une inflammation latente qui pilote CRP, IL-6, BDNF et le score de dépression ; IL-6 qui pilote la fatigue ; l’âge qui pilote à la fois NfL et la cognition ; et deux versions binaires des marqueurs (CRP coupée à la médiane, IL-6 coupée au 80<sup>e</sup> percentile).</p>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data()</a></code> génère des données dont on connaît la structure : une inflammation latente qui pilote CRP, IL-6, BDNF et le score de dépression ; IL-6 qui pilote la fatigue ; l’âge qui pilote à la fois NfL et la cognition ; et deux versions binaires des marqueurs (CRP coupée à la médiane, IL-6 coupée au 80<sup>e</sup> percentile).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://clement-poupelin.github.io/corrkit/">corrkit</a></span><span class="op">)</span></span>
-<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span><span class="va">lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    200 obs. of  11 variables:</span></span>
@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>lab</code> est un vecteur nommé variable → libellé ; toutes les fonctions l’acceptent via <code>labels</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
 <span><span class="va">cm</span></span>
 <span><span class="co">#&gt; &lt;cor_matrix&gt; Spearman correlations, 9 variables (2 binary), 36 pairs</span></span>
 <span><span class="co">#&gt;   engine: psych::corr.test() {psych} | raw p-values (no adjustment) | N = 188–194</span></span>
@@ -313,7 +313,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">#&gt; BIN_CRP    1              </span></span>
 <span><span class="co">#&gt; BIN_IL6    0.33*** 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Les arguments principaux de <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix()</a></code> :</p>
+<p>Les arguments principaux de <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code> :</p>
 <table class="caption-top table">
 <thead><tr class="header">
 <th>Argument</th>
@@ -357,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
@@ -369,25 +369,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Le même résultat que la heatmap, avec la même échelle de couleurs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_matrix.html">tbl_cor_matrix</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_matrix.html">tbl_cor_matrix</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="vsqxxcrzyj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vsqxxcrzyj table {
+<div id="fuhwxphhzd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fuhwxphhzd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vsqxxcrzyj thead, #vsqxxcrzyj tbody, #vsqxxcrzyj tfoot, #vsqxxcrzyj tr, #vsqxxcrzyj td, #vsqxxcrzyj th {
+#fuhwxphhzd thead, #fuhwxphhzd tbody, #fuhwxphhzd tfoot, #fuhwxphhzd tr, #fuhwxphhzd td, #fuhwxphhzd th {
   border-style: none;
 }
 
-#vsqxxcrzyj p {
+#fuhwxphhzd p {
   margin: 0;
   padding: 0;
 }
 
-#vsqxxcrzyj .gt_table {
+#fuhwxphhzd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -413,12 +413,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_caption {
+#fuhwxphhzd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vsqxxcrzyj .gt_title {
+#fuhwxphhzd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -430,7 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#vsqxxcrzyj .gt_subtitle {
+#fuhwxphhzd .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -442,7 +442,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#vsqxxcrzyj .gt_heading {
+#fuhwxphhzd .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -454,13 +454,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_bottom_border {
+#fuhwxphhzd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_col_headings {
+#fuhwxphhzd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -475,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_col_heading {
+#fuhwxphhzd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -495,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#vsqxxcrzyj .gt_column_spanner_outer {
+#fuhwxphhzd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -507,15 +507,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#vsqxxcrzyj .gt_column_spanner_outer:first-child {
+#fuhwxphhzd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vsqxxcrzyj .gt_column_spanner_outer:last-child {
+#fuhwxphhzd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vsqxxcrzyj .gt_column_spanner {
+#fuhwxphhzd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -527,11 +527,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#vsqxxcrzyj .gt_spanner_row {
+#fuhwxphhzd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vsqxxcrzyj .gt_group_heading {
+#fuhwxphhzd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -557,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#vsqxxcrzyj .gt_empty_group_heading {
+#fuhwxphhzd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -572,15 +572,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#vsqxxcrzyj .gt_from_md > :first-child {
+#fuhwxphhzd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vsqxxcrzyj .gt_from_md > :last-child {
+#fuhwxphhzd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vsqxxcrzyj .gt_row {
+#fuhwxphhzd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -599,7 +599,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#vsqxxcrzyj .gt_stub {
+#fuhwxphhzd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -612,7 +612,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#vsqxxcrzyj .gt_stub_row_group {
+#fuhwxphhzd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -626,15 +626,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#vsqxxcrzyj .gt_row_group_first td {
+#fuhwxphhzd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vsqxxcrzyj .gt_row_group_first th {
+#fuhwxphhzd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vsqxxcrzyj .gt_summary_row {
+#fuhwxphhzd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -644,16 +644,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#vsqxxcrzyj .gt_first_summary_row {
+#fuhwxphhzd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_first_summary_row.thick {
+#fuhwxphhzd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vsqxxcrzyj .gt_last_summary_row {
+#fuhwxphhzd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -663,7 +663,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_grand_summary_row {
+#fuhwxphhzd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -673,7 +673,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#vsqxxcrzyj .gt_first_grand_summary_row {
+#fuhwxphhzd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -683,7 +683,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_last_grand_summary_row_top {
+#fuhwxphhzd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -693,11 +693,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_striped {
+#fuhwxphhzd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vsqxxcrzyj .gt_table_body {
+#fuhwxphhzd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -706,7 +706,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_footnotes {
+#fuhwxphhzd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -720,7 +720,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_footnote {
+#fuhwxphhzd .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -729,7 +729,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#vsqxxcrzyj .gt_sourcenotes {
+#fuhwxphhzd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -743,7 +743,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#vsqxxcrzyj .gt_sourcenote {
+#fuhwxphhzd .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -751,72 +751,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#vsqxxcrzyj .gt_left {
+#fuhwxphhzd .gt_left {
   text-align: left;
 }
 
-#vsqxxcrzyj .gt_center {
+#fuhwxphhzd .gt_center {
   text-align: center;
 }
 
-#vsqxxcrzyj .gt_right {
+#fuhwxphhzd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vsqxxcrzyj .gt_font_normal {
+#fuhwxphhzd .gt_font_normal {
   font-weight: normal;
 }
 
-#vsqxxcrzyj .gt_font_bold {
+#fuhwxphhzd .gt_font_bold {
   font-weight: bold;
 }
 
-#vsqxxcrzyj .gt_font_italic {
+#fuhwxphhzd .gt_font_italic {
   font-style: italic;
 }
 
-#vsqxxcrzyj .gt_super {
+#fuhwxphhzd .gt_super {
   font-size: 65%;
 }
 
-#vsqxxcrzyj .gt_footnote_marks {
+#fuhwxphhzd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vsqxxcrzyj .gt_asterisk {
+#fuhwxphhzd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vsqxxcrzyj .gt_indent_1 {
+#fuhwxphhzd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vsqxxcrzyj .gt_indent_2 {
+#fuhwxphhzd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vsqxxcrzyj .gt_indent_3 {
+#fuhwxphhzd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vsqxxcrzyj .gt_indent_4 {
+#fuhwxphhzd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vsqxxcrzyj .gt_indent_5 {
+#fuhwxphhzd .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vsqxxcrzyj .katex-display {
+#fuhwxphhzd .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vsqxxcrzyj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#fuhwxphhzd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -979,25 +979,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <p>Une ligne par paire, avec n, l’intervalle de confiance et la p-value ; lignes significatives en gras.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, sort_by <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, sort_by <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="kmbczwytfw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kmbczwytfw table {
+<div id="rqxjqksflj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rqxjqksflj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kmbczwytfw thead, #kmbczwytfw tbody, #kmbczwytfw tfoot, #kmbczwytfw tr, #kmbczwytfw td, #kmbczwytfw th {
+#rqxjqksflj thead, #rqxjqksflj tbody, #rqxjqksflj tfoot, #rqxjqksflj tr, #rqxjqksflj td, #rqxjqksflj th {
   border-style: none;
 }
 
-#kmbczwytfw p {
+#rqxjqksflj p {
   margin: 0;
   padding: 0;
 }
 
-#kmbczwytfw .gt_table {
+#rqxjqksflj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1023,12 +1023,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_caption {
+#rqxjqksflj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kmbczwytfw .gt_title {
+#rqxjqksflj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1040,7 +1040,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#kmbczwytfw .gt_subtitle {
+#rqxjqksflj .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -1052,7 +1052,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#kmbczwytfw .gt_heading {
+#rqxjqksflj .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1064,13 +1064,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_bottom_border {
+#rqxjqksflj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_col_headings {
+#rqxjqksflj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1085,7 +1085,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_col_heading {
+#rqxjqksflj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1105,7 +1105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kmbczwytfw .gt_column_spanner_outer {
+#rqxjqksflj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1117,15 +1117,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#kmbczwytfw .gt_column_spanner_outer:first-child {
+#rqxjqksflj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kmbczwytfw .gt_column_spanner_outer:last-child {
+#rqxjqksflj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kmbczwytfw .gt_column_spanner {
+#rqxjqksflj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1137,11 +1137,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#kmbczwytfw .gt_spanner_row {
+#rqxjqksflj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kmbczwytfw .gt_group_heading {
+#rqxjqksflj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1167,7 +1167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#kmbczwytfw .gt_empty_group_heading {
+#rqxjqksflj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1182,15 +1182,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#kmbczwytfw .gt_from_md > :first-child {
+#rqxjqksflj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kmbczwytfw .gt_from_md > :last-child {
+#rqxjqksflj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kmbczwytfw .gt_row {
+#rqxjqksflj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1209,7 +1209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kmbczwytfw .gt_stub {
+#rqxjqksflj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1222,7 +1222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kmbczwytfw .gt_stub_row_group {
+#rqxjqksflj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1236,15 +1236,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#kmbczwytfw .gt_row_group_first td {
+#rqxjqksflj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kmbczwytfw .gt_row_group_first th {
+#rqxjqksflj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kmbczwytfw .gt_summary_row {
+#rqxjqksflj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1254,16 +1254,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kmbczwytfw .gt_first_summary_row {
+#rqxjqksflj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_first_summary_row.thick {
+#rqxjqksflj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kmbczwytfw .gt_last_summary_row {
+#rqxjqksflj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1273,7 +1273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_grand_summary_row {
+#rqxjqksflj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1283,7 +1283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kmbczwytfw .gt_first_grand_summary_row {
+#rqxjqksflj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1293,7 +1293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_last_grand_summary_row_top {
+#rqxjqksflj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1303,11 +1303,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_striped {
+#rqxjqksflj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kmbczwytfw .gt_table_body {
+#rqxjqksflj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1316,7 +1316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_footnotes {
+#rqxjqksflj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1330,7 +1330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_footnote {
+#rqxjqksflj .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -1339,7 +1339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kmbczwytfw .gt_sourcenotes {
+#rqxjqksflj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1353,7 +1353,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kmbczwytfw .gt_sourcenote {
+#rqxjqksflj .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1361,72 +1361,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kmbczwytfw .gt_left {
+#rqxjqksflj .gt_left {
   text-align: left;
 }
 
-#kmbczwytfw .gt_center {
+#rqxjqksflj .gt_center {
   text-align: center;
 }
 
-#kmbczwytfw .gt_right {
+#rqxjqksflj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kmbczwytfw .gt_font_normal {
+#rqxjqksflj .gt_font_normal {
   font-weight: normal;
 }
 
-#kmbczwytfw .gt_font_bold {
+#rqxjqksflj .gt_font_bold {
   font-weight: bold;
 }
 
-#kmbczwytfw .gt_font_italic {
+#rqxjqksflj .gt_font_italic {
   font-style: italic;
 }
 
-#kmbczwytfw .gt_super {
+#rqxjqksflj .gt_super {
   font-size: 65%;
 }
 
-#kmbczwytfw .gt_footnote_marks {
+#rqxjqksflj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kmbczwytfw .gt_asterisk {
+#rqxjqksflj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kmbczwytfw .gt_indent_1 {
+#rqxjqksflj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kmbczwytfw .gt_indent_2 {
+#rqxjqksflj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kmbczwytfw .gt_indent_3 {
+#rqxjqksflj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kmbczwytfw .gt_indent_4 {
+#rqxjqksflj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kmbczwytfw .gt_indent_5 {
+#rqxjqksflj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kmbczwytfw .katex-display {
+#rqxjqksflj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kmbczwytfw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rqxjqksflj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1880,7 +1880,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <p>Par défaut, les variables sont ordonnées par classification hiérarchique (Ward, distance 1 − r) à l’intérieur de chaque bloc, ce qui rapproche les variables qui se ressemblent. <code>order = "original"</code> garde l’ordre donné.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, order <span class="op">=</span> <span class="st">"original"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, order <span class="op">=</span> <span class="st">"original"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
@@ -1892,7 +1892,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <p><code>separator = "line"</code> remplace les facettes par deux traits et garde des cases carrées.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, separator <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, separator <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
@@ -1904,7 +1904,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 <p><code>show_values = FALSE</code> ne garde que les couleurs, pour une vue d’ensemble d’une grande matrice.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, show_values <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, show_values <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
@@ -1916,7 +1916,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
 <p><code>palette</code> (couleurs des corrélations négatives et positives), <code>title</code>, <code>base_size</code>, <code>value_size</code> et <code>caption_width</code> règlent l’apparence. Le résultat est un <code>ggplot</code> : on peut lui ajouter des couches et des thèmes.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#1B7837"</span>, high <span class="op">=</span> <span class="st">"#762A83"</span><span class="op">)</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#1B7837"</span>, high <span class="op">=</span> <span class="st">"#762A83"</span><span class="op">)</span>,</span>
 <span>                 title <span class="op">=</span> <span class="st">"Biomarqueurs et scores"</span>, base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -1931,15 +1931,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="choisir-le-moteur" class="level2"><h2 class="anchored" data-anchor-id="choisir-le-moteur">Choisir le moteur</h2>
 <p>Les moteurs donnent les mêmes coefficients ; on peut le vérifier :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"stats"</span><span class="op">)</span></span>
-<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span>    <span class="co"># psych si installé</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"stats"</span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span>    <span class="co"># psych si installé</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">r</span>, <span class="va">b</span><span class="op">$</span><span class="va">r</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Pour Kendall, <code>psych</code> n’est pas utilisé (il teste τ avec la formule t de r) : <code>engine = "auto"</code> passe par <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code> ou <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ck</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">ck</span>, labels <span class="op">=</span> <span class="va">lab</span>, title <span class="op">=</span> <span class="st">"Kendall correlations"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ck</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">ck</span>, labels <span class="op">=</span> <span class="va">lab</span>, title <span class="op">=</span> <span class="st">"Kendall correlations"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
@@ -1961,32 +1961,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>toutes les paires d’un ensemble de variables</td>
 <td>
-<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_matrix.html">tbl_cor_matrix()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long()</a></code>
+<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_matrix.html">tbl_cor_matrix()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long()</a></code>
 </td>
 </tr>
 <tr class="even">
 <td>des prédicteurs × des scores, éventuellement ajustés</td>
 <td>
-<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long()</a></code>
+<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long()</a></code>
 </td>
 </tr>
 <tr class="odd">
 <td>voir une paire et ce que mesure son coefficient</td>
-<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair()</a></code></td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair()</a></code></td>
 </tr>
 <tr class="even">
 <td>un test pour une paire</td>
-<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test()</a></code></td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test()</a></code></td>
 </tr>
 <tr class="odd">
 <td>les effets des variables binaires</td>
 <td>
-<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_binary.html">tbl_cor_binary()</a></code>
+<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html">tbl_cor_binary()</a></code>
 </td>
 </tr>
 <tr class="even">
 <td>une note de lecture des variables binaires (en ou fr)</td>
-<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_note.html">cor_binary_note()</a></code></td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note()</a></code></td>
 </tr>
 </tbody>
 </table></section><section id="références" class="level2"><h2 class="anchored" data-anchor-id="références">Références</h2>

@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -198,7 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="table-of-the-effect-sizes-of-binary-variables" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="table-of-the-effect-sizes-of-binary-variables">Table of the effect sizes of binary variables</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Formats the output of <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code>: groups and sizes, means (SD), difference in means with its CI and t-test, rank-biserial correlation r_rb with its CI and Mann-Whitney test, and the observed r_s next to its maximum for this split, so that the attenuation of the correlation is visible.</p>
+<p>Formats the output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>: groups and sizes, means (SD), difference in means with its CI and t-test, rank-biserial correlation r_rb with its CI and Mann-Whitney test, and the observed r_s next to its maximum for this split, so that the attenuation of the correlation is visible.</p>
 </section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">tbl_cor_binary(eff, labels = NULL, digits = 2, title = NULL, subtitle = NULL)
 </code></pre>
@@ -209,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <code id="eff">eff</code>
 </td>
 <td>
-output of <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code>
+output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>
 </td>
 </tr>
 <tr>
@@ -242,27 +242,27 @@ override the automatic texts
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_binary.html">tbl_cor_binary</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html">tbl_cor_binary</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>               labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="oxktwhltgx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#oxktwhltgx table {
+<div id="swgdkajtny" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#swgdkajtny table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#oxktwhltgx thead, #oxktwhltgx tbody, #oxktwhltgx tfoot, #oxktwhltgx tr, #oxktwhltgx td, #oxktwhltgx th {
+#swgdkajtny thead, #swgdkajtny tbody, #swgdkajtny tfoot, #swgdkajtny tr, #swgdkajtny td, #swgdkajtny th {
   border-style: none;
 }
 
-#oxktwhltgx p {
+#swgdkajtny p {
   margin: 0;
   padding: 0;
 }
 
-#oxktwhltgx .gt_table {
+#swgdkajtny .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -288,12 +288,12 @@ override the automatic texts
   border-left-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_caption {
+#swgdkajtny .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#oxktwhltgx .gt_title {
+#swgdkajtny .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -305,7 +305,7 @@ override the automatic texts
   border-bottom-width: 0;
 }
 
-#oxktwhltgx .gt_subtitle {
+#swgdkajtny .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -317,7 +317,7 @@ override the automatic texts
   border-top-width: 0;
 }
 
-#oxktwhltgx .gt_heading {
+#swgdkajtny .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -329,13 +329,13 @@ override the automatic texts
   border-right-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_bottom_border {
+#swgdkajtny .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_col_headings {
+#swgdkajtny .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -350,7 +350,7 @@ override the automatic texts
   border-right-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_col_heading {
+#swgdkajtny .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -370,7 +370,7 @@ override the automatic texts
   overflow-x: hidden;
 }
 
-#oxktwhltgx .gt_column_spanner_outer {
+#swgdkajtny .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -382,15 +382,15 @@ override the automatic texts
   padding-right: 4px;
 }
 
-#oxktwhltgx .gt_column_spanner_outer:first-child {
+#swgdkajtny .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#oxktwhltgx .gt_column_spanner_outer:last-child {
+#swgdkajtny .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#oxktwhltgx .gt_column_spanner {
+#swgdkajtny .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -402,11 +402,11 @@ override the automatic texts
   width: 100%;
 }
 
-#oxktwhltgx .gt_spanner_row {
+#swgdkajtny .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#oxktwhltgx .gt_group_heading {
+#swgdkajtny .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -432,7 +432,7 @@ override the automatic texts
   text-align: left;
 }
 
-#oxktwhltgx .gt_empty_group_heading {
+#swgdkajtny .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -447,15 +447,15 @@ override the automatic texts
   vertical-align: middle;
 }
 
-#oxktwhltgx .gt_from_md > :first-child {
+#swgdkajtny .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#oxktwhltgx .gt_from_md > :last-child {
+#swgdkajtny .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#oxktwhltgx .gt_row {
+#swgdkajtny .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -474,7 +474,7 @@ override the automatic texts
   overflow-x: hidden;
 }
 
-#oxktwhltgx .gt_stub {
+#swgdkajtny .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -487,7 +487,7 @@ override the automatic texts
   padding-right: 5px;
 }
 
-#oxktwhltgx .gt_stub_row_group {
+#swgdkajtny .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -501,15 +501,15 @@ override the automatic texts
   vertical-align: top;
 }
 
-#oxktwhltgx .gt_row_group_first td {
+#swgdkajtny .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#oxktwhltgx .gt_row_group_first th {
+#swgdkajtny .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#oxktwhltgx .gt_summary_row {
+#swgdkajtny .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -519,16 +519,16 @@ override the automatic texts
   padding-right: 5px;
 }
 
-#oxktwhltgx .gt_first_summary_row {
+#swgdkajtny .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_first_summary_row.thick {
+#swgdkajtny .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#oxktwhltgx .gt_last_summary_row {
+#swgdkajtny .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -538,7 +538,7 @@ override the automatic texts
   border-bottom-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_grand_summary_row {
+#swgdkajtny .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -548,7 +548,7 @@ override the automatic texts
   padding-right: 5px;
 }
 
-#oxktwhltgx .gt_first_grand_summary_row {
+#swgdkajtny .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -558,7 +558,7 @@ override the automatic texts
   border-top-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_last_grand_summary_row_top {
+#swgdkajtny .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -568,11 +568,11 @@ override the automatic texts
   border-bottom-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_striped {
+#swgdkajtny .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#oxktwhltgx .gt_table_body {
+#swgdkajtny .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -581,7 +581,7 @@ override the automatic texts
   border-bottom-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_footnotes {
+#swgdkajtny .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -595,7 +595,7 @@ override the automatic texts
   border-right-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_footnote {
+#swgdkajtny .gt_footnote {
   margin: 0px;
   font-size: 11px;
   padding-top: 4px;
@@ -604,7 +604,7 @@ override the automatic texts
   padding-right: 5px;
 }
 
-#oxktwhltgx .gt_sourcenotes {
+#swgdkajtny .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -618,7 +618,7 @@ override the automatic texts
   border-right-color: #D3D3D3;
 }
 
-#oxktwhltgx .gt_sourcenote {
+#swgdkajtny .gt_sourcenote {
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -626,72 +626,72 @@ override the automatic texts
   padding-right: 5px;
 }
 
-#oxktwhltgx .gt_left {
+#swgdkajtny .gt_left {
   text-align: left;
 }
 
-#oxktwhltgx .gt_center {
+#swgdkajtny .gt_center {
   text-align: center;
 }
 
-#oxktwhltgx .gt_right {
+#swgdkajtny .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oxktwhltgx .gt_font_normal {
+#swgdkajtny .gt_font_normal {
   font-weight: normal;
 }
 
-#oxktwhltgx .gt_font_bold {
+#swgdkajtny .gt_font_bold {
   font-weight: bold;
 }
 
-#oxktwhltgx .gt_font_italic {
+#swgdkajtny .gt_font_italic {
   font-style: italic;
 }
 
-#oxktwhltgx .gt_super {
+#swgdkajtny .gt_super {
   font-size: 65%;
 }
 
-#oxktwhltgx .gt_footnote_marks {
+#swgdkajtny .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#oxktwhltgx .gt_asterisk {
+#swgdkajtny .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#oxktwhltgx .gt_indent_1 {
+#swgdkajtny .gt_indent_1 {
   text-indent: 5px;
 }
 
-#oxktwhltgx .gt_indent_2 {
+#swgdkajtny .gt_indent_2 {
   text-indent: 10px;
 }
 
-#oxktwhltgx .gt_indent_3 {
+#swgdkajtny .gt_indent_3 {
   text-indent: 15px;
 }
 
-#oxktwhltgx .gt_indent_4 {
+#swgdkajtny .gt_indent_4 {
   text-indent: 20px;
 }
 
-#oxktwhltgx .gt_indent_5 {
+#swgdkajtny .gt_indent_5 {
   text-indent: 25px;
 }
 
-#oxktwhltgx .katex-display {
+#swgdkajtny .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#oxktwhltgx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#swgdkajtny div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
