@@ -1,0 +1,40 @@
+Package: corrkit
+Title: Correlation Analyses with Annotated Heatmaps and Tables
+Version: 0.1.0
+Authors@R:
+    person("Clément", "Poupelin", email = "clementjc.poupelin@gmail.com",
+           role = c("aut", "cre"))
+Description: A thin layer over validated correlation engines (stats::cor.test(),
+    ppcor::pcor.test(), psych::corr.test(), correlation::correlation()) that adds
+    one way of working: an explicit multiple-testing family, a dedicated reading
+    of binary (0/1) variables, and publication-ready outputs (ggplot2 heatmaps and
+    scatter plots, gt tables) whose subtitles, captions and source notes state the
+    method, the engine, the formulas, the adjustment and how to read the result.
+    Notation follows Makowski, Ben-Shachar, Patil and Lüdecke (2020)
+    <doi:10.21105/joss.02306>.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
+Imports:
+    dplyr,
+    ggplot2 (>= 3.4.0),
+    gt (>= 0.9.0),
+    purrr,
+    stats,
+    tibble,
+    tidyr,
+    tools,
+    utils
+Suggests:
+    correlation,
+    effectsize,
+    knitr,
+    ppcor,
+    psych,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2

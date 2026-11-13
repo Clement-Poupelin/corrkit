@@ -1,0 +1,143 @@
+---
+title: "Variables binaires dans une analyse de corrélation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Variables binaires dans une analyse de corrélation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 8, fig.height = 5, dpi = 96,
+                      out.width = "100%")
+```
+
+```{r setup}
+library(corrkit)
+library(ggplot2)
+d   <- simulate_cor_data(n = 200)
+lab <- attr(d, "labels")
+```
+
+Un biomarqueur « haut » vs « bas », le sexe, un traitement : une variable à deux modalités peut entrer dans une corrélation. Le calcul est valide, mais le coefficient obtenu **ne se lit pas comme celui d'une variable continue**. Cette vignette explique pourquoi, ce que `corrkit` fait de ces variables et ce qu'il faut rapporter à la place.
+
+## Codage
+
+`as_cor_numeric()` code une variable binaire en 0/1, la modalité **haute** (le second niveau du facteur) valant 1. Un coefficient positif signifie donc « plus élevé dans le groupe haut ». Ce recodage est une transformation linéaire croissante : il ne change ni le coefficient, ni sa p-value.
+
+```{r}
+table(d$BIN_CRP, as_cor_numeric(d$BIN_CRP), useNA = "ifany")
+```
+
+Dans les graphiques et les tableaux, les variables binaires portent la marque ` [0/1]` (argument `bin_mark`) et sont rangées dans un bloc à part.
+
+## Pearson : la corrélation point-bisériale est un test t
+
+Avec une variable 0/1, le r de Pearson est la corrélation **point-bisériale** :
+
+$$r_{pb} = \frac{M_1 - M_0}{SD_y}\sqrt{pq},$$
+
+où $M_1, M_0$ sont les moyennes de y dans les deux groupes, $p, q$ les proportions des groupes et $SD_y$ l'écart-type de y (dénominateur n). Son test est exactement le test t de Student à variances égales :
+
+```{r}
+g <- as_cor_numeric(d$BIN_CRP); y <- d$depression; ok <- complete.cases(g, y)
+c(cor_test = partial_cor_test(g, y, meth = "pearson")$p.value,
+  t_test   = t.test(y[ok & g == 1], y[ok & g == 0], var.equal = TRUE)$p.value)
+```
+
+Ajustée sur des covariables, c'est le test de la pente de `lm(y ~ groupe + covariables)` (même t, mêmes degrés de liberté).
+
+## Pourquoi le coefficient est plus petit
+
+### Un biomarqueur coupé perd de la corrélation
+
+Quand un biomarqueur continu est coupé en deux groupes, la corrélation avec un score diminue mécaniquement. Pour une loi normale coupée au seuil c (en écarts-types), avec une proportion p au-dessus du seuil :
+
+$$r_{pb} = r \times \frac{\varphi(c)}{\sqrt{pq}},$$
+
+$\varphi$ étant la densité de la loi normale. Le facteur vaut au plus 0,80 (coupure à la médiane) et 0,70 pour une répartition 20/80. On le vérifie par simulation :
+
+```{r}
+set.seed(1)
+n <- 20000; r <- 0.5
+x <- rnorm(n); yy <- r * x + sqrt(1 - r^2) * rnorm(n)
+sim <- do.call(rbind, lapply(seq(0.05, 0.5, by = 0.05), function(p) {
+  c_ <- qnorm(1 - p)                         # seuil : une proportion p au-dessus
+  b  <- as.numeric(x > c_)
+  data.frame(p = p, observed = cor(b, yy), theory = r * dnorm(c_) / sqrt(p * (1 - p)))
+}))
+round(sim, 3)
+```
+
+```{r}
+ggplot(sim, aes(p, observed)) +
+  geom_hline(yintercept = r, linetype = "dashed", colour = "grey50") +
+  geom_line(aes(y = theory), colour = COR_PAL[["high"]]) +
+  geom_point(size = 2) +
+  scale_x_continuous(labels = function(v) paste0(100 * v, "%")) +
+  labs(title = "Point-biserial r after cutting a continuous marker",
+       subtitle = sprintf("Continuous r = %.1f (dashed line); n = %d simulated individuals", r, n),
+       x = "Share of individuals in the upper group (p)", y = "Point-biserial r",
+       caption = "Points = simulation; line = r × φ(c) / √(pq). The more unbalanced the groups, the smaller the coefficient.") +
+  theme_pub(11)
+```
+
+À effet identique, le r d'un biomarqueur binaire est donc plus petit que celui du même biomarqueur continu, et d'autant plus que les groupes sont déséquilibrés (Babchishin & Helmus 2016) : **les deux ne sont pas comparables**.
+
+### Spearman : un test de Mann-Whitney déguisé
+
+Avec deux groupes, le r_s de Spearman est une corrélation de Pearson sur les rangs de y ; c'est une fonction linéaire du U de Mann-Whitney. Sans ex æquo dans y :
+
+$$r_s = r_{rb}\sqrt{3pq}, \qquad r_{rb} = \frac{2U}{n_0 n_1} - 1 = 2\,\mathrm{AUC} - 1,$$
+
+où $r_{rb}$ est la corrélation **rang-bisériale** (Kerby 2014) : la probabilité qu'un individu du groupe haut ait un score plus élevé qu'un individu du groupe bas, moins la probabilité inverse. Même quand les deux groupes sont parfaitement séparés ($r_{rb} = 1$), $|r_s|$ ne dépasse pas $\sqrt{3pq}$ : 0,87 à 50/50, 0,69 à 20/80.
+
+```{r}
+eff <- cor_binary_effects(d, c("BIN_CRP", "BIN_IL6"), c("depression", "fatigue"), labels = lab)
+eff[, c("X", "Y", "prop1", "r_rb", "r_s", "r_s_bound")]
+with(eff, cbind(r_s, r_rb_x_sqrt3pq = r_rb * sqrt(3 * prop1 * (1 - prop1))))
+```
+
+L'égalité n'est approximative que parce que les scores simulés contiennent des ex æquo.
+
+### Kendall
+
+Le numérateur du τ de Kendall (paires concordantes − paires discordantes) ne compte que les paires prises dans deux groupes différents, et vaut $n_0 n_1 \times r_{rb}$ : c'est encore la comparaison de Mann-Whitney, avec un maximum qui dépend de la répartition et des ex æquo.
+
+## Ce qu'il faut rapporter
+
+La corrélation reste utile pour **tester** l'association (son test est celui de Student ou de Mann-Whitney). Pour **la taille de l'effet**, on rapporte la différence entre groupes et la corrélation rang-bisériale :
+
+```{r}
+tbl_cor_binary(eff)
+```
+
+La dernière colonne place le r_s observé à côté de son maximum pour cette répartition : un r_s de 0,30 avec un maximum de 0,69 n'a pas le même sens qu'un r_s de 0,30 entre deux variables continues.
+
+`plot_cor_pair()` montre la même chose sur un graphique : les valeurs par groupe, avec r_s, r_rb et la différence de moyennes dans le sous-titre.
+
+```{r}
+plot_cor_pair(d, "BIN_IL6", "fatigue", labels = lab)
+```
+
+## Dans les heatmaps et les tableaux
+
+Les cases qui font intervenir une variable binaire sont regroupées dans un bloc à part, et la légende donne la formule du coefficient réellement calculé :
+
+```{r, fig.height = 6}
+res <- plot_cor_cross(d, c("CRP", "IL6", "BIN_CRP", "BIN_IL6"), c("depression", "fatigue"), labels = lab)
+res$plot
+```
+
+`res$note` contient la note complète, et `cor_binary_note()` la fournit en anglais (légendes, notes de tableau) ou en français (encadrés d'un rapport), en version courte ou complète :
+
+```{r}
+cor_binary_note("spearman", lang = "fr", short = TRUE)
+cat(strwrap(cor_binary_note("spearman", lang = "fr"), 90), sep = "\n")
+```
+
+## Références
+
+* Kerby DS (2014). The simple difference formula: an approach to teaching nonparametric correlation. *Comprehensive Psychology* 3:11.IT.3.1. doi:10.2466/11.IT.3.1
+* Babchishin KM, Helmus LM (2016). The influence of base rates on correlations: an evaluation of proposed alternative effect sizes with real-world data. *Behavior Research Methods* 48:1021-1031. doi:10.3758/s13428-015-0627-7
+* Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020). Methods and algorithms for correlation analysis in R. *Journal of Open Source Software* 5(51):2306. doi:10.21105/joss.02306
