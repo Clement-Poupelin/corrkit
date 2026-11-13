@@ -1,0 +1,2489 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Analyse complète d’une matrice de corrélation – corrkit</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../man/figures/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-bd8e5e1cc279c06a62fc3e018f344ac3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head>
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">corrkit</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../NEWS.html"> 
+<span class="menu-text">0.1.0</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../vignettes/corrkit.html"> 
+<span class="menu-text">Premiers pas</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference.html"> 
+<span class="menu-text">Référence</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-vignettes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Vignettes</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-vignettes">
+<li>
+    <a class="dropdown-item" href="../vignettes/workflow.html">
+ <span class="dropdown-text">Analyse complète d’une matrice</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../vignettes/p-values.html">
+ <span class="dropdown-text">Corrections pour tests multiples</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../vignettes/methods-comparison.html">
+ <span class="dropdown-text">Comparer les coefficients de corrélation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../vignettes/partial-cross.html">
+ <span class="dropdown-text">Corrélations croisées et partielles</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../vignettes/binary-variables.html">
+ <span class="dropdown-text">Variables binaires</span></a>
+  </li>  
+    </ul>
+</li>
+  <li class="nav-item">
+    <a class="nav-link" href="../NEWS.html"> 
+<span class="menu-text">Changements</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/clement-poupelin/corrkit"> <i class="bi bi-github" role="img" aria-label="corrkit sur GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Sur cette page</h2>
+   
+  <ul>
+<li><a href="#lid%C3%A9e-ne-rien-recalculer-tout-expliquer" id="toc-lidée-ne-rien-recalculer-tout-expliquer" class="nav-link active" data-scroll-target="#lid%C3%A9e-ne-rien-recalculer-tout-expliquer">L’idée : ne rien recalculer, tout expliquer</a></li>
+  <li><a href="#donn%C3%A9es-et-calcul" id="toc-données-et-calcul" class="nav-link" data-scroll-target="#donn%C3%A9es-et-calcul">Données et calcul</a></li>
+  <li><a href="#les-sorties" id="toc-les-sorties" class="nav-link" data-scroll-target="#les-sorties">Les sorties</a></li>
+  <li><a href="#lire-une-heatmap" id="toc-lire-une-heatmap" class="nav-link" data-scroll-target="#lire-une-heatmap">Lire une heatmap</a></li>
+  <li><a href="#options-de-la-heatmap" id="toc-options-de-la-heatmap" class="nav-link" data-scroll-target="#options-de-la-heatmap">Options de la heatmap</a></li>
+  <li><a href="#choisir-le-moteur" id="toc-choisir-le-moteur" class="nav-link" data-scroll-target="#choisir-le-moteur">Choisir le moteur</a></li>
+  <li><a href="#r%C3%A9capitulatif-des-fonctions" id="toc-récapitulatif-des-fonctions" class="nav-link" data-scroll-target="#r%C3%A9capitulatif-des-fonctions">Récapitulatif des fonctions</a></li>
+  <li><a href="#r%C3%A9f%C3%A9rences" id="toc-références" class="nav-link" data-scroll-target="#r%C3%A9f%C3%A9rences">Références</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Analyse complète d’une matrice de corrélation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>Cette vignette reprend le début de <a href="../vignettes/corrkit.html">Prise en main</a> et le détaille : d’où viennent les calculs, toutes les sorties d’une matrice de corrélation, leurs options et leur lecture.</p>
+<section id="lidée-ne-rien-recalculer-tout-expliquer" class="level2"><h2 class="anchored" data-anchor-id="lidée-ne-rien-recalculer-tout-expliquer">L’idée : ne rien recalculer, tout expliquer</h2>
+<p><code>corrkit</code> ne contient <strong>aucun nouvel estimateur</strong>. Chaque coefficient, chaque p-value et chaque intervalle vient d’une fonction existante et validée ; le package ajoute par-dessus une manière de travailler et des sorties qui disent ce qu’elles montrent.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Ce qui est calculé</th>
+<th>Fonction utilisée</th>
+<th>Repli si le package manque</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Une paire, sans ajustement</td>
+<td><code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Une paire, partielle</td>
+<td>
+<code><a href="https://rdrr.io/pkg/ppcor/man/pcor.test.html">ppcor::pcor.test()</a></code> (Kim 2015)</td>
+<td>corrélation des résidus de <code><a href="https://rdrr.io/r/stats/lmfit.html">stats::lm.fit()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td>Toutes les paires (matrice)</td>
+<td>
+<code>psych::corr.test(adjust = "none")</code> ou <code>correlation::correlation(p_adjust = "none")</code> (Makowski et al.&nbsp;2020)</td>
+<td>
+<code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code> paire par paire</td>
+</tr>
+<tr class="even">
+<td>Intervalle de confiance</td>
+<td><code><a href="https://easystats.github.io/correlation/reference/cor_to_p.html">correlation::cor_to_ci()</a></code></td>
+<td>transformation z de Fisher en R de base</td>
+</tr>
+<tr class="odd">
+<td>Ajustement pour tests multiples (sur demande)</td>
+<td><code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Effets des variables binaires</td>
+<td>
+<code><a href="https://rdrr.io/r/stats/t.test.html">stats::t.test()</a></code>, <code><a href="https://rdrr.io/r/stats/wilcox.test.html">stats::wilcox.test()</a></code>, <code><a href="https://easystats.github.io/effectsize/reference/rank_biserial.html">effectsize::rank_biserial()</a></code>
+</td>
+<td>IC de r_rb non calculé</td>
+</tr>
+</tbody>
+</table>
+<p>Les fonctions suivent toutes le même schéma : <code>cor_*()</code> calcule, <code>plot_*()</code> dessine (un <code>ggplot</code>), <code>tbl_*()</code> met en forme (un tableau <code>gt</code>).</p>
+</section><section id="données-et-calcul" class="level2"><h2 class="anchored" data-anchor-id="données-et-calcul">Données et calcul</h2>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data()</a></code> génère des données dont on connaît la structure : une inflammation latente qui pilote CRP, IL-6, BDNF et le score de dépression ; IL-6 qui pilote la fatigue ; l’âge qui pilote à la fois NfL et la cognition ; et deux versions binaires des marqueurs (CRP coupée à la médiane, IL-6 coupée au 80<sup>e</sup> percentile).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://clement-poupelin.github.io/corrkit/">corrkit</a></span><span class="op">)</span></span>
+<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="va">lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    200 obs. of  11 variables:</span></span>
+<span><span class="co">#&gt;  $ age       : num  61 42 57 54 47 25 46 43 56 49 ...</span></span>
+<span><span class="co">#&gt;  $ sex       : Factor w/ 2 levels "F","M": 1 1 1 2 2 2 1 1 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ CRP       : num  1.95 0.98 0.51 3.89 0.55 0.43 0.6 1.66 1.46 2.39 ...</span></span>
+<span><span class="co">#&gt;  $ IL6       : num  0.82 -0.65 -0.28 0.71 -0.07 -0.45 -0.29 1.5 -1.36 0.14 ...</span></span>
+<span><span class="co">#&gt;  $ BDNF      : num  0.3 -0.35 -0.21 0.89 1.55 1.31 0.32 0.17 -1.48 -1.3 ...</span></span>
+<span><span class="co">#&gt;  $ NfL       : num  0.93 -0.15 -0.76 -0.86 -1.08 -1.47 -1.5 NA -0.99 -0.06 ...</span></span>
+<span><span class="co">#&gt;  $ depression: num  7.3 7.3 NA 14.4 9.1 10.2 6 14.1 15.2 11.4 ...</span></span>
+<span><span class="co">#&gt;  $ fatigue   : num  4 5.6 4.6 9.2 9.1 7.6 7.5 12.3 4.5 0.1 ...</span></span>
+<span><span class="co">#&gt;  $ cognition : num  23.6 25.7 25.5 24.3 26 NA 27.6 26.3 26.1 27.7 ...</span></span>
+<span><span class="co">#&gt;  $ BIN_CRP   : Factor w/ 2 levels "low","high": 2 1 1 2 1 1 1 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ BIN_IL6   : Factor w/ 2 levels "low","high": 1 1 1 1 1 1 1 2 1 1 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "labels")= Named chr [1:11] "Age" "Sex" "CRP" "IL-6" ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:11] "age" "sex" "CRP" "IL6" ...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>lab</code> est un vecteur nommé variable → libellé ; toutes les fonctions l’acceptent via <code>labels</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">cm</span></span>
+<span><span class="co">#&gt; &lt;cor_matrix&gt; Spearman correlations, 9 variables (2 binary), 36 pairs</span></span>
+<span><span class="co">#&gt;   engine: psych::corr.test() {psych} | raw p-values (no adjustment) | N = 188–194</span></span>
+<span><span class="co">#&gt;            CRP      IL6      BDNF     NfL      depression fatigue cognition</span></span>
+<span><span class="co">#&gt; CRP        1                                                               </span></span>
+<span><span class="co">#&gt; IL6        0.57***  1                                                      </span></span>
+<span><span class="co">#&gt; BDNF       -0.36*** -0.25*** 1                                             </span></span>
+<span><span class="co">#&gt; NfL        0.17*    0.05     -0.04    1                                    </span></span>
+<span><span class="co">#&gt; depression 0.50***  0.47***  -0.21**  0.23**   1                           </span></span>
+<span><span class="co">#&gt; fatigue    0.17*    0.47***  -0.10    -0.05    0.25***    1                </span></span>
+<span><span class="co">#&gt; cognition  -0.13    -0.01    0.01     -0.61*** -0.27***   0.06    1        </span></span>
+<span><span class="co">#&gt; BIN_CRP    0.87***  0.46***  -0.31*** 0.12     0.41***    0.21**  -0.04    </span></span>
+<span><span class="co">#&gt; BIN_IL6    0.39***  0.69***  -0.14    0.07     0.35***    0.35*** -0.04    </span></span>
+<span><span class="co">#&gt;            BIN_CRP BIN_IL6</span></span>
+<span><span class="co">#&gt; CRP                       </span></span>
+<span><span class="co">#&gt; IL6                       </span></span>
+<span><span class="co">#&gt; BDNF                      </span></span>
+<span><span class="co">#&gt; NfL                       </span></span>
+<span><span class="co">#&gt; depression                </span></span>
+<span><span class="co">#&gt; fatigue                   </span></span>
+<span><span class="co">#&gt; cognition                 </span></span>
+<span><span class="co">#&gt; BIN_CRP    1              </span></span>
+<span><span class="co">#&gt; BIN_IL6    0.33*** 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Les arguments principaux de <code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix()</a></code> :</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Argument</th>
+<th>Défaut</th>
+<th>Rôle</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>method</code></td>
+<td><code>"spearman"</code></td>
+<td>
+<code>"pearson"</code>, <code>"kendall"</code>, ou une méthode robuste du package correlation (voir <a href="../vignettes/methods-comparison.html">Comparer les coefficients</a>)</td>
+</tr>
+<tr class="even">
+<td><code>p_adjust</code></td>
+<td><code>"none"</code></td>
+<td>p-values brutes ; <code>"BH"</code>, <code>"holm"</code>, <code>"bonferroni"</code>… pour un ajustement sur les k(k − 1)/2 paires (voir <a href="../vignettes/p-values.html">Corrections pour tests multiples</a>)</td>
+</tr>
+<tr class="odd">
+<td><code>engine</code></td>
+<td><code>"auto"</code></td>
+<td>
+<code><a href="https://rdrr.io/pkg/psych/man/corr.test.html">psych::corr.test()</a></code>, puis <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code>, puis <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>ci</code></td>
+<td><code>0.95</code></td>
+<td>niveau des intervalles de confiance (<code>NULL</code> = aucun)</td>
+</tr>
+</tbody>
+</table></section><section id="les-sorties" class="level2"><h2 class="anchored" data-anchor-id="les-sorties">Les sorties</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist">
+<li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Heatmap</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Tableau matrice</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Tableau long</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Console</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">Données</a></li>
+</ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Le même résultat que la heatmap, avec la même échelle de couleurs.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_matrix.html">tbl_cor_matrix</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="vsqxxcrzyj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vsqxxcrzyj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vsqxxcrzyj thead, #vsqxxcrzyj tbody, #vsqxxcrzyj tfoot, #vsqxxcrzyj tr, #vsqxxcrzyj td, #vsqxxcrzyj th {
+  border-style: none;
+}
+
+#vsqxxcrzyj p {
+  margin: 0;
+  padding: 0;
+}
+
+#vsqxxcrzyj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vsqxxcrzyj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vsqxxcrzyj .gt_subtitle {
+  color: #333333;
+  font-size: 12px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vsqxxcrzyj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vsqxxcrzyj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vsqxxcrzyj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vsqxxcrzyj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vsqxxcrzyj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vsqxxcrzyj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vsqxxcrzyj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vsqxxcrzyj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vsqxxcrzyj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vsqxxcrzyj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vsqxxcrzyj .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vsqxxcrzyj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vsqxxcrzyj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vsqxxcrzyj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vsqxxcrzyj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vsqxxcrzyj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vsqxxcrzyj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vsqxxcrzyj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vsqxxcrzyj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vsqxxcrzyj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_footnote {
+  margin: 0px;
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vsqxxcrzyj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vsqxxcrzyj .gt_sourcenote {
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vsqxxcrzyj .gt_left {
+  text-align: left;
+}
+
+#vsqxxcrzyj .gt_center {
+  text-align: center;
+}
+
+#vsqxxcrzyj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vsqxxcrzyj .gt_font_normal {
+  font-weight: normal;
+}
+
+#vsqxxcrzyj .gt_font_bold {
+  font-weight: bold;
+}
+
+#vsqxxcrzyj .gt_font_italic {
+  font-style: italic;
+}
+
+#vsqxxcrzyj .gt_super {
+  font-size: 65%;
+}
+
+#vsqxxcrzyj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vsqxxcrzyj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vsqxxcrzyj .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vsqxxcrzyj .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vsqxxcrzyj .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vsqxxcrzyj .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vsqxxcrzyj .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vsqxxcrzyj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vsqxxcrzyj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="10" class="gt_heading gt_title gt_font_normal">Correlation matrix</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="10" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Spearman correlation | pairwise complete N = 188–194 | Computed with psych::corr.test() {psych}</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="lab__1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">CRP</th>
+<th id="lab__2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">IL-6</th>
+<th id="lab__3" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">BDNF</th>
+<th id="lab__4" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">NfL</th>
+<th id="lab__5" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Depression score</th>
+<th id="lab__6" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Fatigue score</th>
+<th id="lab__7" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Cognition score</th>
+<th id="lab__8" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">CRP high [0/1]</th>
+<th id="lab__9" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">IL-6 high [0/1]</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">CRP</th>
+<td class="gt_row gt_center" headers="stub_1_1 lab__1" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__2" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__3" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__4" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__5" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__6" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_1 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">IL-6</th>
+<td class="gt_row gt_center" headers="stub_1_2 lab__1" style="background-color: #DE857F; color: #FFFFFF">0.57***</td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__2" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__3" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__4" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__5" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__6" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_2 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">BDNF</th>
+<td class="gt_row gt_center" headers="stub_1_3 lab__1" style="background-color: #B8C4E1; color: #000000">-0.36***</td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__2" style="background-color: #CED6EA; color: #000000">-0.25***</td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__3" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__4" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__5" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__6" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_3 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">NfL</th>
+<td class="gt_row gt_center" headers="stub_1_4 lab__1" style="background-color: #F9DAD7; color: #000000">0.17*</td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__2" style="background-color: #FDF5F4; color: #000000">0.05</td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__3" style="background-color: #F8F9FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__4" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__5" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__6" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_4 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Depression score</th>
+<td class="gt_row gt_center" headers="stub_1_5 lab__1" style="background-color: #E4938D; color: #000000">0.50***</td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__2" style="background-color: #E69B95; color: #000000">0.47***</td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__3" style="background-color: #D5DCED; color: #000000">-0.21**</td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__4" style="background-color: #F5CDC9; color: #000000">0.23**</td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__5" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__6" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_5 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="even">
+<th id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Fatigue score</th>
+<td class="gt_row gt_center" headers="stub_1_6 lab__1" style="background-color: #F9DAD7; color: #000000">0.17*</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__2" style="background-color: #E69B95; color: #000000">0.47***</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__3" style="background-color: #EBEFF7; color: #000000">-0.10</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__4" style="background-color: #F5F7FB; color: #000000">-0.05</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__5" style="background-color: #F4C8C4; color: #000000">0.25***</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__6" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__7" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_6 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="odd">
+<th id="stub_1_7" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Cognition score</th>
+<td class="gt_row gt_center" headers="stub_1_7 lab__1" style="background-color: #E5E9F4; color: #000000">-0.13</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__2" style="background-color: #FDFDFE; color: #000000">-0.01</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__3" style="background-color: #FFFCFB; color: #000000">0.01</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__4" style="background-color: #869ECD; color: #FFFFFF">-0.61***</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__5" style="background-color: #CBD4E9; color: #000000">-0.27***</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__6" style="background-color: #FDF3F1; color: #000000">0.06</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__7" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__8" style="background-color: #FFFFFF; color: #000000"></td>
+<td class="gt_row gt_center" headers="stub_1_7 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="even">
+<th id="stub_1_8" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">CRP high [0/1]<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+<td class="gt_row gt_center" headers="stub_1_8 lab__1" style="background-color: #C14244; color: #FFFFFF">0.87***</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__2" style="background-color: #E79D97; color: #000000">0.46***</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__3" style="background-color: #C2CCE5; color: #000000">-0.31***</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__4" style="background-color: #FBE5E2; color: #000000">0.12</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__5" style="background-color: #EAA6A0; color: #000000">0.41***</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__6" style="background-color: #F7D3CF; color: #000000">0.21**</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__7" style="background-color: #F7F8FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__8" style="background-color: #B2182B; color: #FFFFFF">1</td>
+<td class="gt_row gt_center" headers="stub_1_8 lab__9" style="background-color: #FFFFFF; color: #000000"></td>
+</tr>
+<tr class="odd">
+<th id="stub_1_9" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">IL-6 high [0/1]<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+<td class="gt_row gt_center" headers="stub_1_9 lab__1" style="background-color: #ECACA6; color: #000000">0.39***</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__2" style="background-color: #D36A65; color: #FFFFFF">0.69***</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__3" style="background-color: #E4E8F4; color: #000000">-0.14</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__4" style="background-color: #FDF0EF; color: #000000">0.07</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__5" style="background-color: #EEB4AE; color: #000000">0.35***</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__6" style="background-color: #EFB5AF; color: #000000">0.35***</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__7" style="background-color: #F8F9FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__8" style="background-color: #F0B7B2; color: #000000">0.33***</td>
+<td class="gt_row gt_center" headers="stub_1_9 lab__9" style="background-color: #B2182B; color: #FFFFFF">1</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="10" class="gt_footnote">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Binary variable [0/1], coded 0/1 (upper level = 1).</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="10" class="gt_sourcenote">Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.</td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="10" class="gt_sourcenote">Continuous: r_s = cov(rank_x, rank_y) / (SD(rank_x) × SD(rank_y)); t-test, n − 2 df.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="10" class="gt_sourcenote">Binary [0/1]: r_s = r_rb × √(3pq), r_rb = 2 AUC − 1 (rank-biserial, ≡ Mann-Whitney test), p, q = group proportions; |r_s| ≤ 0.87, not comparable with continuous pairs.</td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="10" class="gt_sourcenote">Notation: Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020), J Open Source Softw 5(51):2306, doi:10.21105/joss.02306.</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>Une ligne par paire, avec n, l’intervalle de confiance et la p-value ; lignes significatives en gras.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, sort_by <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="kmbczwytfw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kmbczwytfw table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kmbczwytfw thead, #kmbczwytfw tbody, #kmbczwytfw tfoot, #kmbczwytfw tr, #kmbczwytfw td, #kmbczwytfw th {
+  border-style: none;
+}
+
+#kmbczwytfw p {
+  margin: 0;
+  padding: 0;
+}
+
+#kmbczwytfw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kmbczwytfw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kmbczwytfw .gt_subtitle {
+  color: #333333;
+  font-size: 12px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kmbczwytfw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kmbczwytfw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kmbczwytfw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kmbczwytfw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kmbczwytfw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kmbczwytfw .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kmbczwytfw .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kmbczwytfw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kmbczwytfw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kmbczwytfw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kmbczwytfw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kmbczwytfw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmbczwytfw .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kmbczwytfw .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kmbczwytfw .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kmbczwytfw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmbczwytfw .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kmbczwytfw .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmbczwytfw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kmbczwytfw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_footnote {
+  margin: 0px;
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmbczwytfw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmbczwytfw .gt_sourcenote {
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmbczwytfw .gt_left {
+  text-align: left;
+}
+
+#kmbczwytfw .gt_center {
+  text-align: center;
+}
+
+#kmbczwytfw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kmbczwytfw .gt_font_normal {
+  font-weight: normal;
+}
+
+#kmbczwytfw .gt_font_bold {
+  font-weight: bold;
+}
+
+#kmbczwytfw .gt_font_italic {
+  font-style: italic;
+}
+
+#kmbczwytfw .gt_super {
+  font-size: 65%;
+}
+
+#kmbczwytfw .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kmbczwytfw .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kmbczwytfw .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kmbczwytfw .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kmbczwytfw .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kmbczwytfw .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kmbczwytfw .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#kmbczwytfw .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#kmbczwytfw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="7" class="gt_heading gt_title gt_font_normal">Spearman correlations</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Spearman correlation, all pairs | pairwise complete N = 188–194 | Computed with psych::corr.test() {psych}</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="lab1" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable 1</th>
+<th id="lab2" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable 2</th>
+<th id="pair" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Pair</th>
+<th id="n" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">n</th>
+<th id="coef" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rₛ</th>
+<th id="ci" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">95% CI</th>
+<th id="p_txt" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">p (raw)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">194</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #C14244; color: #FFFFFF; font-weight: bold">0.87</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.82, 0.90]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">194</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #D36A65; color: #FFFFFF; font-weight: bold">0.69</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.61, 0.76]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">NfL</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Cognition score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #869ECD; color: #FFFFFF; font-weight: bold">-0.61</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.69, -0.51]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #DE857F; color: #FFFFFF; font-weight: bold">0.57</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.46, 0.66]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E4938D; color: #000000; font-weight: bold">0.50</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.38, 0.61]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E69B95; color: #000000; font-weight: bold">0.47</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.34, 0.57]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Fatigue score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">189</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E69B95; color: #000000; font-weight: bold">0.47</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.34, 0.57]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E79D97; color: #000000; font-weight: bold">0.46</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.33, 0.57]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #EAA6A0; color: #000000; font-weight: bold">0.41</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.28, 0.53]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #ECACA6; color: #000000; font-weight: bold">0.39</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.26, 0.51]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">BDNF</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #B8C4E1; color: #000000; font-weight: bold">-0.36</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.48, -0.23]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #EEB4AE; color: #000000; font-weight: bold">0.35</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.22, 0.47]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Fatigue score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">189</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #EFB5AF; color: #000000; font-weight: bold">0.35</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.21, 0.47]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">bin × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F0B7B2; color: #000000; font-weight: bold">0.33</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.20, 0.46]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">BDNF</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #C2CCE5; color: #000000; font-weight: bold">-0.31</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.44, -0.17]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Cognition score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #CBD4E9; color: #000000; font-weight: bold">-0.27</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.40, -0.12]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Fatigue score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F4C8C4; color: #000000; font-weight: bold">0.25</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.11, 0.39]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">BDNF</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #CED6EA; color: #000000; font-weight: bold">-0.25</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.38, -0.10]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">NfL</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F5CDC9; color: #000000; font-weight: bold">0.23</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.09, 0.37]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.001 **</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">BDNF</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Depression score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #D5DCED; color: #000000; font-weight: bold">-0.21</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.35, -0.07]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.003 **</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">Fatigue score</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F7D3CF; color: #000000; font-weight: bold">0.21</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.06, 0.34]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.005 **</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">NfL</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F9DAD7; color: #000000; font-weight: bold">0.17</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.03, 0.31]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.018 *</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
+<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">Fatigue score</td>
+<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
+<td class="gt_row gt_center" headers="n" style="font-weight: bold">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F9DAD7; color: #000000; font-weight: bold">0.17</td>
+<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.02, 0.31]</td>
+<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.019 *</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">BDNF</td>
+<td class="gt_row gt_left" headers="lab2">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair">cont × bin</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E4E8F4; color: #000000">-0.14</td>
+<td class="gt_row gt_center" headers="ci">[-0.28, 0.01]</td>
+<td class="gt_row gt_center" headers="p_txt">0.058</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">CRP</td>
+<td class="gt_row gt_left" headers="lab2">Cognition score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #E5E9F4; color: #000000">-0.13</td>
+<td class="gt_row gt_center" headers="ci">[-0.27, 0.01]</td>
+<td class="gt_row gt_center" headers="p_txt">0.069</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">NfL</td>
+<td class="gt_row gt_left" headers="lab2">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair">cont × bin</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FBE5E2; color: #000000">0.12</td>
+<td class="gt_row gt_center" headers="ci">[-0.03, 0.26]</td>
+<td class="gt_row gt_center" headers="p_txt">0.094</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">BDNF</td>
+<td class="gt_row gt_left" headers="lab2">Fatigue score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">189</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #EBEFF7; color: #000000">-0.10</td>
+<td class="gt_row gt_center" headers="ci">[-0.24, 0.05]</td>
+<td class="gt_row gt_center" headers="p_txt">0.175</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">NfL</td>
+<td class="gt_row gt_left" headers="lab2">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair">cont × bin</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FDF0EF; color: #000000">0.07</td>
+<td class="gt_row gt_center" headers="ci">[-0.08, 0.21]</td>
+<td class="gt_row gt_center" headers="p_txt">0.347</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">Fatigue score</td>
+<td class="gt_row gt_left" headers="lab2">Cognition score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FDF3F1; color: #000000">0.06</td>
+<td class="gt_row gt_center" headers="ci">[-0.09, 0.20]</td>
+<td class="gt_row gt_center" headers="p_txt">0.435</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">NfL</td>
+<td class="gt_row gt_left" headers="lab2">Fatigue score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">189</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F5F7FB; color: #000000">-0.05</td>
+<td class="gt_row gt_center" headers="ci">[-0.20, 0.10]</td>
+<td class="gt_row gt_center" headers="p_txt">0.493</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">IL-6</td>
+<td class="gt_row gt_left" headers="lab2">NfL</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FDF5F4; color: #000000">0.05</td>
+<td class="gt_row gt_center" headers="ci">[-0.10, 0.19]</td>
+<td class="gt_row gt_center" headers="p_txt">0.510</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">Cognition score</td>
+<td class="gt_row gt_left" headers="lab2">CRP high [0/1]</td>
+<td class="gt_row gt_center" headers="pair">cont × bin</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F7F8FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="ci">[-0.19, 0.11]</td>
+<td class="gt_row gt_center" headers="p_txt">0.584</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">Cognition score</td>
+<td class="gt_row gt_left" headers="lab2">IL-6 high [0/1]</td>
+<td class="gt_row gt_center" headers="pair">cont × bin</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F8F9FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="ci">[-0.18, 0.11]</td>
+<td class="gt_row gt_center" headers="p_txt">0.606</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">BDNF</td>
+<td class="gt_row gt_left" headers="lab2">NfL</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">189</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #F8F9FC; color: #000000">-0.04</td>
+<td class="gt_row gt_center" headers="ci">[-0.18, 0.11]</td>
+<td class="gt_row gt_center" headers="p_txt">0.627</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="lab1">BDNF</td>
+<td class="gt_row gt_left" headers="lab2">Cognition score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FFFCFB; color: #000000">0.01</td>
+<td class="gt_row gt_center" headers="ci">[-0.13, 0.16]</td>
+<td class="gt_row gt_center" headers="p_txt">0.839</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="lab1">IL-6</td>
+<td class="gt_row gt_left" headers="lab2">Cognition score</td>
+<td class="gt_row gt_center" headers="pair">cont × cont</td>
+<td class="gt_row gt_center" headers="n">188</td>
+<td class="gt_row gt_center" headers="coef" style="background-color: #FDFDFE; color: #000000">-0.01</td>
+<td class="gt_row gt_center" headers="ci">[-0.16, 0.14]</td>
+<td class="gt_row gt_center" headers="p_txt">0.891</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="7" class="gt_sourcenote">Pair: cont = continuous, bin = binary[0/1]. Bold = p &lt; 0.05.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="7" class="gt_sourcenote">Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.</td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="7" class="gt_sourcenote">Continuous: r_s = cov(rank_x, rank_y) / (SD(rank_x) × SD(rank_y)); t-test, n − 2 df.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="7" class="gt_sourcenote">95% CI: Fisher z transformation, SE = √(1.06 / (n − 3)) (Fieller et al. 1957); computed with correlation::cor_to_ci() {correlation}.</td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="7" class="gt_sourcenote">Binary [0/1]: r_s = r_rb × √(3pq), r_rb = 2 AUC − 1 (rank-biserial, ≡ Mann-Whitney test), p, q = group proportions; |r_s| ≤ 0.87, not comparable with continuous pairs.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="7" class="gt_sourcenote">Notation: Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020), J Open Source Softw 5(51):2306, doi:10.21105/joss.02306.</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;cor_matrix&gt; Spearman correlations, 9 variables (2 binary), 36 pairs</span></span>
+<span><span class="co">#&gt;   engine: psych::corr.test() {psych} | raw p-values (no adjustment) | N = 188–194</span></span>
+<span><span class="co">#&gt;            CRP      IL6      BDNF     NfL      depression fatigue cognition</span></span>
+<span><span class="co">#&gt; CRP        1                                                               </span></span>
+<span><span class="co">#&gt; IL6        0.57***  1                                                      </span></span>
+<span><span class="co">#&gt; BDNF       -0.36*** -0.25*** 1                                             </span></span>
+<span><span class="co">#&gt; NfL        0.17*    0.05     -0.04    1                                    </span></span>
+<span><span class="co">#&gt; depression 0.50***  0.47***  -0.21**  0.23**   1                           </span></span>
+<span><span class="co">#&gt; fatigue    0.17*    0.47***  -0.10    -0.05    0.25***    1                </span></span>
+<span><span class="co">#&gt; cognition  -0.13    -0.01    0.01     -0.61*** -0.27***   0.06    1        </span></span>
+<span><span class="co">#&gt; BIN_CRP    0.87***  0.46***  -0.31*** 0.12     0.41***    0.21**  -0.04    </span></span>
+<span><span class="co">#&gt; BIN_IL6    0.39***  0.69***  -0.14    0.07     0.35***    0.35*** -0.04    </span></span>
+<span><span class="co">#&gt;            BIN_CRP BIN_IL6</span></span>
+<span><span class="co">#&gt; CRP                       </span></span>
+<span><span class="co">#&gt; IL6                       </span></span>
+<span><span class="co">#&gt; BDNF                      </span></span>
+<span><span class="co">#&gt; NfL                       </span></span>
+<span><span class="co">#&gt; depression                </span></span>
+<span><span class="co">#&gt; fatigue                   </span></span>
+<span><span class="co">#&gt; cognition                 </span></span>
+<span><span class="co">#&gt; BIN_CRP    1              </span></span>
+<span><span class="co">#&gt; BIN_IL6    0.33*** 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<p>Le tableau long, pour filtrer, trier ou exporter (<code>write.csv(cm$long, ...)</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">cm</span><span class="op">$</span><span class="va">long</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Var1       Var2      type1      type2           r      ci_low     ci_high</span></span>
+<span><span class="co">#&gt; 1   CRP        IL6 continuous continuous  0.56897575  0.46026507  0.66087549</span></span>
+<span><span class="co">#&gt; 2   CRP       BDNF continuous continuous -0.36210257 -0.48359271 -0.22692414</span></span>
+<span><span class="co">#&gt; 3   IL6       BDNF continuous continuous -0.24812481 -0.38146502 -0.10466940</span></span>
+<span><span class="co">#&gt; 4   CRP        NfL continuous continuous  0.17166756  0.02501970  0.31108281</span></span>
+<span><span class="co">#&gt; 5   IL6        NfL continuous continuous  0.04837098 -0.09961916  0.19426744</span></span>
+<span><span class="co">#&gt; 6  BDNF        NfL continuous continuous -0.03552826 -0.18147094  0.11194568</span></span>
+<span><span class="co">#&gt; 7   CRP depression continuous continuous  0.50289312  0.38405847  0.60533837</span></span>
+<span><span class="co">#&gt; 8   IL6 depression continuous continuous  0.46594678  0.34214607  0.57384706</span></span>
+<span><span class="co">#&gt; 9  BDNF depression continuous continuous -0.21317476 -0.34948268 -0.06803023</span></span>
+<span><span class="co">#&gt; 10  NfL depression continuous continuous  0.23293694  0.08869952  0.36760590</span></span>
+<span><span class="co">#&gt;               p   n        p_adj</span></span>
+<span><span class="co">#&gt; 1  1.613518e-17 188 1.613518e-17</span></span>
+<span><span class="co">#&gt; 2  3.288137e-07 188 3.288137e-07</span></span>
+<span><span class="co">#&gt; 3  5.963373e-04 188 5.963373e-04</span></span>
+<span><span class="co">#&gt; 4  1.849267e-02 188 1.849267e-02</span></span>
+<span><span class="co">#&gt; 5  5.097724e-01 188 5.097724e-01</span></span>
+<span><span class="co">#&gt; 6  6.274310e-01 189 6.274310e-01</span></span>
+<span><span class="co">#&gt; 7  1.917294e-13 188 1.917294e-13</span></span>
+<span><span class="co">#&gt; 8  1.601954e-11 188 1.601954e-11</span></span>
+<span><span class="co">#&gt; 9  3.311377e-03 188 3.311377e-03</span></span>
+<span><span class="co">#&gt; 10 1.295666e-03 188 1.295666e-03</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="lire-une-heatmap" class="level2"><h2 class="anchored" data-anchor-id="lire-une-heatmap">Lire une heatmap</h2>
+<ul>
+<li>
+<strong>le sous-titre</strong> donne la méthode, l’effectif (complet par paire : il varie avec les valeurs manquantes) et la fonction qui a fait le calcul ;</li>
+<li>
+<strong>chaque case</strong> affiche le coefficient et les étoiles de la p-value ; la couleur suit une échelle unique de −1 (bleu) à +1 (rouge) ;</li>
+<li>
+<strong>les variables binaires</strong> sont regroupées dans un bloc à part, car leur coefficient n’est pas sur la même échelle (voir <a href="../vignettes/binary-variables.html">Variables binaires</a>) ;</li>
+<li>
+<strong>la légende du bas</strong> rappelle le statut des p-values (brutes, ou ajustées et sur quelle famille), l’ordre des variables, la formule du coefficient et la lecture des cases binaires.</li>
+</ul>
+<p>Le sous-titre et les notes des tableaux sont construits par les mêmes fonctions internes que la légende de la heatmap : un graphique et son tableau ne peuvent pas se contredire.</p>
+</section><section id="options-de-la-heatmap" class="level2"><h2 class="anchored" data-anchor-id="options-de-la-heatmap">Options de la heatmap</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist">
+<li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Ordre d’origine</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Séparateur simple</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Sans valeurs</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Palette et titre</a></li>
+</ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Par défaut, les variables sont ordonnées par classification hiérarchique (Ward, distance 1 − r) à l’intérieur de chaque bloc, ce qui rapproche les variables qui se ressemblent. <code>order = "original"</code> garde l’ordre donné.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, order <span class="op">=</span> <span class="st">"original"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p><code>separator = "line"</code> remplace les facettes par deux traits et garde des cases carrées.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, separator <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<p><code>show_values = FALSE</code> ne garde que les couleurs, pour une vue d’ensemble d’une grande matrice.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, show_values <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<p><code>palette</code> (couleurs des corrélations négatives et positives), <code>title</code>, <code>base_size</code>, <code>value_size</code> et <code>caption_width</code> règlent l’apparence. Le résultat est un <code>ggplot</code> : on peut lui ajouter des couches et des thèmes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="va">lab</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#1B7837"</span>, high <span class="op">=</span> <span class="st">"#762A83"</span><span class="op">)</span>,</span>
+<span>                 title <span class="op">=</span> <span class="st">"Biomarqueurs et scores"</span>, base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="choisir-le-moteur" class="level2"><h2 class="anchored" data-anchor-id="choisir-le-moteur">Choisir le moteur</h2>
+<p>Les moteurs donnent les mêmes coefficients ; on peut le vérifier :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"stats"</span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, engine <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span>    <span class="co"># psych si installé</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">r</span>, <span class="va">b</span><span class="op">$</span><span class="va">r</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Pour Kendall, <code>psych</code> n’est pas utilisé (il teste τ avec la formule t de r) : <code>engine = "auto"</code> passe par <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code> ou <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ck</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">vars</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">ck</span>, labels <span class="op">=</span> <span class="va">lab</span>, title <span class="op">=</span> <span class="st">"Kendall correlations"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workflow_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="récapitulatif-des-fonctions" class="level2"><h2 class="anchored" data-anchor-id="récapitulatif-des-fonctions">Récapitulatif des fonctions</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Je veux…</th>
+<th>Fonction</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>toutes les paires d’un ensemble de variables</td>
+<td>
+<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_test_matrix.html">cor_test_matrix()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_heatmap.html">plot_cor_heatmap()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_matrix.html">tbl_cor_matrix()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td>des prédicteurs × des scores, éventuellement ajustés</td>
+<td>
+<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_cross.html">cor_cross()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_cross.html">plot_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_cross.html">tbl_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_long.html">tbl_cor_long()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td>voir une paire et ce que mesure son coefficient</td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/plot_cor_pair.html">plot_cor_pair()</a></code></td>
+</tr>
+<tr class="even">
+<td>un test pour une paire</td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/partial_cor_test.html">partial_cor_test()</a></code></td>
+</tr>
+<tr class="odd">
+<td>les effets des variables binaires</td>
+<td>
+<code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_effects.html">cor_binary_effects()</a></code> → <code><a href="https://clement-poupelin.github.io/corrkit/reference/tbl_cor_binary.html">tbl_cor_binary()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td>une note de lecture des variables binaires (en ou fr)</td>
+<td><code><a href="https://clement-poupelin.github.io/corrkit/reference/cor_binary_note.html">cor_binary_note()</a></code></td>
+</tr>
+</tbody>
+</table></section><section id="références" class="level2"><h2 class="anchored" data-anchor-id="références">Références</h2>
+<ul>
+<li>Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020). Methods and algorithms for correlation analysis in R. <em>Journal of Open Source Software</em> 5(51):2306. doi:10.21105/joss.02306</li>
+<li>Kim S (2015). ppcor: an R package for a fast calculation to semi-partial correlation coefficients. <em>Communications for Statistical Applications and Methods</em> 22(6):665-674. doi:10.5351/CSAM.2015.22.6.665</li>
+</ul>
+
+
+</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/clement-poupelin\.github\.io\/corrkit\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Développé par <a href="https://orcid.org/0009-0005-7308-0368">Clément Poupelin</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Site construit avec <a href="https://quarto.org">Quarto</a> et <a href="https://altdoc.etiennebacher.com">altdoc</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

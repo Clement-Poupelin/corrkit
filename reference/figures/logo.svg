@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 277.13" width="240" height="277">
-  <polygon points="120.00,0.00 240.00,69.28 240.00,207.85 120.00,277.13 0.00,207.85 0.00,69.28" fill="#1B3A5C"/>
-  <polygon points="120.00,6.24 234.60,72.40 234.60,204.73 120.00,270.89 5.40,204.73 5.40,72.40" fill="#FFFFFF"/>
-  <rect x="63.5" y="50.0" width="26" height="26" rx="3" fill="#B2182B"/><rect x="63.5" y="79.0" width="26" height="26" rx="3" fill="#CF707C"/><rect x="92.5" y="79.0" width="26" height="26" rx="3" fill="#B2182B"/><rect x="63.5" y="108.0" width="26" height="26" rx="3" fill="#B1C9E2"/><rect x="92.5" y="108.0" width="26" height="26" rx="3" fill="#F1D5D9"/><rect x="121.5" y="108.0" width="26" height="26" rx="3" fill="#B2182B"/><rect x="63.5" y="137.0" width="26" height="26" rx="3" fill="#C14453"/><rect x="92.5" y="137.0" width="26" height="26" rx="3" fill="#7EA6CF"/><rect x="121.5" y="137.0" width="26" height="26" rx="3" fill="#EAC1C6"/><rect x="150.5" y="137.0" width="26" height="26" rx="3" fill="#B2182B"/>
-  <text x="120" y="208" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#1B3A5C">corrkit</text>
-  <text x="120" y="232" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#5A6B7D">r · r&#8347; · τ</text>
-</svg>

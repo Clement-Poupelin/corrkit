@@ -1,0 +1,62 @@
+# Site of the package, built by altdoc::render_docs() with Quarto.
+# altdoc replaces the $ALTDOC_* variables (name, version, GitHub URL) and copies
+# every file of altdoc/ (index.md, reference.qmd, custom.scss) into the site.
+project:
+  type: website
+  output-dir: ../docs/
+
+lang: fr
+
+website:
+  title: "$ALTDOC_PACKAGE_NAME"
+  site-url: https://clement-poupelin.github.io/corrkit/
+  repo-url: $ALTDOC_PACKAGE_URL_GITHUB
+  favicon: man/figures/logo.png
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    background: light
+    search: true
+    left:
+      - text: "$ALTDOC_PACKAGE_VERSION"
+        href: NEWS.md
+      - text: Premiers pas
+        href: vignettes/corrkit.qmd
+      - text: Référence
+        href: reference.qmd
+      - text: Vignettes
+        menu:
+          - text: Analyse complète d'une matrice
+            href: vignettes/workflow.qmd
+          - text: Corrections pour tests multiples
+            href: vignettes/p-values.qmd
+          - text: Comparer les coefficients de corrélation
+            href: vignettes/methods-comparison.qmd
+          - text: Corrélations croisées et partielles
+            href: vignettes/partial-cross.qmd
+          - text: Variables binaires
+            href: vignettes/binary-variables.qmd
+      - text: Changements
+        href: NEWS.md
+    right:
+      - icon: github
+        href: $ALTDOC_PACKAGE_URL_GITHUB
+        aria-label: corrkit sur GitHub
+  page-footer:
+    left: "Développé par [Clément Poupelin](https://orcid.org/0009-0005-7308-0368)."
+    right: "Site construit avec [Quarto](https://quarto.org) et [altdoc](https://altdoc.etiennebacher.com)."
+
+format:
+  html:
+    theme: [cosmo, custom.scss]
+    toc: true
+    toc-location: right
+    toc-title: "Sur cette page"
+    toc-depth: 3
+    code-link: true
+    code-copy: true
+    highlight-style: github
+    fig-width: 8
+    fig-height: 6
+    fig-dpi: 96
+    fig-align: center
