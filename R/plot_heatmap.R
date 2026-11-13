@@ -93,7 +93,7 @@ plot_cor_heatmap <- function(cm, labels = NULL, use_adj = TRUE, order = c("hclus
     .cor_tiles(long, sym, palette)
   if (show_values) p <- p + ggplot2::geom_text(ggplot2::aes(label = lab), size = value_size, lineheight = 0.8)
   p <- p +
-    ggplot2::labs(title = title %||% "Correlation matrix",
+    .labs_safe(title = title %||% "Correlation matrix",
                   subtitle = sprintf("%s correlation | pairwise complete N = %s\nComputed with %s; p adjustment: %s",
                                      .meth_name(meth), .n_range_txt(cm$n[upper.tri(cm$n)]),
                                      .cor_engine_txt(cm$engine %||% "stats::cor.test"),
@@ -137,7 +137,7 @@ plot_cor_heatmap <- function(cm, labels = NULL, use_adj = TRUE, order = c("hclus
 #' @param title title (default "<Method> correlations")
 #' @param value_size size of the values
 #' @param show_note add the short reading note for binary variables to the caption
-#' @param split_binary binary variables in a separate facet ("Continuous" / "Binary [0/1]")
+#' @param split_binary binary variables in a separate facet ("Continuous" / "Binary \[0/1\]")
 #' @param palette colours of the negative / positive correlations (named low / high)
 #' @param caption_width wrap the caption lines at this number of characters
 #'   (`NULL` = no wrapping); ~60 for two heatmaps side by side
@@ -192,7 +192,7 @@ plot_cor_cross <- function(data, x_vars, y_vars, covariates = NULL, labels = NUL
                                    cols = if (facet_cols) ggplot2::vars(y_block),
                                    scales = "free", space = "free")
   pl <- pl +
-    ggplot2::labs(title = title %||% sprintf("%s correlations", .meth_name(meth)),
+    .labs_safe(title = title %||% sprintf("%s correlations", .meth_name(meth)),
                   subtitle = .cor_cross_subtitle(m, tab, labels),
                   caption = caption, x = NULL, y = NULL) +
     theme_pub(base_size) + rotate_x(45) + ggplot2::theme(panel.grid = ggplot2::element_blank()) +

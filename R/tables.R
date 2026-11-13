@@ -35,7 +35,7 @@
 #' Table of cross correlations X x Y (wide: one row per predictor, one column per score)
 #'
 #' Same content and same colour scale as [plot_cor_cross()]. Binary
-#' predictors are grouped under "Binary [0/1]" and carry a footnote.
+#' predictors are grouped under "Binary \[0/1\]" and carry a footnote.
 #'
 #' @param x output of [cor_cross()] or [plot_cor_cross()]
 #' @param labels named vector variable -> label (default: those given to [cor_cross()])

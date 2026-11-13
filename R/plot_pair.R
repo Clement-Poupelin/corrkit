@@ -65,7 +65,7 @@ plot_cor_pair <- function(data, x, y, covariates = NULL, labels = NULL,
       ggplot2::geom_point(alpha = 0.6, size = 1.8, colour = "grey25") +
       ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = TRUE, colour = palette[["high"]],
                            fill = palette[["high"]], alpha = 0.15) +
-      ggplot2::labs(title = title %||% sprintf("%s vs %s, adjusted", yl, xl),
+      .labs_safe(title = title %||% sprintf("%s vs %s, adjusted", yl, xl),
                     subtitle = paste0(stat_txt, "\n", eng_txt),
                     x = sprintf("%s%s, residual on the covariates", xl, rank_txt),
                     y = sprintf("%s%s, residual on the covariates", yl, rank_txt),
@@ -96,7 +96,7 @@ plot_cor_pair <- function(data, x, y, covariates = NULL, labels = NULL,
       ggplot2::geom_jitter(width = 0.12, height = 0, alpha = 0.5, size = 1.6, colour = "grey25") +
       ggplot2::stat_summary(fun = mean, geom = "point", shape = 23, size = 3.2, fill = palette[["high"]], colour = "white") +
       ggplot2::scale_x_discrete(labels = sprintf("%s\n(n = %d)", lev, c(eff$n0, eff$n1))) +
-      ggplot2::labs(title = title %||% sprintf("%s by %s", vl, bl),
+      .labs_safe(title = title %||% sprintf("%s by %s", vl, bl),
                     subtitle = paste0(stat_txt, "\n", eff_txt, "\n", eng_txt),
                     x = bl, y = vl,
                     caption = .wrap_caption(list(
@@ -115,7 +115,7 @@ plot_cor_pair <- function(data, x, y, covariates = NULL, labels = NULL,
     ggplot2::geom_point(alpha = 0.6, size = 1.8, colour = "grey25") +
     ggplot2::geom_smooth(method = smooth, formula = y ~ x, se = TRUE, colour = palette[["high"]],
                          fill = palette[["high"]], alpha = 0.15) +
-    ggplot2::labs(title = title %||% sprintf("%s vs %s", yl, xl),
+    .labs_safe(title = title %||% sprintf("%s vs %s", yl, xl),
                   subtitle = paste0(stat_txt, "\n", eng_txt), x = xl, y = yl,
                   caption = .wrap_caption(list(
                     c("How to read: each point is an individual.",

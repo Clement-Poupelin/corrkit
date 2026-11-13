@@ -34,3 +34,15 @@ test_that("binary notes exist in both languages", {
     expect_false(grepl("{MARK}", cor_binary_note(m, l, short = TRUE), fixed = TRUE))
   }
 })
+
+test_that("plots can be drawn on a pdf device (Latin-1 text only)", {
+  cm <- cor_test_matrix(d, c("CRP", "IL6", "BIN_CRP"), method = "kendall")
+  plots <- list(plot_cor_heatmap(cm),
+                plot_cor_cross(d, c("CRP", "BIN_CRP"), "fatigue", covariates = "age")$plot,
+                plot_cor_pair(d, "BIN_CRP", "depression"),
+                plot_cor_pair(d, "NfL", "cognition", covariates = "age", meth = "spearman"))
+  f <- tempfile(fileext = ".pdf")
+  grDevices::pdf(f)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  for (p in plots) expect_no_error(print(p))
+})

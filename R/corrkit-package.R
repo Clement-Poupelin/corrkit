@@ -30,6 +30,7 @@
 "_PACKAGE"
 
 #' @importFrom dplyr %>%
+#' @importFrom utils globalVariables
 NULL
 
 # Column names used inside dplyr / ggplot2 calls (avoid "no visible binding" notes)

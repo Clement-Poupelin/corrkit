@@ -86,10 +86,34 @@ rotate_x <- function(angle = 45)
   if (min(n) == max(n)) as.character(min(n)) else paste0(min(n), "\u2013", max(n))
 }
 
+#' Text of a ggplot (subtitle, caption) restricted to Latin-1 characters
+#'
+#' The pdf() and postscript() devices (used by R CMD check, and by ggsave(*.pdf))
+#' cannot draw characters outside Latin-1 such as the square root or the
+#' minus sign; those are replaced by plain equivalents. Tables (HTML) keep them.
+#' @noRd
+.plot_text <- function(x) {
+  if (is.null(x)) return(x)
+  map <- c("\u221a" = "sqrt", "\u2212" = "-", "\u2013" = "-", "\u2014" = "-", "\u2261" = "=",
+           "\u2264" = "<=", "\u2265" = ">=", "\u2248" = "~", "\u03c4" = "tau", "\u03c6" = "phi",
+           "\u03c1" = "rho", "\u2080" = "0", "\u2081" = "1", "\u209b" = "s", "\u2192" = "->")
+  for (k in names(map)) x <- gsub(k, map[[k]], x, fixed = TRUE)
+  x
+}
+
 #' The two levels of a binary variable, lower level first (coded 0, upper level coded 1)
 #' @noRd
 .binary_levels <- function(x) {
   if (is.logical(x)) return(c("FALSE", "TRUE"))
   if (is.factor(x) || is.character(x)) return(levels(droplevels(as.factor(x))))
   as.character(sort(unique(stats::na.omit(x))))
+}
+
+#' ggplot2::labs() with a Latin-1-safe subtitle and caption (see .plot_text())
+#' @noRd
+.labs_safe <- function(...) {
+  a <- list(...)
+  for (k in intersect(c("subtitle", "caption"), names(a)))
+    if (!is.null(a[[k]])) a[[k]] <- .plot_text(a[[k]])
+  do.call(ggplot2::labs, a)
 }
