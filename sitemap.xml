@@ -2,122 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/methods-comparison.html</loc>
-    <lastmod>2026-11-13T14:41:08.256Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/binary-variables.html</loc>
-    <lastmod>2026-11-13T14:41:08.255Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/corrkit.html</loc>
-    <lastmod>2026-11-13T14:41:08.255Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/LICENSE.html</loc>
-    <lastmod>2026-11-13T14:40:56.013Z</lastmod>
+    <lastmod>2026-11-13T15:05:55.923Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/CITATION.html</loc>
-    <lastmod>2026-11-13T14:40:56.060Z</lastmod>
+    <lastmod>2026-11-13T15:05:55.962Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/mark_binary.html</loc>
-    <lastmod>2026-11-13T14:41:01.622Z</lastmod>
+    <lastmod>2026-11-13T15:06:02.270Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/COR_PAL.html</loc>
-    <lastmod>2026-11-13T14:40:59.797Z</lastmod>
+    <lastmod>2026-11-13T15:06:00.361Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html</loc>
-    <lastmod>2026-11-13T14:41:06.592Z</lastmod>
+    <lastmod>2026-11-13T15:06:07.320Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html</loc>
-    <lastmod>2026-11-13T14:41:05.689Z</lastmod>
+    <lastmod>2026-11-13T15:06:06.428Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html</loc>
-    <lastmod>2026-11-13T14:41:04.587Z</lastmod>
+    <lastmod>2026-11-13T15:06:05.263Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html</loc>
-    <lastmod>2026-11-13T14:40:56.151Z</lastmod>
+    <lastmod>2026-11-13T15:05:56.122Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html</loc>
-    <lastmod>2026-11-13T14:40:57.103Z</lastmod>
+    <lastmod>2026-11-13T15:05:57.237Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/theme_pub.html</loc>
-    <lastmod>2026-11-13T14:41:08.067Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.052Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html</loc>
-    <lastmod>2026-11-13T14:41:04.781Z</lastmod>
+    <lastmod>2026-11-13T15:06:05.531Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/reference.html</loc>
-    <lastmod>2026-11-13T14:41:08.269Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.547Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/NEWS.html</loc>
-    <lastmod>2026-11-13T14:40:56.001Z</lastmod>
+    <lastmod>2026-11-13T15:05:55.914Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html</loc>
-    <lastmod>2026-11-13T14:40:57.928Z</lastmod>
+    <lastmod>2026-11-13T15:05:58.163Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html</loc>
-    <lastmod>2026-11-13T14:41:00.502Z</lastmod>
+    <lastmod>2026-11-13T15:06:00.981Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/tbl_cor_matrix.html</loc>
-    <lastmod>2026-11-13T14:41:07.883Z</lastmod>
+    <lastmod>2026-11-13T15:06:08.756Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/p_to_stars.html</loc>
-    <lastmod>2026-11-13T14:41:01.817Z</lastmod>
+    <lastmod>2026-11-13T15:06:02.574Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html</loc>
-    <lastmod>2026-11-13T14:41:03.575Z</lastmod>
+    <lastmod>2026-11-13T15:06:04.354Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/cor_var_type.html</loc>
-    <lastmod>2026-11-13T14:41:01.409Z</lastmod>
+    <lastmod>2026-11-13T15:06:01.960Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/cor_cross.html</loc>
-    <lastmod>2026-11-13T14:40:58.902Z</lastmod>
+    <lastmod>2026-11-13T15:05:59.271Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html</loc>
-    <lastmod>2026-11-13T14:41:07.689Z</lastmod>
+    <lastmod>2026-11-13T15:06:08.458Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html</loc>
-    <lastmod>2026-11-13T14:41:07.498Z</lastmod>
+    <lastmod>2026-11-13T15:06:08.178Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html</loc>
-    <lastmod>2026-11-13T14:41:02.664Z</lastmod>
+    <lastmod>2026-11-13T15:06:03.427Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/index.html</loc>
-    <lastmod>2026-11-13T14:41:08.268Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.546Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/workflow.html</loc>
-    <lastmod>2026-11-13T14:41:08.256Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/partial-cross.html</loc>
-    <lastmod>2026-11-13T14:41:08.256Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
   <url>
     <loc>https://clement-poupelin.github.io/corrkit/vignettes/p-values.html</loc>
-    <lastmod>2026-11-13T14:41:08.256Z</lastmod>
+    <lastmod>2026-11-13T15:06:09.448Z</lastmod>
   </url>
 </urlset>
