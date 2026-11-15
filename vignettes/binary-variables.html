@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Variables binaires dans une analyse de corrélation – corrkit</title>
+<title>binary-variables – corrkit</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -147,7 +147,7 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -208,7 +208,10 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-<li><a href="#codage" id="toc-codage" class="nav-link active" data-scroll-target="#codage">Codage</a></li>
+<li>
+<a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section">—</a>
+  <ul class="collapse">
+<li><a href="#codage" id="toc-codage" class="nav-link" data-scroll-target="#codage">Codage</a></li>
   <li><a href="#pearson-la-corr%C3%A9lation-point-bis%C3%A9riale-est-un-test-t" id="toc-pearson-la-corrélation-point-bisériale-est-un-test-t" class="nav-link" data-scroll-target="#pearson-la-corr%C3%A9lation-point-bis%C3%A9riale-est-un-test-t">Pearson : la corrélation point-bisériale est un test t</a></li>
   <li>
 <a href="#pourquoi-le-coefficient-est-plus-petit" id="toc-pourquoi-le-coefficient-est-plus-petit" class="nav-link" data-scroll-target="#pourquoi-le-coefficient-est-plus-petit">Pourquoi le coefficient est plus petit</a>
@@ -221,25 +224,14 @@ window.Quarto = {
   <li><a href="#ce-quil-faut-rapporter" id="toc-ce-quil-faut-rapporter" class="nav-link" data-scroll-target="#ce-quil-faut-rapporter">Ce qu’il faut rapporter</a></li>
   <li><a href="#dans-les-heatmaps-et-les-tableaux" id="toc-dans-les-heatmaps-et-les-tableaux" class="nav-link" data-scroll-target="#dans-les-heatmaps-et-les-tableaux">Dans les heatmaps et les tableaux</a></li>
   <li><a href="#r%C3%A9f%C3%A9rences" id="toc-références" class="nav-link" data-scroll-target="#r%C3%A9f%C3%A9rences">Références</a></li>
+  </ul>
+</li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">Variables binaires dans une analyse de corrélation</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header><div class="cell">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="section" class="level1"><h1>—</h1>
+<p>title: “Variables binaires dans une analyse de corrélation” vignette: &gt; % % % knitr: opts_chunk: collapse: true comment: “#&gt;” fig-width: 8 fig-height: 5 —</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://clement-poupelin.github.io/corrkit/">corrkit</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
@@ -249,12 +241,14 @@ window.Quarto = {
 <section id="codage" class="level2"><h2 class="anchored" data-anchor-id="codage">Codage</h2>
 <p><code><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric()</a></code> code une variable binaire en 0/1, la modalité <strong>haute</strong> (le second niveau du facteur) valant 1. Un coefficient positif signifie donc « plus élevé dans le groupe haut ». Ce recodage est une transformation linéaire croissante : il ne change ni le coefficient, ni sa p-value.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span>, <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span><span class="op">)</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       </span></span>
-<span><span class="co">#&gt;         0  1 &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   low  96  0    0</span></span>
-<span><span class="co">#&gt;   high  0 98    0</span></span>
-<span><span class="co">#&gt;   &lt;NA&gt;  0  0    6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span>, <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span><span class="op">)</span>, useNA <span class="op">=</span> <span class="st">"ifany"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      
+        0  1 &lt;NA&gt;
+  low  96  0    0
+  high  0 98    0
+  &lt;NA&gt;  0  0    6</code></pre>
+</div>
 </div>
 <p>Dans les graphiques et les tableaux, les variables binaires portent la marque <code>[0/1]</code> (argument <code>bin_mark</code>) et sont rangées dans un bloc à part.</p>
 </section><section id="pearson-la-corrélation-point-bisériale-est-un-test-t" class="level2"><h2 class="anchored" data-anchor-id="pearson-la-corrélation-point-bisériale-est-un-test-t">Pearson : la corrélation point-bisériale est un test t</h2>
@@ -262,11 +256,13 @@ window.Quarto = {
 <p><span class="math display">\[r_{pb} = \frac{M_1 - M_0}{SD_y}\sqrt{pq},\]</span></p>
 <p>où <span class="math inline">\(M_1, M_0\)</span> sont les moyennes de y dans les deux groupes, <span class="math inline">\(p, q\)</span> les proportions des groupes et <span class="math inline">\(SD_y\)</span> l’écart-type de y (dénominateur n). Son test est exactement le test t de Student à variances égales :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span><span class="op">)</span>; <span class="va">y</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">depression</span>; <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">y</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">BIN_CRP</span><span class="op">)</span>; <span class="va">y</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">depression</span>; <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">y</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>cor_test <span class="op">=</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">y</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span>,</span>
-<span>  t_test   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ok</span> <span class="op">&amp;</span> <span class="va">g</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="va">ok</span> <span class="op">&amp;</span> <span class="va">g</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span>, var.equal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     cor_test       t_test </span></span>
-<span><span class="co">#&gt; 9.689758e-09 9.689758e-09</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  t_test   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ok</span> <span class="op">&amp;</span> <span class="va">g</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="va">ok</span> <span class="op">&amp;</span> <span class="va">g</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span>, var.equal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    cor_test       t_test 
+9.689758e-09 9.689758e-09 </code></pre>
+</div>
 </div>
 <p>Ajustée sur des covariables, c’est le test de la pente de <code>lm(y ~ groupe + covariables)</code> (même t, mêmes degrés de liberté).</p>
 </section><section id="pourquoi-le-coefficient-est-plus-petit" class="level2"><h2 class="anchored" data-anchor-id="pourquoi-le-coefficient-est-plus-petit">Pourquoi le coefficient est plus petit</h2>
@@ -275,7 +271,7 @@ window.Quarto = {
 <p><span class="math display">\[r_{pb} = r \times \frac{\varphi(c)}{\sqrt{pq}},\]</span></p>
 <p><span class="math inline">\(\varphi\)</span> étant la densité de la loi normale. Le facteur vaut au plus 0,80 (coupure à la médiane) et 0,70 pour une répartition 20/80. On le vérifie par simulation :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">20000</span>; <span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>; <span class="va">yy</span> <span class="op">&lt;-</span> <span class="va">r</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">r</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
@@ -283,21 +279,23 @@ window.Quarto = {
 <span>  <span class="va">b</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="va">c_</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">b</span>, <span class="va">yy</span><span class="op">)</span>, theory <span class="op">=</span> <span class="va">r</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="va">c_</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">p</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">sim</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       p observed theory</span></span>
-<span><span class="co">#&gt; 1  0.05    0.237  0.237</span></span>
-<span><span class="co">#&gt; 2  0.10    0.290  0.292</span></span>
-<span><span class="co">#&gt; 3  0.15    0.323  0.326</span></span>
-<span><span class="co">#&gt; 4  0.20    0.350  0.350</span></span>
-<span><span class="co">#&gt; 5  0.25    0.367  0.367</span></span>
-<span><span class="co">#&gt; 6  0.30    0.383  0.379</span></span>
-<span><span class="co">#&gt; 7  0.35    0.385  0.388</span></span>
-<span><span class="co">#&gt; 8  0.40    0.389  0.394</span></span>
-<span><span class="co">#&gt; 9  0.45    0.393  0.398</span></span>
-<span><span class="co">#&gt; 10 0.50    0.392  0.399</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">sim</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      p observed theory
+1  0.05    0.237  0.237
+2  0.10    0.290  0.292
+3  0.15    0.323  0.326
+4  0.20    0.350  0.350
+5  0.25    0.367  0.367
+6  0.30    0.383  0.379
+7  0.35    0.385  0.388
+8  0.40    0.389  0.394
+9  0.45    0.393  0.398
+10 0.50    0.392  0.399</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">sim</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">observed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">sim</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">observed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">r</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">theory</span><span class="op">)</span>, colour <span class="op">=</span> <span class="va">COR_PAL</span><span class="op">[[</span><span class="st">"high"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
@@ -320,21 +318,25 @@ window.Quarto = {
 <p><span class="math display">\[r_s = r_{rb}\sqrt{3pq}, \qquad r_{rb} = \frac{2U}{n_0 n_1} - 1 = 2\,\mathrm{AUC} - 1,\]</span></p>
 <p>où <span class="math inline">\(r_{rb}\)</span> est la corrélation <strong>rang-bisériale</strong> (Kerby 2014) : la probabilité qu’un individu du groupe haut ait un score plus élevé qu’un individu du groupe bas, moins la probabilité inverse. Même quand les deux groupes sont parfaitement séparés (<span class="math inline">\(r_{rb} = 1\)</span>), <span class="math inline">\(|r_s|\)</span> ne dépasse pas <span class="math inline">\(\sqrt{3pq}\)</span> : 0,87 à 50/50, 0,69 à 20/80.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
-<span><span class="va">eff</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"prop1"</span>, <span class="st">"r_rb"</span>, <span class="st">"r_s"</span>, <span class="st">"r_s_bound"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 6</span></span>
-<span><span class="co">#&gt;   X       Y          prop1  r_rb   r_s r_s_bound</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 BIN_CRP depression 0.505 0.479 0.414     0.866</span></span>
-<span><span class="co">#&gt; 2 BIN_CRP fatigue    0.516 0.237 0.205     0.866</span></span>
-<span><span class="co">#&gt; 3 BIN_IL6 depression 0.197 0.510 0.352     0.689</span></span>
-<span><span class="co">#&gt; 4 BIN_IL6 fatigue    0.206 0.493 0.346     0.701</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">eff</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">r_s</span>, r_rb_x_sqrt3pq <span class="op">=</span> <span class="va">r_rb</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">3</span> <span class="op">*</span> <span class="va">prop1</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">prop1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            r_s r_rb_x_sqrt3pq</span></span>
-<span><span class="co">#&gt; [1,] 0.4144474      0.4144141</span></span>
-<span><span class="co">#&gt; [2,] 0.2051657      0.2051436</span></span>
-<span><span class="co">#&gt; [3,] 0.3515586      0.3515305</span></span>
-<span><span class="co">#&gt; [4,] 0.3458298      0.3457938</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
+<span><span class="va">eff</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"Y"</span>, <span class="st">"prop1"</span>, <span class="st">"r_rb"</span>, <span class="st">"r_s"</span>, <span class="st">"r_s_bound"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  X       Y          prop1  r_rb   r_s r_s_bound
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 BIN_CRP depression 0.505 0.479 0.414     0.866
+2 BIN_CRP fatigue    0.516 0.237 0.205     0.866
+3 BIN_IL6 depression 0.197 0.510 0.352     0.689
+4 BIN_IL6 fatigue    0.206 0.493 0.346     0.701</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">eff</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">r_s</span>, r_rb_x_sqrt3pq <span class="op">=</span> <span class="va">r_rb</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">3</span> <span class="op">*</span> <span class="va">prop1</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">prop1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           r_s r_rb_x_sqrt3pq
+[1,] 0.4144474      0.4144141
+[2,] 0.2051657      0.2051436
+[3,] 0.3515586      0.3515305
+[4,] 0.3458298      0.3457938</code></pre>
+</div>
 </div>
 <p>L’égalité n’est approximative que parce que les scores simulés contiennent des ex æquo.</p>
 </section><section id="kendall" class="level3"><h3 class="anchored" data-anchor-id="kendall">Kendall</h3>
@@ -342,7 +344,7 @@ window.Quarto = {
 </section></section><section id="ce-quil-faut-rapporter" class="level2"><h2 class="anchored" data-anchor-id="ce-quil-faut-rapporter">Ce qu’il faut rapporter</h2>
 <p>La corrélation reste utile pour <strong>tester</strong> l’association (son test est celui de Student ou de Mann-Whitney). Pour <strong>la taille de l’effet</strong>, on rapporte la différence entre groupes et la corrélation rang-bisériale :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html">tbl_cor_binary</a></span><span class="op">(</span><span class="va">eff</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html">tbl_cor_binary</a></span><span class="op">(</span><span class="va">eff</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="wotruodbev" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#wotruodbev table {
@@ -902,7 +904,7 @@ Rank-biserial correlation
 <p>La dernière colonne place le r_s observé à côté de son maximum pour cette répartition : un r_s de 0,30 avec un maximum de 0,69 n’a pas le même sens qu’un r_s de 0,30 entre deux variables continues.</p>
 <p><code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair()</a></code> montre la même chose sur un graphique : les valeurs par groupe, avec r_s, r_rb et la différence de moyennes dans le sous-titre.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_IL6"</span>, <span class="st">"fatigue"</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_IL6"</span>, <span class="st">"fatigue"</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="binary-variables_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
@@ -913,8 +915,8 @@ Rank-biserial correlation
 </section><section id="dans-les-heatmaps-et-les-tableaux" class="level2"><h2 class="anchored" data-anchor-id="dans-les-heatmaps-et-les-tableaux">Dans les heatmaps et les tableaux</h2>
 <p>Les cases qui font intervenir une variable binaire sont regroupées dans un bloc à part, et la légende donne la formule du coefficient réellement calculé :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
-<span><span class="va">res</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="binary-variables_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
@@ -922,21 +924,584 @@ Rank-biserial correlation
 </div>
 </div>
 </div>
-<p><code>res$note</code> contient la note complète, et <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note()</a></code> la fournit en anglais (légendes, notes de tableau) ou en français (encadrés d’un rapport), en version courte ou complète :</p>
+<p>Les tailles d’effet de toutes les variables binaires d’une analyse s’obtiennent directement depuis le résultat :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, lang <span class="op">=</span> <span class="st">"fr"</span>, short <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "[0/1] binaire : r_s ≈ Mann-Whitney (écart de rangs entre groupes) ; |r_s| ≤ √(3pq) ≤ 0,87, non comparable aux variables continues"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, lang <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span>, <span class="fl">90</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Variables binaires (notées [0/1], classe haute = 1) : le r_s de Spearman est une</span></span>
-<span><span class="co">#&gt; corrélation de Pearson sur les rangs ; avec deux groupes, c'est une fonction linéaire du</span></span>
-<span><span class="co">#&gt; U de Mann-Whitney (même test, à l'approximation près) : il mesure si les scores tendent à</span></span>
-<span><span class="co">#&gt; être mieux classés dans le groupe haut. r_s = r_rb × √(3pq), où r_rb = 2 AUC − 1 est la</span></span>
-<span><span class="co">#&gt; corrélation rang-bisériale (p/q = répartition entre groupes, sans ex aequo) : |r_s| ≤</span></span>
-<span><span class="co">#&gt; 0,87 à 50/50 et 0,69 à 20/80. Il n'est donc pas comparable au r_s d'un biomarqueur</span></span>
-<span><span class="co">#&gt; continu : la taille de l'effet est r_rb ou la différence entre groupes. La version</span></span>
-<span><span class="co">#&gt; partielle (ajustée) se lit de la même façon. (Kerby 2014, Comprehensive Psychology,</span></span>
-<span><span class="co">#&gt; doi:10.2466/11.IT.3.1; Babchishin &amp; Helmus 2016, Behav Res Methods,</span></span>
-<span><span class="co">#&gt; doi:10.3758/s13428-015-0627-7).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_binary.html">tbl_cor_binary</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="yaonrkzrzg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yaonrkzrzg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#yaonrkzrzg thead, #yaonrkzrzg tbody, #yaonrkzrzg tfoot, #yaonrkzrzg tr, #yaonrkzrzg td, #yaonrkzrzg th {
+  border-style: none;
+}
+
+#yaonrkzrzg p {
+  margin: 0;
+  padding: 0;
+}
+
+#yaonrkzrzg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#yaonrkzrzg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#yaonrkzrzg .gt_subtitle {
+  color: #333333;
+  font-size: 12px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#yaonrkzrzg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#yaonrkzrzg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#yaonrkzrzg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#yaonrkzrzg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#yaonrkzrzg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#yaonrkzrzg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#yaonrkzrzg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#yaonrkzrzg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yaonrkzrzg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#yaonrkzrzg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#yaonrkzrzg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#yaonrkzrzg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaonrkzrzg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#yaonrkzrzg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#yaonrkzrzg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#yaonrkzrzg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaonrkzrzg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#yaonrkzrzg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaonrkzrzg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#yaonrkzrzg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_footnote {
+  margin: 0px;
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaonrkzrzg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yaonrkzrzg .gt_sourcenote {
+  font-size: 11px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yaonrkzrzg .gt_left {
+  text-align: left;
+}
+
+#yaonrkzrzg .gt_center {
+  text-align: center;
+}
+
+#yaonrkzrzg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#yaonrkzrzg .gt_font_normal {
+  font-weight: normal;
+}
+
+#yaonrkzrzg .gt_font_bold {
+  font-weight: bold;
+}
+
+#yaonrkzrzg .gt_font_italic {
+  font-style: italic;
+}
+
+#yaonrkzrzg .gt_super {
+  font-size: 65%;
+}
+
+#yaonrkzrzg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#yaonrkzrzg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#yaonrkzrzg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#yaonrkzrzg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#yaonrkzrzg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#yaonrkzrzg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#yaonrkzrzg .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#yaonrkzrzg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#yaonrkzrzg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<td colspan="9" class="gt_heading gt_title gt_font_normal">Binary variables: effect sizes to report</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Group 1 = upper level of each binary variable | N = 188–189 | raw p-values (no adjustment)</td>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="var" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Binary variable</th>
+<th rowspan="2" id="split" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Groups 0 / 1: n (% group 1)</th>
+<th rowspan="2" id="m0" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Mean (SD), group 0</th>
+<th rowspan="2" id="m1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Mean (SD), group 1</th>
+<th colspan="2" id="sp_diff" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Mean difference
+</div></th>
+<th colspan="2" id="sp_rb" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Rank-biserial correlation
+</div></th>
+<th rowspan="2" id="rs" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Observed rₛ / max |rₛ|</th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="diff" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">M₁ − M₀ [95% CI]</th>
+<th id="p_t" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">p (t-test)</th>
+<th id="rb" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">r_rb [95% CI]</th>
+<th id="p_mw" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">p (Mann-Whitney)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row odd">
+<th colspan="9" id="Depression-score" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Depression score</th>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_left" headers="Depression-score  var">CRP high</td>
+<td class="gt_row gt_center" headers="Depression-score  split">low / high: 93 / 95 (51%)</td>
+<td class="gt_row gt_center" headers="Depression-score  m0">10.09 (4.03)</td>
+<td class="gt_row gt_center" headers="Depression-score  m1">13.36 (3.42)</td>
+<td class="gt_row gt_center" headers="Depression-score  diff">3.27 [2.20, 4.35]</td>
+<td class="gt_row gt_center" headers="Depression-score  p_t">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Depression-score  rb" style="background-color: #E59992; color: #000000">0.48 [0.34, 0.60]</td>
+<td class="gt_row gt_center" headers="Depression-score  p_mw">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Depression-score  rs">0.41 / 0.87</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Depression-score  var">IL-6 high</td>
+<td class="gt_row gt_center" headers="Depression-score  split">low / high: 151 / 37 (20%)</td>
+<td class="gt_row gt_center" headers="Depression-score  m0">11.04 (4.01)</td>
+<td class="gt_row gt_center" headers="Depression-score  m1">14.60 (3.05)</td>
+<td class="gt_row gt_center" headers="Depression-score  diff">3.56 [2.17, 4.95]</td>
+<td class="gt_row gt_center" headers="Depression-score  p_t">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Depression-score  rb" style="background-color: #E3928C; color: #000000">0.51 [0.34, 0.65]</td>
+<td class="gt_row gt_center" headers="Depression-score  p_mw">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Depression-score  rs">0.35 / 0.69</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<th colspan="9" id="Fatigue-score" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Fatigue score</th>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_left" headers="Fatigue-score  var">CRP high</td>
+<td class="gt_row gt_center" headers="Fatigue-score  split">low / high: 91 / 97 (52%)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  m0">7.48 (3.12)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  m1">8.93 (3.46)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  diff">1.46 [0.50, 2.41]</td>
+<td class="gt_row gt_center" headers="Fatigue-score  p_t">0.003</td>
+<td class="gt_row gt_center" headers="Fatigue-score  rb" style="background-color: #F5CCC8; color: #000000">0.24 [0.08, 0.39]</td>
+<td class="gt_row gt_center" headers="Fatigue-score  p_mw">0.005</td>
+<td class="gt_row gt_center" headers="Fatigue-score  rs">0.21 / 0.87</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Fatigue-score  var">IL-6 high</td>
+<td class="gt_row gt_center" headers="Fatigue-score  split">low / high: 150 / 39 (21%)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  m0">7.64 (3.13)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  m1">10.70 (3.46)</td>
+<td class="gt_row gt_center" headers="Fatigue-score  diff">3.06 [1.93, 4.20]</td>
+<td class="gt_row gt_center" headers="Fatigue-score  p_t">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Fatigue-score  rb" style="background-color: #E4958F; color: #000000">0.49 [0.32, 0.63]</td>
+<td class="gt_row gt_center" headers="Fatigue-score  p_mw">&lt; 0.001</td>
+<td class="gt_row gt_center" headers="Fatigue-score  rs">0.35 / 0.70</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="9" class="gt_sourcenote">M₁ − M₀: difference in means, Student's t-test with equal variances (= test of the point-biserial r); 95% CI from stats::t.test() {stats}.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="9" class="gt_sourcenote">r_rb = 2U / (n₀ n₁) − 1 = P(Y₁ &gt; Y₀) − P(Y₁ &lt; Y₀) = 2 AUC − 1, U = Mann-Whitney statistic of stats::wilcox.test() {stats} (Kerby 2014, doi:10.2466/11.IT.3.1); 95% CI from effectsize::rank_biserial() {effectsize}.</td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="9" class="gt_sourcenote">Observed rₛ / max |rₛ|: Spearman correlation with the 0/1 variable and its maximum √(3pq) for this split (no ties): the correlation is bounded by the split and must not be compared with that of a continuous variable (Babchishin &amp; Helmus 2016, doi:10.3758/s13428-015-0627-7).</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note()</a></code> fournit la note de lecture en anglais (légendes, notes de tableau) ou en français (encadrés d’un rapport), en version courte ou complète :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, lang <span class="op">=</span> <span class="st">"fr"</span>, short <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "[0/1] binaire : r_s ≈ Mann-Whitney (écart de rangs entre groupes) ; |r_s| ≤ √(3pq) ≤ 0,87, non comparable aux variables continues"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note</a></span><span class="op">(</span><span class="st">"spearman"</span>, lang <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span>, <span class="fl">90</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Variables binaires (notées [0/1], classe haute = 1) : le r_s de Spearman est une
+corrélation de Pearson sur les rangs ; avec deux groupes, c'est une fonction linéaire du
+U de Mann-Whitney (même test, à l'approximation près) : il mesure si les scores tendent à
+être mieux classés dans le groupe haut. r_s = r_rb × √(3pq), où r_rb = 2 AUC − 1 est la
+corrélation rang-bisériale (p/q = répartition entre groupes, sans ex aequo) : |r_s| ≤
+0,87 à 50/50 et 0,69 à 20/80. Il n'est donc pas comparable au r_s d'un biomarqueur
+continu : la taille de l'effet est r_rb ou la différence entre groupes. La version
+partielle (ajustée) se lit de la même façon. (Kerby 2014, Comprehensive Psychology,
+doi:10.2466/11.IT.3.1; Babchishin &amp; Helmus 2016, Behav Res Methods,
+doi:10.3758/s13428-015-0627-7).</code></pre>
+</div>
 </div>
 </section><section id="références" class="level2"><h2 class="anchored" data-anchor-id="références">Références</h2>
 <ul>
@@ -946,7 +1511,7 @@ Rank-biserial correlation
 </ul>
 
 
-</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

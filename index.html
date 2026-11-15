@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -161,7 +161,7 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./vignettes/corrkit.html"> 
@@ -258,20 +258,24 @@ window.Quarto = {
 </section>
 <section id="démarrage-rapide" class="level2">
 <h2 class="anchored" data-anchor-id="démarrage-rapide">Démarrage rapide</h2>
+<p>Une seule fonction calcule, <code>cor_compute()</code> ; son résultat se décrit, se dessine et se met en tableau.</p>
 <p><strong>Toutes les paires</strong> d’un ensemble de variables :</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">cor_test_matrix</span>(d, <span class="fu">c</span>(<span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span>), <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cor_heatmap</span>(cm, <span class="at">labels =</span> lab)   <span class="co"># heatmap annotée (ggplot)</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor_matrix</span>(cm, <span class="at">labels =</span> lab)     <span class="co"># même résultat en tableau (gt)</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor_long</span>(cm, <span class="at">labels =</span> lab)       <span class="co"># une ligne par paire : IC, p brute, p ajustée</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">cor_compute</span>(d, <span class="at">x =</span> <span class="fu">c</span>(<span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span>), <span class="at">labels =</span> lab)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cm                            <span class="co"># coefficients et étoiles</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cm)                   <span class="co"># caractéristiques de l'analyse et contenu de l'objet</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cm)                      <span class="co"># heatmap annotée (ggplot)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cm, <span class="at">type =</span> <span class="st">"forest"</span>)     <span class="co"># chaque coefficient avec son intervalle de confiance</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor</span>(cm)                   <span class="co"># même résultat en tableau (gt)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor</span>(cm, <span class="at">layout =</span> <span class="st">"long"</span>)  <span class="co"># une ligne par paire : IC, p brute, p ajustée</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Biomarqueurs × scores</strong>, ajustés sur l’âge et le sexe :</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">cor_cross</span>(d, <span class="fu">c</span>(<span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span>), <span class="fu">c</span>(<span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span>),</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">covariates =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>), <span class="at">labels =</span> lab)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cor_cross</span>(cc)<span class="sc">$</span>plot</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor_cross</span>(cc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">cor_compute</span>(d, <span class="at">x =</span> <span class="fu">c</span>(<span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">covariates =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"sex"</span>), <span class="at">labels =</span> lab)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cc)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor</span>(cc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Une paire</strong>, et ce que mesure son coefficient :</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cor_pair</span>(d, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, <span class="at">covariates =</span> <span class="st">"age"</span>, <span class="at">meth =</span> <span class="st">"pearson"</span>, <span class="at">labels =</span> lab)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cc, <span class="at">type =</span> <span class="st">"scatter"</span>, <span class="at">pair =</span> <span class="fu">c</span>(<span class="st">"NfL"</span>, <span class="st">"cognition"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Variables binaires</strong> : ce qu’il faut rapporter à la place de la corrélation :</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor_binary</span>(<span class="fu">cor_binary_effects</span>(d, <span class="st">"BIN_CRP"</span>, <span class="fu">c</span>(<span class="st">"depression"</span>, <span class="st">"fatigue"</span>)), <span class="at">labels =</span> lab)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cor_binary</span>(<span class="fu">cor_binary_effects</span>(cc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="les-coefficients-de-corrélation" class="level2">
 <h2 class="anchored" data-anchor-id="les-coefficients-de-corrélation">Les coefficients de corrélation</h2>
@@ -321,7 +325,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>Ces coefficients sont disponibles dans <code>cor_test_matrix(method = ...)</code> via le moteur <code>correlation::correlation()</code>.</p>
+<p>Ces coefficients sont disponibles dans <code>cor_compute(method = ...)</code> via le package correlation.</p>
 </section>
 <section id="variables-binaires-et-ordinales" class="level3">
 <h3 class="anchored" data-anchor-id="variables-binaires-et-ordinales">Variables binaires et ordinales</h3>
@@ -381,13 +385,13 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>Pearson, Spearman, Kendall</td>
-<td>partout (paires, matrices, croisé, partiel)</td>
+<td>partout dans <code>cor_compute()</code> (matrice, croisé, paire, partiel)</td>
 <td><code>stats::cor.test()</code>, <code>psych::corr.test()</code>, <code>ppcor::pcor.test()</code></td>
 </tr>
 <tr class="even">
 <td>Robustes et non linéaires</td>
-<td><code>cor_test_matrix(method = ...)</code></td>
-<td><code>correlation::correlation()</code></td>
+<td><code>cor_compute(method = ...)</code>, sans covariables</td>
+<td><code>correlation::correlation()</code>, <code>correlation::cor_test()</code></td>
 </tr>
 <tr class="odd">
 <td>Point-bisérial, rang-bisérial</td>
@@ -406,7 +410,7 @@ window.Quarto = {
 <section id="pour-aller-plus-loin" class="level2">
 <h2 class="anchored" data-anchor-id="pour-aller-plus-loin">Pour aller plus loin</h2>
 <ul>
-<li><a href="https://clement-poupelin.github.io/corrkit/vignettes/corrkit.html">Prise en main</a> : <code>cor_test_matrix()</code> et la matrice de corrélation ;</li>
+<li><a href="https://clement-poupelin.github.io/corrkit/vignettes/corrkit.html">Prise en main</a> : <code>cor_compute()</code>, son contenu et la matrice de corrélation ;</li>
 <li><a href="https://clement-poupelin.github.io/corrkit/vignettes/workflow.html">Analyse complète d’une matrice</a> : options de la heatmap, tableaux, moteurs ;</li>
 <li><a href="https://clement-poupelin.github.io/corrkit/vignettes/p-values.html">Corrections pour tests multiples</a> : quand et comment ajuster les p-values ;</li>
 <li><a href="https://clement-poupelin.github.io/corrkit/vignettes/methods-comparison.html">Comparer les coefficients</a> : Pearson, Spearman, Kendall et les coefficients robustes, en théorie et sur données simulées ;</li>

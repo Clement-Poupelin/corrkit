@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link active" href="./NEWS.html" aria-current="page"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./vignettes/corrkit.html"> 
@@ -162,7 +162,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-  <li><a href="#corrkit-0.1.0" id="toc-corrkit-0.1.0" class="nav-link active" data-scroll-target="#corrkit-0.1.0">corrkit 0.1.0</a>
+  <li><a href="#corrkit-0.2.0" id="toc-corrkit-0.2.0" class="nav-link active" data-scroll-target="#corrkit-0.2.0">corrkit 0.2.0</a></li>
+  <li><a href="#corrkit-0.1.0" id="toc-corrkit-0.1.0" class="nav-link" data-scroll-target="#corrkit-0.1.0">corrkit 0.1.0</a>
   <ul class="collapse">
   <li><a href="#changes-after-the-first-site" id="toc-changes-after-the-first-site" class="nav-link" data-scroll-target="#changes-after-the-first-site">Changes after the first site</a></li>
   </ul></li>
@@ -175,6 +176,19 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="corrkit-0.2.0" class="level1">
+<h1>corrkit 0.2.0</h1>
+<ul>
+<li><strong>One computing function, <code>cor_compute()</code></strong>, replaces <code>cor_test_matrix()</code> and <code>cor_cross()</code>: <code>y = NULL</code> gives every pair of <code>x</code> (matrix), <code>y</code> gives the cross analysis <code>x</code> x <code>y</code>, one <code>x</code> and one <code>y</code> a single pair; <code>covariates</code> works in every case (partial correlation matrices are new). One result class, <code>cor_result</code>.</li>
+<li>Methods of <code>cor_result</code>: <code>print()</code>, <code>summary()</code> (settings, variables, strongest pairs, content of the object), <code>plot()</code> and <code>autoplot()</code> with <code>type = "heatmap"</code>, <code>"forest"</code> or <code>"scatter"</code>, <code>as.matrix(what = )</code>, <code>as.data.frame()</code>.</li>
+<li>New <code>plot_cor_forest()</code>: each coefficient with its confidence interval.</li>
+<li><code>tbl_cor(layout = "matrix" | "wide" | "long")</code> replaces <code>tbl_cor_matrix()</code>, <code>tbl_cor_cross()</code> and <code>tbl_cor_long()</code>.</li>
+<li><code>plot_cor_heatmap()</code> takes a <code>cor_result</code> and draws a triangle (matrix) or a rectangle (cross); <code>plot_cor_cross()</code> is removed.</li>
+<li><code>cor_binary_effects()</code> also accepts a <code>cor_result</code>.</li>
+<li>Removed: <code>cor_test_matrix()</code>, <code>cor_cross()</code>, <code>plot_cor_cross()</code>, <code>tbl_cor_matrix()</code>, <code>tbl_cor_cross()</code>, <code>tbl_cor_long()</code>, <code>partial_rank_cor()</code>.</li>
+<li>Plot subtitles and captions use Latin-1 characters only, so that figures can be saved as PDF.</li>
+</ul>
+</section>
 <section id="corrkit-0.1.0" class="level1">
 <h1>corrkit 0.1.0</h1>
 <ul>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>cor_cross – corrkit</title>
+<title>plot_cor_forest – corrkit</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -184,68 +184,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li>
-<a href="#cross-correlations-x-x-y-e.g.-biomarkers-x-scores-optionally-partial" id="toc-cross-correlations-x-x-y-e.g.-biomarkers-x-scores-optionally-partial" class="nav-link active" data-scroll-target="#cross-correlations-x-x-y-e.g.-biomarkers-x-scores-optionally-partial">Cross correlations X x Y (e.g.&nbsp;biomarkers x scores), optionally partial</a>
+<a href="#forest-plot-of-a-correlation-analysis-each-coefficient-with-its-ci" id="toc-forest-plot-of-a-correlation-analysis-each-coefficient-with-its-ci" class="nav-link active" data-scroll-target="#forest-plot-of-a-correlation-analysis-each-coefficient-with-its-ci">Forest plot of a correlation analysis: each coefficient with its CI</a>
   <ul class="collapse">
 <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
   <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul>
 </li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="cross-correlations-x-x-y-e.g.-biomarkers-x-scores-optionally-partial" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="cross-correlations-x-x-y-e.g.-biomarkers-x-scores-optionally-partial">Cross correlations X x Y (e.g.&nbsp;biomarkers x scores), optionally partial</h2>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="forest-plot-of-a-correlation-analysis-each-coefficient-with-its-ci" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="forest-plot-of-a-correlation-analysis-each-coefficient-with-its-ci">Forest plot of a correlation analysis: each coefficient with its CI</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Every pair (x, y) is tested with <code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test()</a></code>; if <code>p_adjust</code> is not <code>“none”</code>, p-values are then adjusted with <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code> within the family chosen by <code>adjust_by</code>. p-values are raw by default (<code>p_adjust = “none”</code>). The result feeds <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross()</a></code> and <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long()</a></code>.</p>
+<p>One row per pair: point = coefficient, bar = confidence interval, filled point = p (adjusted if requested) below <code>alpha</code>. A cross analysis has one panel per <code>y</code> (e.g.&nbsp;per score); a matrix analysis lists every pair. Complements the heatmap: the heatmap shows the structure, the forest plot shows the precision of each coefficient.</p>
 </section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
-<pre><code class="language-R">cor_cross(
-  data,
-  x_vars,
-  y_vars,
-  covariates = NULL,
+<pre><code class="language-R">plot_cor_forest(
+  x,
   labels = NULL,
-  p_adjust = "none",
-  adjust_by = c("y", "x", "all", "none"),
-  meth = c("spearman", "pearson", "kendall"),
-  engine = c("ppcor", "base"),
-  ci = 0.95,
-  bin_mark = " [0/1]"
+  use_adj = TRUE,
+  alpha = 0.05,
+  sort = TRUE,
+  base_size = 10,
+  title = NULL,
+  palette = COR_PAL,
+  show_note = TRUE,
+  caption_width = 110
 )
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
 <table role="presentation">
 <tbody><tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="data">data</code>
+<code id="x">x</code>
 </td>
 <td>
-data frame
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="x_vars">x_vars</code>
-</td>
-<td>
-predictors (rows of the heatmap, e.g.&nbsp;biomarkers)
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="y_vars">y_vars</code>
-</td>
-<td>
-outcomes (columns, e.g.&nbsp;scores)
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="covariates">covariates</code>
-</td>
-<td>
-covariates of the partial correlation (<code>NULL</code> = unadjusted)
+output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code>
 </td>
 </tr>
 <tr>
@@ -253,76 +229,91 @@ covariates of the partial correlation (<code>NULL</code> = unadjusted)
 <code id="labels">labels</code>
 </td>
 <td>
-named vector variable -&gt; display label
+named vector variable -&gt; label (default: the labels given to <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code>)
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="p_adjust">p_adjust</code>
+<code id="use_adj">use_adj</code>
 </td>
 <td>
-method of <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code>: <code>“none”</code> (default, raw p) or e.g.&nbsp;<code>“BH”</code>, <code>“holm”</code>
+filled points from adjusted (<code>TRUE</code>) or raw p-values
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="adjust_by">adjust_by</code>
+<code id="alpha">alpha</code>
 </td>
 <td>
-family of the adjustment (used only if <code>p_adjust</code> is not <code>“none”</code>): <code>“y”</code> (the predictors of each score, default, as in univariable forest plots), <code>“x”</code> (the scores of each predictor), <code>“all”</code> (every test), <code>“none”</code>
+significance threshold of the filled points
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="meth">meth</code>
+<code id="sort">sort</code>
 </td>
 <td>
-<code>“spearman”</code> (default), <code>“pearson”</code> or <code>“kendall”</code>
+sort the pairs by coefficient within each panel
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="engine">engine</code>
+<code id="base_size">base_size</code>
 </td>
 <td>
-<code>“ppcor”</code> (default) or <code>“base”</code> for the partial correlations
+base font size
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="ci">ci</code>
+<code id="title">title</code>
 </td>
 <td>
-confidence level (<code>NULL</code> = none)
+title (default "<method> correlations")
+</method>
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="bin_mark">bin_mark</code>
+<code id="palette">palette</code>
 </td>
 <td>
-marker appended to the labels of binary variables
+colours of the negative / positive coefficients (named low / high)
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="show_note">show_note</code>
+</td>
+<td>
+add the binary-variable line to the caption
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="caption_width">caption_width</code>
+</td>
+<td>
+wrap the caption lines at this number of characters (<code>NULL</code> = no wrapping)
 </td>
 </tr>
 </tbody></table></section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
-<p>object of class <code>cor_cross</code>: list(table, meta). <code>table</code> has one row per pair: X, Y, x_type, y_type, rho (the coefficient, whatever the method), ci_low, ci_high, p, n, k, engine, p_adj.</p>
+<p>a ggplot</p>
+</section><section id="see-also" class="level3"><h3 class="anchored" data-anchor-id="see-also">See Also</h3>
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> on a <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code> result, which calls this function for <code>type = “forest”</code>.</p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, x_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>,</span>
-<span>                y_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span><span class="op">)</span>,</span>
-<span>                covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cc</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&lt;cor_cross&gt; 4 x 3 Spearman correlations (partial, adjusted for age, sex)
-  Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.
-       X depression fatigue cognition
-     CRP     0.22**    0.07     -0.01
-     IL6    0.34*** 0.38***      0.00
-     NfL       0.02   0.18*   -0.25**
- BIN_CRP      0.18*    0.08      0.02</code></pre>
+<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>,</span>
+<span>                  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span>, <span class="st">"cognition"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_forest.html">plot_cor_forest</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="plot_cor_forest_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 

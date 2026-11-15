@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -205,9 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>
 <p>covariates: <code><a href="https://rdrr.io/pkg/ppcor/man/pcor.test.html">ppcor::pcor.test()</a></code> (default engine); fallback or <code>engine = “base”</code>: correlation of the residuals of x and y on Z (for Spearman x, y AND Z are ranked, as in ppcor), t-test with n - 2 - k df. For Pearson this is exactly the slope test of <code>lm(y ~ x + Z)</code> (Frisch-Waugh-Lovell theorem). Kendall partial correlations need ppcor.</p>
 </li>
-</ul>
-<p><code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_rank_cor()</a></code> is the former name, kept for backward compatibility.</p>
-</section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
+</ul></section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">partial_cor_test(
   x,
   y,
@@ -216,8 +214,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   engine = c("ppcor", "base"),
   ci = 0.95
 )
-
-partial_rank_cor(x, y, Z = NULL, meth = c("spearman", "pearson"))
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
 <table role="presentation">

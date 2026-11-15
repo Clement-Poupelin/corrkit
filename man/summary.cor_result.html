@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>tbl_cor_long – corrkit</title>
+<title>summary.cor_result – corrkit</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li>
-<a href="#long-table-of-correlations-one-row-per-pair-with-ci-raw-and-adjusted-p" id="toc-long-table-of-correlations-one-row-per-pair-with-ci-raw-and-adjusted-p" class="nav-link active" data-scroll-target="#long-table-of-correlations-one-row-per-pair-with-ci-raw-and-adjusted-p">Long table of correlations: one row per pair, with CI, raw and adjusted p</a>
+<a href="#summary-of-a-correlation-analysis" id="toc-summary-of-a-correlation-analysis" class="nav-link active" data-scroll-target="#summary-of-a-correlation-analysis">Summary of a correlation analysis</a>
   <ul class="collapse">
 <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -196,45 +196,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="long-table-of-correlations-one-row-per-pair-with-ci-raw-and-adjusted-p" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="long-table-of-correlations-one-row-per-pair-with-ci-raw-and-adjusted-p">Long table of correlations: one row per pair, with CI, raw and adjusted p</h2>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="summary-of-a-correlation-analysis" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="summary-of-a-correlation-analysis">Summary of a correlation analysis</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Works for <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code> / <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code> outputs (rows grouped by the family of the adjustment) and for <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code> outputs (all pairs). Rows with a p-value (adjusted, if an adjustment was requested) below <code>alpha</code> are in bold; the adjusted column is hidden when p-values are raw.</p>
+<p>Characteristics of the analysis (mode, method, covariates, engines, confidence intervals, adjustment of the p-values), the variables and their types, the number of pairs and of significant pairs, the strongest pairs, and the content of the object.</p>
 </section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
-<pre><code class="language-R">tbl_cor_long(
-  x,
-  labels = NULL,
-  digits = 2,
-  alpha = 0.05,
-  palette = COR_PAL,
-  title = NULL,
-  subtitle = NULL,
-  sort_by = c("none", "abs")
-)
+<pre><code class="language-R">## S3 method for class 'cor_result'
+summary(object, top = 5, alpha = 0.05, ...)
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
 <table role="presentation">
 <tbody><tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="x">x</code>
+<code id="object">object</code>
 </td>
 <td>
-output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code> or <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code>
+output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code>
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="labels">labels</code>
+<code id="top">top</code>
 </td>
 <td>
-named vector variable -&gt; label
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="digits">digits</code>
-</td>
-<td>
-decimals of the coefficients
+number of strongest pairs to list
 </td>
 </tr>
 <tr>
@@ -242,588 +226,61 @@ decimals of the coefficients
 <code id="alpha">alpha</code>
 </td>
 <td>
-threshold for bold rows
+significance threshold used in the counts
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="palette">palette</code>
+<code id="...">…</code>
 </td>
 <td>
-colours (named low / high) of the coefficient column; <code>NULL</code> = no colour
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="title">title</code>, <code id="subtitle">subtitle</code>
-</td>
-<td>
-override the automatic texts
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="sort_by">sort_by</code>
-</td>
-<td>
-<code>“none”</code> (order of the variables) or <code>“abs”</code> (decreasing |coefficient| within groups)
+unused
 </td>
 </tr>
 </tbody></table></section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
-<p>a <code>gt_tbl</code></p>
+<p>object of class <code>summary.cor_result</code>: list(settings, variables, pairs, strongest, contents), printed by <code><a href="https://rdrr.io/r/base/print.html">print()</a></code></p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_long.html">tbl_cor_long</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="uxzqseqpze" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#uxzqseqpze table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>== Correlation analysis (cor_result) ==
 
-#uxzqseqpze thead, #uxzqseqpze tbody, #uxzqseqpze tfoot, #uxzqseqpze tr, #uxzqseqpze td, #uxzqseqpze th {
-  border-style: none;
-}
+  Mode         matrix: every pair of 5 variables
+  Method       Spearman
+  Covariates   none (unadjusted)
+  Engine       psych::corr.test() {psych}
+  CI           95% (correlation::cor_to_ci)
+  p-values     raw (no multiple-testing adjustment)
 
-#uxzqseqpze p {
-  margin: 0;
-  padding: 0;
-}
+-- Variables --
+ variable    label   role       type   n
+      CRP      CRP matrix continuous 146
+      IL6     IL-6 matrix continuous 146
+     BDNF     BDNF matrix continuous 146
+      NfL      NfL matrix continuous 146
+  BIN_CRP CRP high matrix     binary 146
 
-#uxzqseqpze .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 13px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
+-- Pairs --
+  10 pairs (4 involving a binary variable), N = 142–146
+  p &lt; 0.05: 4 (raw)
 
-#uxzqseqpze .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
+-- Strongest pairs (|r_s|) --
+            pair   r_s             CI       p   n
+  CRP - CRP high  0.87   [0.82, 0.90] &lt; 0.001 146
+      CRP - IL-6  0.41   [0.26, 0.54] &lt; 0.001 142
+ IL-6 - CRP high  0.30   [0.14, 0.45] &lt; 0.001 142
+     IL-6 - BDNF -0.23 [-0.38, -0.06]   0.007 142
+      CRP - BDNF -0.14  [-0.30, 0.03]   0.099 142
 
-#uxzqseqpze .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#uxzqseqpze .gt_subtitle {
-  color: #333333;
-  font-size: 12px;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#uxzqseqpze .gt_heading {
-  background-color: #FFFFFF;
-  text-align: left;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#uxzqseqpze .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#uxzqseqpze .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#uxzqseqpze .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#uxzqseqpze .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#uxzqseqpze .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#uxzqseqpze .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#uxzqseqpze .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#uxzqseqpze .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#uxzqseqpze .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#uxzqseqpze .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#uxzqseqpze .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uxzqseqpze .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#uxzqseqpze .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#uxzqseqpze .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#uxzqseqpze .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uxzqseqpze .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#uxzqseqpze .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uxzqseqpze .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#uxzqseqpze .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_footnote {
-  margin: 0px;
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uxzqseqpze .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#uxzqseqpze .gt_sourcenote {
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uxzqseqpze .gt_left {
-  text-align: left;
-}
-
-#uxzqseqpze .gt_center {
-  text-align: center;
-}
-
-#uxzqseqpze .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#uxzqseqpze .gt_font_normal {
-  font-weight: normal;
-}
-
-#uxzqseqpze .gt_font_bold {
-  font-weight: bold;
-}
-
-#uxzqseqpze .gt_font_italic {
-  font-style: italic;
-}
-
-#uxzqseqpze .gt_super {
-  font-size: 65%;
-}
-
-#uxzqseqpze .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#uxzqseqpze .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#uxzqseqpze .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#uxzqseqpze .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#uxzqseqpze .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#uxzqseqpze .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#uxzqseqpze .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#uxzqseqpze .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#uxzqseqpze div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading header">
-<td colspan="7" class="gt_heading gt_title gt_font_normal">Spearman correlations</td>
-</tr>
-<tr class="gt_heading even">
-<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Spearman correlation, all pairs | pairwise complete N = 142–146 | Computed with psych::corr.test() {psych}</td>
-</tr>
-<tr class="gt_col_headings header">
-<th id="lab1" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable 1</th>
-<th id="lab2" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable 2</th>
-<th id="pair" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Pair</th>
-<th id="n" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">n</th>
-<th id="coef" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">rₛ</th>
-<th id="ci" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">95% CI</th>
-<th id="p_txt" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">p (raw)</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
-<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">IL-6</td>
-<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
-<td class="gt_row gt_center" headers="n" style="font-weight: bold">142</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #EAA7A1; color: #000000; font-weight: bold">0.41</td>
-<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.26, 0.54]</td>
-<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="lab1">CRP</td>
-<td class="gt_row gt_left" headers="lab2">BDNF</td>
-<td class="gt_row gt_center" headers="pair">cont × cont</td>
-<td class="gt_row gt_center" headers="n">142</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #E4E8F4; color: #000000">-0.14</td>
-<td class="gt_row gt_center" headers="ci">[-0.30, 0.03]</td>
-<td class="gt_row gt_center" headers="p_txt">0.099</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
-<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">BDNF</td>
-<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × cont</td>
-<td class="gt_row gt_center" headers="n" style="font-weight: bold">142</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #D3DAEC; color: #000000; font-weight: bold">-0.23</td>
-<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[-0.38, -0.06]</td>
-<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">0.007 **</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">CRP</td>
-<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
-<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
-<td class="gt_row gt_center" headers="n" style="font-weight: bold">146</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #C14244; color: #FFFFFF; font-weight: bold">0.87</td>
-<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.82, 0.90]</td>
-<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="lab1" style="font-weight: bold">IL-6</td>
-<td class="gt_row gt_left" headers="lab2" style="font-weight: bold">CRP high [0/1]</td>
-<td class="gt_row gt_center" headers="pair" style="font-weight: bold">cont × bin</td>
-<td class="gt_row gt_center" headers="n" style="font-weight: bold">142</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #F2BEBA; color: #000000; font-weight: bold">0.30</td>
-<td class="gt_row gt_center" headers="ci" style="font-weight: bold">[0.14, 0.45]</td>
-<td class="gt_row gt_center" headers="p_txt" style="font-weight: bold">&lt; 0.001 ***</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="lab1">BDNF</td>
-<td class="gt_row gt_left" headers="lab2">CRP high [0/1]</td>
-<td class="gt_row gt_center" headers="pair">cont × bin</td>
-<td class="gt_row gt_center" headers="n">142</td>
-<td class="gt_row gt_center" headers="coef" style="background-color: #EBEFF7; color: #000000">-0.10</td>
-<td class="gt_row gt_center" headers="ci">[-0.26, 0.07]</td>
-<td class="gt_row gt_center" headers="p_txt">0.239</td>
-</tr>
-</tbody>
-<tfoot>
-<tr class="gt_sourcenotes odd">
-<td colspan="7" class="gt_sourcenote">Pair: cont = continuous, bin = binary[0/1]. Bold = p &lt; 0.05.</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="7" class="gt_sourcenote">Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.</td>
-</tr>
-<tr class="gt_sourcenotes odd">
-<td colspan="7" class="gt_sourcenote">Continuous: r_s = cov(rank_x, rank_y) / (SD(rank_x) × SD(rank_y)); t-test, n − 2 df.</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="7" class="gt_sourcenote">95% CI: Fisher z transformation, SE = √(1.06 / (n − 3)) (Fieller et al. 1957); computed with correlation::cor_to_ci() {correlation}.</td>
-</tr>
-<tr class="gt_sourcenotes odd">
-<td colspan="7" class="gt_sourcenote">Binary [0/1]: r_s = r_rb × √(3pq), r_rb = 2 AUC − 1 (rank-biserial, ≡ Mann-Whitney test), p, q = group proportions; |r_s| ≤ 0.87, not comparable with continuous pairs.</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="7" class="gt_sourcenote">Notation: Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020), J Open Source Softw 5(51):2306, doi:10.21105/joss.02306.</td>
-</tr>
-</tfoot>
-</table>
-</div>
+-- Content of the object --
+  $table  one row per pair (10 x 13): X, Y, x_type, y_type, r, ci_low, ci_high, p, p_adj, n, k, engine, ci_engine
+  $meta   settings of the analysis (mode, meth, p_adjust, adjust_by, family, covariates, partial, k, x_vars, y_vars, x_types, y_types, labels, bin_mark, ci, engine, ci_engine)
+  $data   the 5 columns used (150 rows)
+  Use: plot(x, type = "heatmap" | "forest" | "scatter"), tbl_cor(x, layout = ...),
+       as.matrix(x, what = "r" | "p" | "p_adj" | "n" | "ci_low" | "ci_high"), as.data.frame(x)</code></pre>
 </div>
 </div>
 

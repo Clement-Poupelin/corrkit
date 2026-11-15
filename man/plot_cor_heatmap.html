@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -184,33 +184,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li>
-<a href="#lower-triangular-heatmap-of-a-correlation-matrix" id="toc-lower-triangular-heatmap-of-a-correlation-matrix" class="nav-link active" data-scroll-target="#lower-triangular-heatmap-of-a-correlation-matrix">Lower-triangular heatmap of a correlation matrix</a>
+<a href="#heatmap-of-a-correlation-analysis" id="toc-heatmap-of-a-correlation-analysis" class="nav-link active" data-scroll-target="#heatmap-of-a-correlation-analysis">Heatmap of a correlation analysis</a>
   <ul class="collapse">
 <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+  <li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
   <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
+  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul>
 </li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="lower-triangular-heatmap-of-a-correlation-matrix" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="lower-triangular-heatmap-of-a-correlation-matrix">Lower-triangular heatmap of a correlation matrix</h2>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="heatmap-of-a-correlation-analysis" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="heatmap-of-a-correlation-analysis">Heatmap of a correlation analysis</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Lower-triangular heatmap of a correlation matrix</p>
-</section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
+<ul>
+<li>
+<p>matrix analysis (<code>cor_compute(y = NULL)</code>): lower triangle, diagonal included;</p>
+</li>
+<li>
+<p>cross analysis: one row per <code>x</code>, one column per <code>y</code>.</p>
+</li>
+</ul></section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">plot_cor_heatmap(
-  cm,
+  x,
   labels = NULL,
   use_adj = TRUE,
   order = c("hclust", "original"),
   show_values = TRUE,
   base_size = 10,
   title = NULL,
-  value_size = 2.6,
+  value_size = NULL,
   show_note = TRUE,
-  bin_mark = " [0/1]",
   split_binary = TRUE,
   palette = COR_PAL,
   caption_width = 110,
@@ -221,10 +228,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <table role="presentation">
 <tbody><tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="cm">cm</code>
+<code id="x">x</code>
 </td>
 <td>
-output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix()</a></code>
+output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code>
 </td>
 </tr>
 <tr>
@@ -232,7 +239,7 @@ output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_test
 <code id="labels">labels</code>
 </td>
 <td>
-named vector variable -&gt; display label
+named vector variable -&gt; display label (default: the labels given to <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code>)
 </td>
 </tr>
 <tr>
@@ -248,7 +255,7 @@ stars on adjusted (<code>TRUE</code>) or raw p-values
 <code id="order">order</code>
 </td>
 <td>
-<code>“hclust”</code> (within each block if <code>split_binary</code>) or <code>“original”</code>
+matrix only: <code>“hclust”</code> (within each block if <code>split_binary</code>) or <code>“original”</code>
 </td>
 </tr>
 <tr>
@@ -272,7 +279,8 @@ base font size
 <code id="title">title</code>
 </td>
 <td>
-title (default "Correlation matrix")
+title (default "Correlation matrix" or "<method> correlations")
+</method>
 </td>
 </tr>
 <tr>
@@ -293,18 +301,10 @@ add the binary-variable line to the caption
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="bin_mark">bin_mark</code>
-</td>
-<td>
-marker appended to the labels of binary variables
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
 <code id="split_binary">split_binary</code>
 </td>
 <td>
-binary variables in a separate block (last rows / columns)
+binary variables in a separate block
 </td>
 </tr>
 <tr>
@@ -328,21 +328,35 @@ wrap the caption lines at this number of characters (<code>NULL</code> = no wrap
 <code id="separator">separator</code>
 </td>
 <td>
-<code>“facet”</code> (2 x 2 panels with strips, default) or <code>“line”</code> (separator lines, square tiles)
+matrix only: <code>“facet”</code> (panels with strips, default) or <code>“line”</code> (separator lines, square tiles)
 </td>
 </tr>
-</tbody></table></section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
+</tbody></table></section><section id="details" class="level3"><h3 class="anchored" data-anchor-id="details">Details</h3>
+<p>Each cell shows the coefficient and the stars of its p-value (adjusted if an adjustment was requested); the subtitle gives the method, the adjustment for covariates, N and the engine; the caption gives the status of the p-values, the formula of the coefficient and the reading of binary cells.</p>
+</section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
 <p>a ggplot</p>
+</section><section id="see-also" class="level3"><h3 class="anchored" data-anchor-id="see-also">See Also</h3>
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> on a <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code> result, which calls this function for <code>type = “heatmap”</code>.</p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"depression"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"depression"</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"BIN_IL6"</span><span class="op">)</span>,</span>
+<span>                  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_heatmap_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"cognition"</span><span class="op">)</span>,</span>
+<span>                  covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_heatmap.html">plot_cor_heatmap</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="plot_cor_heatmap_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>

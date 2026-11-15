@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>tbl_cor_cross – corrkit</title>
+
+
+<title>as.matrix.cor_result – corrkit</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,42 +26,8 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
+
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
@@ -78,7 +47,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -105,11 +75,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+
+
 </head>
+
 <body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site"><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">corrkit</span>
@@ -120,9 +95,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -136,8 +111,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-vignettes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Vignettes</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-vignettes">
-<li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-vignettes">    
+        <li>
     <a class="dropdown-item" href="../vignettes/workflow.html">
  <span class="dropdown-text">Analyse complète d’une matrice</span></a>
   </li>  
@@ -158,643 +133,102 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Variables binaires</span></a>
   </li>  
     </ul>
-</li>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
 <span class="menu-text">Changements</span></a>
   </li>  
 </ul>
-<ul class="navbar-nav navbar-nav-scroll ms-auto">
-<li class="nav-item compact">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/clement-poupelin/corrkit"> <i class="bi bi-github" role="img" aria-label="corrkit sur GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
 </ul>
-</div> <!-- /navcollapse -->
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
             <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
-    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Sur cette page</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">Sur cette page</h2>
    
   <ul>
-<li>
-<a href="#table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score" id="toc-table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score" class="nav-link active" data-scroll-target="#table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score">Table of cross correlations X x Y (wide: one row per predictor, one column per score)</a>
+  <li><a href="#matrix-of-one-statistic-of-a-cor_result" id="toc-matrix-of-one-statistic-of-a-cor_result" class="nav-link active" data-scroll-target="#matrix-of-one-statistic-of-a-cor_result">Matrix of one statistic of a cor_result</a>
   <ul class="collapse">
-<li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
   <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  </ul></li>
   </ul>
-</li>
-  </ul></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="table-of-cross-correlations-x-x-y-wide-one-row-per-predictor-one-column-per-score">Table of cross correlations X x Y (wide: one row per predictor, one column per score)</h2>
-<section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Same content and same colour scale as <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>. Binary predictors are grouped under "Binary [0/1]" and carry a footnote.</p>
-</section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
-<pre><code class="language-R">tbl_cor_cross(
-  x,
-  labels = NULL,
-  digits = 2,
-  palette = COR_PAL,
-  show_note = TRUE,
-  title = NULL,
-  subtitle = NULL,
-  stub_label = "Predictor"
-)
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="matrix-of-one-statistic-of-a-cor_result" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="matrix-of-one-statistic-of-a-cor_result">Matrix of one statistic of a cor_result</h2>
+<section id="description" class="level3">
+<h3 class="anchored" data-anchor-id="description">Description</h3>
+<p>Matrix of one statistic of a cor_result</p>
+</section>
+<section id="usage" class="level3">
+<h3 class="anchored" data-anchor-id="usage">Usage</h3>
+<pre><code class="language-R">## S3 method for class 'cor_result'
+as.matrix(x, what = c("r", "p", "p_adj", "n", "ci_low", "ci_high"), ...)
 </code></pre>
-</section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
+</section>
+<section id="arguments" class="level3">
+<h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
 <table role="presentation">
 <tbody><tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
 <code id="x">x</code>
 </td>
 <td>
-output of <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code> or <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_cross.html">plot_cor_cross()</a></code>
+output of <code>cor_compute()</code>
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="labels">labels</code>
+<code id="what">what</code>
 </td>
 <td>
-named vector variable -&gt; label (default: those given to <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross()</a></code>)
+column of <code>x$table</code>: <code>“r”</code> (default), <code>“p”</code>, <code>“p_adj”</code>, <code>“n”</code>, <code>“ci_low”</code> or <code>“ci_high”</code>
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="digits">digits</code>
+<code id="...">…</code>
 </td>
 <td>
-decimals of the coefficients
+unused
 </td>
 </tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="palette">palette</code>
-</td>
-<td>
-colours (named low / high); <code>NULL</code> = no colour
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="show_note">show_note</code>
-</td>
-<td>
-add the reading lines of binary variables
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="title">title</code>, <code id="subtitle">subtitle</code>
-</td>
-<td>
-override the automatic texts
-</td>
-</tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="stub_label">stub_label</code>
-</td>
-<td>
-header of the row labels
-</td>
-</tr>
-</tbody></table></section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
-<p>a <code>gt_tbl</code></p>
-</section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
-<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_cross.html">cor_cross</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"fatigue"</span><span class="op">)</span>,</span>
-<span>                covariates <span class="op">=</span> <span class="st">"age"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor_cross.html">tbl_cor_cross</a></span><span class="op">(</span><span class="va">cc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="ovfgnwqlul" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ovfgnwqlul table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#ovfgnwqlul thead, #ovfgnwqlul tbody, #ovfgnwqlul tfoot, #ovfgnwqlul tr, #ovfgnwqlul td, #ovfgnwqlul th {
-  border-style: none;
-}
-
-#ovfgnwqlul p {
-  margin: 0;
-  padding: 0;
-}
-
-#ovfgnwqlul .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 13px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#ovfgnwqlul .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ovfgnwqlul .gt_subtitle {
-  color: #333333;
-  font-size: 12px;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ovfgnwqlul .gt_heading {
-  background-color: #FFFFFF;
-  text-align: left;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ovfgnwqlul .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ovfgnwqlul .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ovfgnwqlul .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ovfgnwqlul .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ovfgnwqlul .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#ovfgnwqlul .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#ovfgnwqlul .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ovfgnwqlul .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ovfgnwqlul .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ovfgnwqlul .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ovfgnwqlul .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ovfgnwqlul .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#ovfgnwqlul .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#ovfgnwqlul .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#ovfgnwqlul .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ovfgnwqlul .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#ovfgnwqlul .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ovfgnwqlul .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ovfgnwqlul .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_footnote {
-  margin: 0px;
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ovfgnwqlul .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ovfgnwqlul .gt_sourcenote {
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ovfgnwqlul .gt_left {
-  text-align: left;
-}
-
-#ovfgnwqlul .gt_center {
-  text-align: center;
-}
-
-#ovfgnwqlul .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ovfgnwqlul .gt_font_normal {
-  font-weight: normal;
-}
-
-#ovfgnwqlul .gt_font_bold {
-  font-weight: bold;
-}
-
-#ovfgnwqlul .gt_font_italic {
-  font-style: italic;
-}
-
-#ovfgnwqlul .gt_super {
-  font-size: 65%;
-}
-
-#ovfgnwqlul .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#ovfgnwqlul .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#ovfgnwqlul .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#ovfgnwqlul .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#ovfgnwqlul .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#ovfgnwqlul .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#ovfgnwqlul .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#ovfgnwqlul .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#ovfgnwqlul div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading header">
-<td colspan="3" class="gt_heading gt_title gt_font_normal">Spearman correlations</td>
-</tr>
-<tr class="gt_heading even">
-<td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Spearman partial, adjusted for Age | N = 142–143 | Computed with ppcor::pcor.test() {ppcor}; p adjustment: none</td>
-</tr>
-<tr class="gt_col_headings header">
-<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Predictor</th>
-<th id="lab__1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Depression score</th>
-<th id="lab__2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Fatigue score</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="gt_group_heading_row odd">
-<th colspan="3" id="Continuous" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Continuous</th>
-</tr>
-<tr class="gt_row_group_first even">
-<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">CRP</th>
-<td class="gt_row gt_center" headers="Continuous stub_1_1 lab__1" style="background-color: #F6CFCB; color: #000000">0.22**</td>
-<td class="gt_row gt_center" headers="Continuous stub_1_1 lab__2" style="background-color: #FDF0EF; color: #000000">0.07</td>
-</tr>
-<tr class="odd">
-<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">IL-6</th>
-<td class="gt_row gt_center" headers="Continuous stub_1_2 lab__1" style="background-color: #EFB5B0; color: #000000">0.35***</td>
-<td class="gt_row gt_center" headers="Continuous stub_1_2 lab__2" style="background-color: #EDAEA8; color: #000000">0.38***</td>
-</tr>
-<tr class="gt_group_heading_row even">
-<th colspan="3" id="Binary-[0/1]" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Binary [0/1]</th>
-</tr>
-<tr class="gt_row_group_first odd">
-<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">CRP high [0/1]<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
-</th>
-<td class="gt_row gt_center" headers="Binary-[0/1] stub_1_3 lab__1" style="background-color: #F8D7D4; color: #000000">0.18*</td>
-<td class="gt_row gt_center" headers="Binary-[0/1] stub_1_3 lab__2" style="background-color: #FDEFEE; color: #000000">0.07</td>
-</tr>
-</tbody>
-<tfoot>
-<tr class="gt_footnotes odd">
-<td colspan="3" class="gt_footnote">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> [0/1] binary: r_s ≈ Mann-Whitney (rank difference between groups); |r_s| ≤ √(3pq) ≤ 0.87, not comparable with continuous variables</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="3" class="gt_sourcenote">Cells: r_s and stars; colour = same scale as the heatmap (blue &lt; 0 &lt; red). Confidence intervals: tbl_cor_long().</td>
-</tr>
-<tr class="gt_sourcenotes odd">
-<td colspan="3" class="gt_sourcenote">Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="3" class="gt_sourcenote">Continuous: r_s = cov(rank_x, rank_y) / (SD(rank_x) × SD(rank_y)); partial: r_s,xy.z = r(e_x.z, e_y.z), residuals of the ranks on the k = 1 covariate terms z; t-test, n − 2 − k df.</td>
-</tr>
-<tr class="gt_sourcenotes odd">
-<td colspan="3" class="gt_sourcenote">Binary [0/1]: r_s = r_rb × √(3pq), r_rb = 2 AUC − 1 (rank-biserial, ≡ Mann-Whitney test), p, q = group proportions; |r_s| ≤ 0.87, not comparable with continuous pairs.</td>
-</tr>
-<tr class="gt_sourcenotes even">
-<td colspan="3" class="gt_sourcenote">Notation: Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020), J Open Source Softw 5(51):2306, doi:10.21105/joss.02306.</td>
-</tr>
-</tfoot>
-</table>
-</div>
-</div>
-</div>
+</tbody></table>
+</section>
+<section id="value" class="level3">
+<h3 class="anchored" data-anchor-id="value">Value</h3>
+<p>a numeric matrix: symmetric with the diagonal filled (r = 1, p = 0, n = number of values) for a matrix analysis; <code>x</code> in rows and <code>y</code> in columns for a cross analysis</p>
 
 
-</section></section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -1266,11 +700,13 @@ header of the row labels
       }
     }
   });
-  </script><script type="application/javascript">
+  </script>
+  <script type="application/javascript">
   window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">
 <p>Développé par <a href="https://orcid.org/0009-0005-7308-0368">Clément Poupelin</a>.</p>
 </div>   
@@ -1282,6 +718,8 @@ header of the row labels
 </div>
   </div>
 </footer>
+
+
 
 
 </body></html>

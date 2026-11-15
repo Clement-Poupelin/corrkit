@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>cor_test_matrix – corrkit</title>
+<title>cor_compute – corrkit</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
     <a class="nav-link" href="../NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../vignettes/corrkit.html"> 
@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li>
-<a href="#correlation-and-p-value-matrices-of-all-pairs-pairwise-complete-observations" id="toc-correlation-and-p-value-matrices-of-all-pairs-pairwise-complete-observations" class="nav-link active" data-scroll-target="#correlation-and-p-value-matrices-of-all-pairs-pairwise-complete-observations">Correlation and p-value matrices of all pairs (pairwise complete observations)</a>
+<a href="#compute-correlations-matrix-cross-or-single-pair-simple-or-partial" id="toc-compute-correlations-matrix-cross-or-single-pair-simple-or-partial" class="nav-link active" data-scroll-target="#compute-correlations-matrix-cross-or-single-pair-simple-or-partial">Compute correlations: matrix, cross or single pair, simple or partial</a>
   <ul class="collapse">
 <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -197,17 +197,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="correlation-and-p-value-matrices-of-all-pairs-pairwise-complete-observations" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="correlation-and-p-value-matrices-of-all-pairs-pairwise-complete-observations">Correlation and p-value matrices of all pairs (pairwise complete observations)</h2>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header><section id="compute-correlations-matrix-cross-or-single-pair-simple-or-partial" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="compute-correlations-matrix-cross-or-single-pair-simple-or-partial">Compute correlations: matrix, cross or single pair, simple or partial</h2>
 <section id="description" class="level3"><h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>The engine always returns <strong>raw</strong> p-values. By default they are kept as they are (<code>p_adjust = “none”</code>); with another <code>p_adjust</code>, corrkit adjusts them with <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code> over the k(k - 1)/2 distinct pairs, as <code><a href="https://rdrr.io/pkg/psych/man/corr.test.html">psych::corr.test()</a></code> does above its diagonal.</p>
-</section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
-<pre><code class="language-R">cor_test_matrix(
+<p><code><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute()</a></code> is the single computing function of corrkit.</p>
+<ul>
+<li>
+<p><code>y = NULL</code>: every pair of the variables <code>x</code> (correlation matrix);</p>
+</li>
+<li>
+<p><code>y</code> given: every pair <code>x</code> x <code>y</code> (e.g.&nbsp;biomarkers x scores);</p>
+</li>
+<li>
+<p>one <code>x</code> and one <code>y</code>: a single pair;</p>
+</li>
+<li>
+<p><code>covariates</code>: partial correlations (any of the above).</p>
+</li>
+</ul></section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
+<pre><code class="language-R">cor_compute(
   data,
-  vars,
+  x,
+  y = NULL,
+  covariates = NULL,
   method = "spearman",
   p_adjust = "none",
-  engine = c("auto", "psych", "correlation", "stats"),
-  ci = 0.95
+  adjust_by = c("y", "x", "all"),
+  ci = 0.95,
+  engine = c("auto", "psych", "correlation", "stats", "ppcor", "base"),
+  labels = NULL,
+  bin_mark = " [0/1]"
 )
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
@@ -222,10 +240,26 @@ data frame
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="vars">vars</code>
+<code id="x">x</code>
 </td>
 <td>
-variables to correlate
+variables (rows of the outputs)
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="y">y</code>
+</td>
+<td>
+variables crossed with <code>x</code> (columns); <code>NULL</code> = every pair of <code>x</code>
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="covariates">covariates</code>
+</td>
+<td>
+covariates of a partial correlation (<code>NULL</code> = none); factors allowed (dummy coded)
 </td>
 </tr>
 <tr>
@@ -233,7 +267,7 @@ variables to correlate
 <code id="method">method</code>
 </td>
 <td>
-correlation method (see above)
+<code>“spearman”</code> (default), <code>“pearson”</code>, <code>“kendall”</code>; without covariates also the methods of the correlation package: <code>“biweight”</code>, <code>“percentage”</code>, <code>“blomqvist”</code>, <code>“hoeffding”</code>, <code>“gaussian”</code>, <code>“shepherd”</code>, <code>“distance”</code>
 </td>
 </tr>
 <tr>
@@ -241,15 +275,15 @@ correlation method (see above)
 <code id="p_adjust">p_adjust</code>
 </td>
 <td>
-method of <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code>: <code>“none”</code> (default, raw p-values, as in most correlation analyses), or e.g.&nbsp;<code>“BH”</code>, <code>“holm”</code>, <code>“bonferroni”</code>
+method of <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code>: <code>“none”</code> (default, raw p-values) or e.g.&nbsp;<code>“BH”</code>, <code>“holm”</code>, <code>“bonferroni”</code>
 </td>
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="engine">engine</code>
+<code id="adjust_by">adjust_by</code>
 </td>
 <td>
-<code>“auto”</code>, <code>“psych”</code>, <code>“correlation”</code> or <code>“stats”</code>
+family of the adjustment of a cross analysis: <code>“y”</code> (the predictors of each column, default), <code>“x”</code> (the columns of each predictor) or <code>“all”</code>; a matrix is always adjusted over all its pairs
 </td>
 </tr>
 <tr>
@@ -260,50 +294,102 @@ method of <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust(
 confidence level of the intervals (<code>NULL</code> = none)
 </td>
 </tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="engine">engine</code>
+</td>
+<td>
+<code>“auto”</code> (default), <code>“psych”</code>, <code>“correlation”</code>, <code>“stats”</code> (matrix without covariates), <code>“ppcor”</code> or <code>“base”</code> (partial correlations)
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="labels">labels</code>
+</td>
+<td>
+named vector variable -&gt; display label, used by the outputs
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="bin_mark">bin_mark</code>
+</td>
+<td>
+marker appended to the labels of binary variables
+</td>
+</tr>
 </tbody></table></section><section id="details" class="level3"><h3 class="anchored" data-anchor-id="details">Details</h3>
-<p>Engines (<code>engine = “auto”</code> picks the first available in this order):</p>
+<p><strong>Engines</strong> (an existing function for every computation)</p>
 <ul>
 <li>
-<p>Pearson / Spearman: <code>psych::corr.test(adjust = “none”)</code>, then <code>correlation::correlation(p_adjust = “none”)</code>, then <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code> pair by pair;</p>
+<p>matrix without covariates: <code>psych::corr.test(adjust = “none”)</code> (Pearson, Spearman), <code>correlation::correlation(p_adjust = “none”)</code> (Kendall and the robust methods), or <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code> pair by pair;</p>
 </li>
 <li>
-<p>Kendall: <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code>, then <code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code> (psych tests tau with the t formula of r, so it is not used for Kendall);</p>
-</li>
-<li>
-<p>other methods of the correlation package (<code>“biweight”</code>, <code>“percentage”</code>, <code>“blomqvist”</code>, <code>“hoeffding”</code>, <code>“gaussian”</code>, <code>“shepherd”</code>, <code>“distance”</code>): <code><a href="https://easystats.github.io/correlation/reference/correlation.html">correlation::correlation()</a></code> only.</p>
+<p>other cases: <code><a href="https://clement-poupelin.github.io/corrkit/man/partial_cor_test.html">partial_cor_test()</a></code>, i.e.&nbsp;<code><a href="https://rdrr.io/r/stats/cor.test.html">stats::cor.test()</a></code> without covariates and <code><a href="https://rdrr.io/pkg/ppcor/man/pcor.test.html">ppcor::pcor.test()</a></code> with covariates; robust methods use <code><a href="https://easystats.github.io/correlation/reference/cor_test.html">correlation::cor_test()</a></code>.</p>
 </li>
 </ul>
-<p>Binary variables are coded 0/1 (see <code><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric()</a></code>) and flagged in <code>types</code>.</p>
+<p><strong>p-values</strong> are raw by default (<code>p_adjust = “none”</code>). Otherwise they are adjusted with <code><a href="https://rdrr.io/r/stats/p.adjust.html">stats::p.adjust()</a></code> over the k(k - 1)/2 pairs (matrix) or over the family set by <code>adjust_by</code> (cross).</p>
+<p><strong>Binary variables</strong> are coded 0/1, the upper level being 1 (see <code><a href="https://clement-poupelin.github.io/corrkit/man/as_cor_numeric.html">as_cor_numeric()</a></code>), and flagged in the result; see <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_note.html">cor_binary_note()</a></code> and <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>.</p>
 </section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
-<p>object of class <code>cor_matrix</code>: list(r, p, p_adj, n, ci_low, ci_high, long, types, method, p_adjust, engine, ci, ci_engine); <code>long</code> = one row per pair (i &lt; j) with Var1, Var2, type1, type2, r, ci_low, ci_high, p, p_adj, n.</p>
+<p>object of class <code>cor_result</code>: a list with</p>
+<ul>
+<li>
+<p><code>table</code>: one row per pair, with X, Y, x_type, y_type, r (the coefficient, whatever the method), ci_low, ci_high, p, p_adj, n, k (number of covariate terms), engine;</p>
+</li>
+<li>
+<p><code>meta</code>: settings of the analysis (mode, method, adjustment, family, covariates, variables and their types, labels…);</p>
+</li>
+<li>
+<p><code>data</code>: the columns used, for <code><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair()</a></code> and <code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>.</p>
+</li>
+</ul>
+<p>Methods: <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, <code><a href="https://clement-poupelin.github.io/corrkit/man/tbl_cor.html">tbl_cor()</a></code>, <code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code>, <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code>.</p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://clement-poupelin.github.io/corrkit/">"corrkit"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">120</span><span class="op">)</span></span>
-<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_test_matrix.html">cor_test_matrix</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
+<span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/simulate_cor_data.html">simulate_cor_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span>
+<span><span class="va">lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># every pair of a set of variables</span></span>
+<span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"BDNF"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
 <span><span class="va">cm</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;cor_matrix&gt; Spearman correlations, 5 variables (1 binary), 10 pairs
-  engine: psych::corr.test() {psych} | raw p-values (no adjustment) | N = 112–116
+<pre><code>&lt;cor_result&gt; Spearman correlations: 5 variables, 10 pairs (1 binary variable)
+  engine: psych::corr.test() {psych} | N = 142–146
+  Raw p (no multiple-testing adjustment): * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = p ≥ 0.05.
+
         CRP     IL6     BDNF  NfL  BIN_CRP
 CRP     1                                 
-IL6     0.36*** 1                         
-BDNF    -0.16   -0.10   1                 
-NfL     0.18    0.01    0.19* 1           
-BIN_CRP 0.87*** 0.33*** -0.11 0.17 1      </code></pre>
+IL6     0.41*** 1                         
+BDNF    -0.14   -0.23** 1                 
+NfL     0.12    0.08    -0.05 1           
+BIN_CRP 0.87*** 0.30*** -0.10 0.12 1      </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cm</span><span class="op">$</span><span class="va">long</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 10
-  Var1  Var2  type1      type2          r   ci_low ci_high       p     n   p_adj
-  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-1 CRP   IL6   continuous contin…  0.356    0.177    0.512  1.18e-4   112 1.18e-4
-2 CRP   BDNF  continuous contin… -0.162   -0.342    0.0302 8.87e-2   112 8.87e-2
-3 IL6   BDNF  continuous contin… -0.0955  -0.281    0.0972 3.17e-1   112 3.17e-1
-4 CRP   NfL   continuous contin…  0.177   -0.0149   0.355  6.27e-2   112 6.27e-2
-5 IL6   NfL   continuous contin…  0.00784 -0.183    0.198  9.35e-1   112 9.35e-1
-6 BDNF  NfL   continuous contin…  0.194    0.00327  0.371  4.03e-2   112 4.03e-2</code></pre>
+<pre><code>               CRP         IL6        BDNF         NfL     BIN_CRP
+CRP      1.0000000  0.41066876 -0.13887643  0.12301507  0.86575902
+IL6      0.4106688  1.00000000 -0.22553259  0.07996328  0.30023797
+BDNF    -0.1388764 -0.22553259  1.00000000 -0.04666500 -0.09951434
+NfL      0.1230151  0.07996328 -0.04666500  1.00000000  0.12285297
+BIN_CRP  0.8657590  0.30023797 -0.09951434  0.12285297  1.00000000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># biomarkers x scores, adjusted for age and sex, BH over the predictors of each score</span></span>
+<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/cor_compute.html">cor_compute</a></span><span class="op">(</span><span class="va">d</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CRP"</span>, <span class="st">"IL6"</span>, <span class="st">"NfL"</span>, <span class="st">"BIN_CRP"</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"depression"</span>, <span class="st">"cognition"</span><span class="op">)</span>,</span>
+<span>                  covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>, p_adjust <span class="op">=</span> <span class="st">"BH"</span>, labels <span class="op">=</span> <span class="va">lab</span><span class="op">)</span></span>
+<span><span class="va">cc</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;cor_result&gt; partial Spearman correlations: 4 x 2 variables, 8 pairs (1 binary variable)
+  adjusted for: age, sex 
+  engine: ppcor::pcor.test() {ppcor} | N = 142–143
+  Adjusted p, Benjamini-Hochberg (FDR) over the 4 predictors of each column: * &lt; 0.05, ** &lt; 0.01, *** &lt; 0.001; no star = adjusted p ≥ 0.05.
+
+        depression cognition
+CRP     0.22*      -0.01    
+IL6     0.34***    0.00     
+NfL     0.02       -0.25*   
+BIN_CRP 0.18*      0.02     </code></pre>
 </div>
 </div>
 

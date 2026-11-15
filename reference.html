@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./NEWS.html"> 
-<span class="menu-text">0.1.0</span></a>
+<span class="menu-text">0.2.0</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./vignettes/corrkit.html"> 
@@ -185,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="ref-index">
 <section id="calculer" class="level2">
 <h2 class="anchored" data-anchor-id="calculer">Calculer</h2>
-<p>Chaque fonction appelle un moteur existant (stats, ppcor, psych, correlation). Les p-values sont brutes par défaut ; un ajustement sur une famille explicite est disponible (<code>p_adjust</code>, <code>adjust_by</code>).</p>
+<p>Une seule fonction de calcul. Chaque coefficient vient d’un moteur existant (stats, ppcor, psych, correlation). Les p-values sont brutes par défaut ; un ajustement sur une famille explicite est disponible (<code>p_adjust</code>, <code>adjust_by</code>).</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -195,27 +195,23 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="./man/cor_test_matrix.html"><code>cor_test_matrix()</code></a></td>
-<td>Corrélations, p-values, effectifs et intervalles de toutes les paires d’un ensemble de variables</td>
+<td><a href="./man/cor_compute.html"><code>cor_compute()</code></a></td>
+<td>Corrélations d’une matrice (<code>y = NULL</code>), d’une analyse croisée <code>x</code> × <code>y</code> ou d’une paire, simples ou partielles (<code>covariates</code>)</td>
 </tr>
 <tr class="even">
-<td><a href="./man/cor_cross.html"><code>cor_cross()</code></a></td>
-<td>Corrélations croisées prédicteurs × scores, éventuellement partielles</td>
+<td><a href="./man/partial_cor_test.html"><code>partial_cor_test()</code></a></td>
+<td>Le moteur sous-jacent : test d’une paire de vecteurs, simple ou partiel</td>
 </tr>
 <tr class="odd">
-<td><a href="./man/partial_cor_test.html"><code>partial_cor_test()</code></a></td>
-<td>Test d’une paire, simple ou partiel (<code>partial_rank_cor()</code> : ancien nom)</td>
-</tr>
-<tr class="even">
 <td><a href="./man/cor_binary_effects.html"><code>cor_binary_effects()</code></a></td>
 <td>Tailles d’effet des variables binaires : différence de moyennes, r rang-bisérial</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="graphiques" class="level2">
-<h2 class="anchored" data-anchor-id="graphiques">Graphiques</h2>
-<p>Objets ggplot, avec un sous-titre (méthode, moteur, N) et une légende de lecture.</p>
+<section id="explorer-le-résultat" class="level2">
+<h2 class="anchored" data-anchor-id="explorer-le-résultat">Explorer le résultat</h2>
+<p>Méthodes de l’objet renvoyé par <code>cor_compute()</code>.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -225,14 +221,48 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="./man/plot_cor_heatmap.html"><code>plot_cor_heatmap()</code></a></td>
-<td>Heatmap triangulaire d’une matrice de corrélation</td>
+<td><code>print()</code></td>
+<td>Coefficients et étoiles</td>
 </tr>
 <tr class="even">
-<td><a href="./man/plot_cor_cross.html"><code>plot_cor_cross()</code></a></td>
-<td>Heatmap des corrélations croisées</td>
+<td><a href="./man/summary.cor_result.html"><code>summary()</code></a></td>
+<td>Caractéristiques de l’analyse, variables, paires les plus fortes, contenu de l’objet</td>
 </tr>
 <tr class="odd">
+<td><a href="./man/as.matrix.cor_result.html"><code>as.matrix()</code></a></td>
+<td>Matrice de <code>r</code>, <code>p</code>, <code>p_adj</code>, <code>n</code>, <code>ci_low</code> ou <code>ci_high</code></td>
+</tr>
+<tr class="even">
+<td><code>as.data.frame()</code></td>
+<td>Tableau long, une ligne par paire</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="graphiques" class="level2">
+<h2 class="anchored" data-anchor-id="graphiques">Graphiques</h2>
+<p>Objets ggplot, avec un sous-titre (méthode, ajustement, N, moteur) et une légende de lecture.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Fonction</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="./man/plot.cor_result.html"><code>plot()</code>, <code>autoplot()</code></a></td>
+<td><code>type = "heatmap"</code> (défaut), <code>"forest"</code> ou <code>"scatter"</code></td>
+</tr>
+<tr class="even">
+<td><a href="./man/plot_cor_heatmap.html"><code>plot_cor_heatmap()</code></a></td>
+<td>Heatmap : triangle pour une matrice, rectangle pour une analyse croisée</td>
+</tr>
+<tr class="odd">
+<td><a href="./man/plot_cor_forest.html"><code>plot_cor_forest()</code></a></td>
+<td>Chaque coefficient avec son intervalle de confiance</td>
+</tr>
+<tr class="even">
 <td><a href="./man/plot_cor_pair.html"><code>plot_cor_pair()</code></a></td>
 <td>Une paire : nuage de points, valeurs par groupe ou graphique des résidus</td>
 </tr>
@@ -251,16 +281,8 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="./man/tbl_cor_matrix.html"><code>tbl_cor_matrix()</code></a></td>
-<td>Matrice de corrélation (triangle inférieur)</td>
-</tr>
-<tr class="even">
-<td><a href="./man/tbl_cor_cross.html"><code>tbl_cor_cross()</code></a></td>
-<td>Corrélations croisées, une ligne par prédicteur</td>
-</tr>
-<tr class="odd">
-<td><a href="./man/tbl_cor_long.html"><code>tbl_cor_long()</code></a></td>
-<td>Une ligne par paire : coefficient, intervalle, p brute et ajustée</td>
+<td><a href="./man/tbl_cor.html"><code>tbl_cor()</code></a></td>
+<td><code>layout = "matrix"</code>, <code>"wide"</code> ou <code>"long"</code></td>
 </tr>
 <tr class="even">
 <td><a href="./man/tbl_cor_binary.html"><code>tbl_cor_binary()</code></a></td>
