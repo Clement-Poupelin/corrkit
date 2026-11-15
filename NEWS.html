@@ -186,7 +186,8 @@ ul.task-list li input[type="checkbox"] {
 <li><code>plot_cor_heatmap()</code> takes a <code>cor_result</code> and draws a triangle (matrix) or a rectangle (cross); <code>plot_cor_cross()</code> is removed.</li>
 <li><code>cor_binary_effects()</code> also accepts a <code>cor_result</code>.</li>
 <li>Removed: <code>cor_test_matrix()</code>, <code>cor_cross()</code>, <code>plot_cor_cross()</code>, <code>tbl_cor_matrix()</code>, <code>tbl_cor_cross()</code>, <code>tbl_cor_long()</code>, <code>partial_rank_cor()</code>.</li>
-<li>Plot subtitles and captions use Latin-1 characters only, so that figures can be saved as PDF.</li>
+<li>Plot texts are typeset: with the ggtext package (Suggests), subtitles, captions and axis titles are rendered as markdown, so that r_s, r_xy.z, e_x.z, r_rb… appear as an italic symbol with a subscript (<code>options(corrkit.markdown = FALSE)</code> for plain text); the colour legend uses plotmath.</li>
+<li><code>options(corrkit.unicode = FALSE)</code> (default) writes the square root, minus sign and tau as <code>sqrt</code>, <code>-</code>, <code>tau</code>, so that figures can be saved with the pdf() device; <code>TRUE</code> keeps the symbols (PNG, or <code>ggsave(device = cairo_pdf)</code>).</li>
 </ul>
 </section>
 <section id="corrkit-0.1.0" class="level1">
