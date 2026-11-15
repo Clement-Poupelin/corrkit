@@ -15,6 +15,7 @@ fig-height: 5
 ```{r}
 #| label: setup
 library(corrkit)
+options(corrkit.unicode = TRUE)   # PNG figures: keep the mathematical symbols
 library(ggplot2)
 d   <- simulate_cor_data(n = 200)
 lab <- attr(d, "labels")

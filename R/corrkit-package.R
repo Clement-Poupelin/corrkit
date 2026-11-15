@@ -28,6 +28,18 @@
 #' simple or partial), whose result has `print()`, `summary()`, `plot()`,
 #' `autoplot()`, `as.matrix()` and `as.data.frame()` methods.
 #'
+#' **Typesetting of the plot texts** (options)
+#' * `options(corrkit.markdown = TRUE)` (default): when the ggtext package is
+#'   installed, subtitles, captions and axis titles are rendered as markdown,
+#'   so that the notation is typeset as in LaTeX (r_s becomes an italic r with
+#'   a subscript s, r_xy.z, e_x.z, r_rb, M_1, SD_y likewise). `FALSE` gives plain text.
+#' * `options(corrkit.unicode = FALSE)` (default): the square root, the minus
+#'   sign, tau, <= ... are written `sqrt`, `-`, `tau`, `<=`, because the pdf()
+#'   device (used by R CMD check and by `ggsave("figure.pdf")`) cannot draw
+#'   them. Set it to `TRUE` if you save your figures as PNG, or as PDF with
+#'   `ggsave(..., device = cairo_pdf)`. The legend of the colour scale is
+#'   always typeset (plotmath), on every device.
+#'
 #' Start with `vignette("corrkit")`.
 #'
 #' @keywords internal

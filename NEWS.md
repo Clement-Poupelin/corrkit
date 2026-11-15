@@ -15,7 +15,12 @@
 * `cor_binary_effects()` also accepts a `cor_result`.
 * Removed: `cor_test_matrix()`, `cor_cross()`, `plot_cor_cross()`, `tbl_cor_matrix()`,
   `tbl_cor_cross()`, `tbl_cor_long()`, `partial_rank_cor()`.
-* Plot subtitles and captions use Latin-1 characters only, so that figures can be saved as PDF.
+* Plot texts are typeset: with the ggtext package (Suggests), subtitles, captions and axis titles
+  are rendered as markdown, so that r_s, r_xy.z, e_x.z, r_rb... appear as an italic symbol with a
+  subscript (`options(corrkit.markdown = FALSE)` for plain text); the colour legend uses plotmath.
+* `options(corrkit.unicode = FALSE)` (default) writes the square root, minus sign and tau as
+  `sqrt`, `-`, `tau`, so that figures can be saved with the pdf() device; `TRUE` keeps the symbols
+  (PNG, or `ggsave(device = cairo_pdf)`).
 
 # corrkit 0.1.0
 

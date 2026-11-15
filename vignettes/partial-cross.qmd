@@ -15,6 +15,7 @@ fig-height: 5.5
 ```{r}
 #| label: setup
 library(corrkit)
+options(corrkit.unicode = TRUE)   # PNG figures: keep the mathematical symbols
 has_ppcor <- requireNamespace("ppcor", quietly = TRUE)
 has_cor   <- requireNamespace("correlation", quietly = TRUE)
 d   <- simulate_cor_data(n = 200)

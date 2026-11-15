@@ -163,7 +163,7 @@ cor_binary_note <- function(meth = c("spearman", "pearson", "kendall"), lang = c
 }
 
 # Internal: symbol of the coefficient, plotmath (legend) and text
-.cor_sym <- function(meth) switch(meth, spearman = quote(r[s]), kendall = quote(tau), "r")
+.cor_sym <- function(meth) switch(meth, spearman = quote(italic(r)[s]), kendall = quote(tau), quote(italic(r)))
 .cor_sym_txt <- function(meth) switch(meth, spearman = "r_s", kendall = "\u03c4", "r")
 # Internal: symbol for gt column labels (Unicode subscript s)
 .cor_sym_tbl <- function(meth) switch(meth, spearman = "r\u209b", kendall = "\u03c4", "r")
@@ -239,8 +239,18 @@ cor_binary_note <- function(meth = c("spearman", "pearson", "kendall"), lang = c
 .cor_ref_line <- function()
   "Notation: Makowski D, Ben-Shachar MS, Patil I, L\u00fcdecke D (2020), J Open Source Softw 5(51):2306, doi:10.21105/joss.02306."
 
-# Internal: more room around the subtitle and the caption
-.cor_text_theme <- function()
+# Internal: more room around the subtitle and the caption; with ggtext (see
+# .use_markdown()), subtitle, caption and axis titles are markdown elements so
+# that the notation prepared by .labs_safe() is typeset (subscripts, italics)
+.cor_text_theme <- function() {
+  if (.use_markdown())
+    return(ggplot2::theme(
+      plot.subtitle = ggtext::element_markdown(hjust = 0, halign = 0, lineheight = 1.15),
+      plot.caption  = ggtext::element_markdown(hjust = 0, halign = 0, lineheight = 1.2,
+                                               margin = ggplot2::margin(t = 14)),
+      axis.title.x  = ggtext::element_markdown(),
+      axis.title.y  = ggtext::element_markdown()))
   ggplot2::theme(plot.subtitle = ggplot2::element_text(lineheight = 1.15),
                  plot.caption = ggplot2::element_text(hjust = 0, lineheight = 1.2,
                                                       margin = ggplot2::margin(t = 14)))
+}

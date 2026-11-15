@@ -17,6 +17,7 @@ Tout `corrkit` passe par **une seule fonction de calcul**, `cor_compute()`. Elle
 ```{r}
 #| label: setup
 library(corrkit)
+options(corrkit.unicode = TRUE)   # PNG figures: keep the mathematical symbols
 d   <- simulate_cor_data(n = 200)     # biomarqueurs, scores et covariables simulés
 lab <- attr(d, "labels")              # libellés des variables
 ```

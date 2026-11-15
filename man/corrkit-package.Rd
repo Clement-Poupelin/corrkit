@@ -39,6 +39,20 @@ engine, the formulas, the adjustment and how to read them:
 simple or partial), whose result has \code{print()}, \code{summary()}, \code{plot()},
 \code{autoplot()}, \code{as.matrix()} and \code{as.data.frame()} methods.
 
+\strong{Typesetting of the plot texts} (options)
+\itemize{
+\item \code{options(corrkit.markdown = TRUE)} (default): when the ggtext package is
+installed, subtitles, captions and axis titles are rendered as markdown,
+so that the notation is typeset as in LaTeX (r_s becomes an italic r with
+a subscript s, r_xy.z, e_x.z, r_rb, M_1, SD_y likewise). \code{FALSE} gives plain text.
+\item \code{options(corrkit.unicode = FALSE)} (default): the square root, the minus
+sign, tau, <= ... are written \code{sqrt}, \code{-}, \code{tau}, \code{<=}, because the pdf()
+device (used by R CMD check and by \code{ggsave("figure.pdf")}) cannot draw
+them. Set it to \code{TRUE} if you save your figures as PNG, or as PDF with
+\code{ggsave(..., device = cairo_pdf)}. The legend of the colour scale is
+always typeset (plotmath), on every device.
+}
+
 Start with \code{vignette("corrkit")}.
 }
 \seealso{

@@ -36,6 +36,7 @@ Une seule fonction calcule, `cor_compute()` ; son résultat se dessine avec `plo
 ```{r}
 #| label: setup
 library(corrkit)
+options(corrkit.unicode = TRUE)   # PNG figures: keep the mathematical symbols
 d   <- simulate_cor_data(n = 200)
 lab <- attr(d, "labels")
 str(d)
@@ -174,6 +175,25 @@ plot(cm, palette = c(low = "#1B7837", high = "#762A83"),
 ```
 
 :::
+
+## Rendu des formules
+
+Les sous-titres, légendes et titres d'axes utilisent la notation de Makowski et al. (2020). Si le package **ggtext** est installé, elle est composée comme en LaTeX : *r*<sub>s</sub>, *r*<sub>xy.z</sub>, *e*<sub>x.z</sub>, *r*<sub>rb</sub>. Deux options règlent ce rendu :
+
+| Option | Défaut | Effet |
+|---|---|---|
+| `corrkit.markdown` | `TRUE` | avec ggtext : indices et italiques ; `FALSE` : texte simple |
+| `corrkit.unicode` | `FALSE` | `TRUE` garde les vrais symboles (√, −, τ, ≤) |
+
+Le device `pdf()` de R (celui de `ggsave("figure.pdf")` et de `R CMD check`) ne sait pas dessiner √, − ou τ : par défaut, ils sont donc écrits `sqrt`, `-` et `tau`. Pour des figures en PNG, ou en PDF avec `ggsave(..., device = cairo_pdf)`, activez-les ; c'est ce que font ces vignettes :
+
+```{r}
+#| eval: false
+options(corrkit.unicode = TRUE)
+ggplot2::ggsave("heatmap.pdf", plot(cm), width = 8, height = 8, device = cairo_pdf)
+```
+
+La légende de l'échelle de couleur (*r*<sub>s</sub>, τ) est toujours composée, quel que soit le device.
 
 ## Choisir le moteur
 

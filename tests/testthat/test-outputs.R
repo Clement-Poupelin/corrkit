@@ -51,3 +51,26 @@ test_that("plots can be drawn on a pdf device (Latin-1 text only)", {
   on.exit(grDevices::dev.off(), add = TRUE)
   for (p in plots) expect_no_error(print(p))
 })
+
+test_that("plain text mode (no markdown) also draws on a pdf device", {
+  old <- options(corrkit.markdown = FALSE)
+  on.exit(options(old), add = TRUE)
+  p1 <- plot(cc, type = "forest")
+  p2 <- plot_cor_pair(d, "BIN_CRP", "depression")
+  f <- tempfile(fileext = ".pdf")
+  grDevices::pdf(f)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_no_error(print(p1))
+  expect_no_error(print(p2))
+})
+
+test_that("the notation is converted to subscripts, function names are left alone", {
+  out <- corrkit:::.md_math("r_s = r_rb x sqrt(3pq); r(e_x.z, e_y.z); p < 0.05 * ; correlation::cor_to_ci()")
+  expect_match(out, "<i>r</i><sub>s</sub>", fixed = TRUE)
+  expect_match(out, "<i>r</i><sub>rb</sub>", fixed = TRUE)
+  expect_match(out, "<i>e</i><sub>x.z</sub>", fixed = TRUE)
+  expect_match(out, "&lt;", fixed = TRUE)
+  expect_match(out, "\\*", fixed = TRUE)
+  expect_match(out, "cor\\_to\\_ci", fixed = TRUE)
+  expect_false(grepl("<sub>to", out, fixed = TRUE))
+})
