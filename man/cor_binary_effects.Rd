@@ -7,7 +7,8 @@
 cor_binary_effects(data, bin_vars, y_vars, labels = NULL, ci = 0.95)
 }
 \arguments{
-\item{data}{data frame}
+\item{data}{data frame, or the output of \code{\link[=cor_compute]{cor_compute()}} (then \code{bin_vars} and
+\code{y_vars} default to its binary variables and the continuous variables paired with them)}
 
 \item{bin_vars}{binary variables (non-binary ones are dropped with a warning)}
 
@@ -42,6 +43,8 @@ Group 1 = upper level of the binary variable (as in \code{\link[=as_cor_numeric]
 \examples{
 d <- simulate_cor_data(150)
 cor_binary_effects(d, c("BIN_CRP", "BIN_IL6"), c("depression", "fatigue"))
+res <- cor_compute(d, c("BIN_CRP", "BIN_IL6"), c("depression", "fatigue"))
+cor_binary_effects(res)
 }
 \references{
 Kerby DS (2014). Comprehensive Psychology 3:11.IT.3.1. doi:10.2466/11.IT.3.1

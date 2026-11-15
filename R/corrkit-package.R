@@ -21,8 +21,12 @@
 #'   effect sizes to report instead of the correlation ([cor_binary_effects()]);
 #' * outputs whose subtitle, caption or source notes state the method, the
 #'   engine, the formulas, the adjustment and how to read them:
-#'   [plot_cor_heatmap()], [plot_cor_cross()], [plot_cor_pair()],
-#'   [tbl_cor_matrix()], [tbl_cor_cross()], [tbl_cor_long()], [tbl_cor_binary()].
+#'   [plot_cor_heatmap()], [plot_cor_forest()], [plot_cor_pair()] (or `plot()`),
+#'   [tbl_cor()], [tbl_cor_binary()].
+#'
+#' **One computing function**: [cor_compute()] (matrix, cross or single pair,
+#' simple or partial), whose result has `print()`, `summary()`, `plot()`,
+#' `autoplot()`, `as.matrix()` and `as.data.frame()` methods.
 #'
 #' Start with `vignette("corrkit")`.
 #'
@@ -37,5 +41,5 @@ NULL
 utils::globalVariables(c(
   "Var1", "Var2", "X", "Y", "res", "x_type", "y_type", "rho", "p", "p_adj",
   "x", "y", "lab", "Xl", "Yl", "i", "j", "x_block", "y_block", "block",
-  "ex", "ey", "g", "v", "ci_low", "ci_high", "n"
+  "ex", "ey", "g", "v", "ci_low", "ci_high", "n", "r", "key", "lo", "hi", "sig", "dir", "panel"
 ))

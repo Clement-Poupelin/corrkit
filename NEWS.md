@@ -1,3 +1,22 @@
+# corrkit 0.2.0
+
+* **One computing function, `cor_compute()`**, replaces `cor_test_matrix()` and `cor_cross()`:
+  `y = NULL` gives every pair of `x` (matrix), `y` gives the cross analysis `x` x `y`, one `x`
+  and one `y` a single pair; `covariates` works in every case (partial correlation matrices
+  are new). One result class, `cor_result`.
+* Methods of `cor_result`: `print()`, `summary()` (settings, variables, strongest pairs,
+  content of the object), `plot()` and `autoplot()` with `type = "heatmap"`, `"forest"`
+  or `"scatter"`, `as.matrix(what = )`, `as.data.frame()`.
+* New `plot_cor_forest()`: each coefficient with its confidence interval.
+* `tbl_cor(layout = "matrix" | "wide" | "long")` replaces `tbl_cor_matrix()`,
+  `tbl_cor_cross()` and `tbl_cor_long()`.
+* `plot_cor_heatmap()` takes a `cor_result` and draws a triangle (matrix) or a rectangle
+  (cross); `plot_cor_cross()` is removed.
+* `cor_binary_effects()` also accepts a `cor_result`.
+* Removed: `cor_test_matrix()`, `cor_cross()`, `plot_cor_cross()`, `tbl_cor_matrix()`,
+  `tbl_cor_cross()`, `tbl_cor_long()`, `partial_rank_cor()`.
+* Plot subtitles and captions use Latin-1 characters only, so that figures can be saved as PDF.
+
 # corrkit 0.1.0
 
 * First version, built from `03_correlation.R`.

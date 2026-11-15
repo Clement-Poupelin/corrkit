@@ -25,16 +25,16 @@ scores     <- c("depression", "fatigue", "cognition")
 
 ## Corrélations croisées : des prédicteurs × des scores
 
-Quand la question est « quels biomarqueurs sont liés à quels scores ? », la matrice complète mélange des paires sans intérêt (biomarqueur × biomarqueur). `cor_cross()` ne teste que les croisements :
+Quand la question est « quels biomarqueurs sont liés à quels scores ? », la matrice complète mélange des paires sans intérêt (biomarqueur × biomarqueur). Avec un argument `y`, `cor_compute()` ne teste que les croisements `x` × `y` :
 
 ```{r}
-cc0 <- cor_cross(d, biomarkers, scores, labels = lab)
+cc0 <- cor_compute(d, x = biomarkers, y = scores, labels = lab)
 cc0
 ```
 
 ```{r}
 #| fig-height: 6
-plot_cor_cross(cc0)$plot
+plot(cc0)
 ```
 
 Les biomarqueurs binaires forment un bloc séparé (facette « Binary [0/1] »), pour la raison détaillée dans [Variables binaires](binary-variables.qmd).
@@ -50,9 +50,9 @@ Par défaut, les p-values sont **brutes** (`p_adjust = "none"`). Si vous demande
 | `"all"` | tous les tests du tableau | une seule question globale, ou un criblage |
 
 ```{r}
-c(raw = sum(cor_cross(d, biomarkers, scores)$table$p < 0.05),
+c(raw = sum(cor_compute(d, biomarkers, scores)$table$p < 0.05),
   sapply(c(y = "y", x = "x", all = "all"),
-         function(a) sum(cor_cross(d, biomarkers, scores, p_adjust = "BH", adjust_by = a)$table$p_adj < 0.05)))
+         function(a) sum(cor_compute(d, biomarkers, scores, p_adjust = "BH", adjust_by = a)$table$p_adj < 0.05)))
 ```
 
 Le choix entre p brutes et p ajustées, et celui de la méthode, sont détaillés dans [Corrections pour tests multiples](p-values.qmd).
@@ -68,25 +68,39 @@ $$r_{xy.z} = r(e_{x.z},\, e_{y.z}).$$
 Pour Spearman, x, y **et** z sont d'abord remplacés par leurs rangs (comme dans `ppcor`). Le test est un t à n − 2 − k degrés de liberté, k étant le nombre de colonnes de covariables (un facteur à m niveaux compte pour m − 1).
 
 ```{r}
-cc_adj <- cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab)
+cc_adj <- cor_compute(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab)
+summary(cc_adj)
 ```
 
 ```{r}
 #| fig-height: 6
-res <- plot_cor_cross(cc_adj)
-res$plot
+plot(cc_adj)
 ```
 
 Le sous-titre passe de « unadjusted » à « partial, adjusted for Age, Sex », et la formule de la légende devient celle de la corrélation partielle, avec le nombre k de termes de covariables.
 
+Le forest plot montre, score par score, chaque coefficient partiel et son intervalle de confiance :
+
+```{r}
+#| fig-height: 7
+plot(cc_adj, type = "forest")
+```
+
+Une matrice peut aussi être partielle : toutes les paires sont alors ajustées sur les mêmes covariables.
+
+```{r}
+#| fig-height: 7
+plot(cor_compute(d, c(biomarkers[1:4], scores), covariates = c("age", "sex"), labels = lab))
+```
+
 ### Voir une corrélation partielle
 
-`plot_cor_pair()` montre ce que mesure le coefficient. Sans covariable, c'est un nuage de points ; avec covariables, c'est le graphique des résidus (*added-variable plot*), dont la corrélation **est** la corrélation partielle :
+`plot(res, type = "scatter", pair = c(x, y))`, ou directement `plot_cor_pair()`, montre ce que mesure le coefficient. Sans covariable, c'est un nuage de points ; avec covariables, c'est le graphique des résidus (*added-variable plot*), dont la corrélation **est** la corrélation partielle :
 
 ```{r}
 #| fig-height: 5
 plot_cor_pair(d, "NfL", "cognition", labels = lab, meth = "pearson")
-plot_cor_pair(d, "NfL", "cognition", covariates = "age", labels = lab, meth = "pearson")
+plot(cc_adj, type = "scatter", pair = c("NfL", "cognition"))
 ```
 
 ### Trois calculs, un même résultat
@@ -125,39 +139,30 @@ unlist(partial_cor_test(sub$NfL, sub$cognition, sub["age"], meth = "pearson")[c(
 Le tableau large reprend la heatmap (même échelle de couleurs, mêmes étoiles) ; les notes répètent le statut des p-values, la formule et la lecture des variables binaires :
 
 ```{r}
-tbl_cor_cross(cc_adj)
+tbl_cor(cc_adj)
 ```
 
 Le tableau long donne, pour chaque paire, n, le coefficient, son intervalle de confiance (z de Fisher sur n − k) et la p-value :
 
 ```{r}
-tbl_cor_long(cc_adj, sort_by = "abs")
+tbl_cor(cc_adj, layout = "long", sort_by = "abs")
 ```
 
 Avec un ajustement, une colonne « p (adjusted) » s'ajoute et les lignes sont regroupées par famille, ce qui permet de relire l'ajustement à la main :
 
 ```{r}
-tbl_cor_long(cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab, p_adjust = "BH"))
-```
-
-`tbl_cor_cross()` et `tbl_cor_long()` acceptent aussi directement la liste renvoyée par `plot_cor_cross()` :
-
-```{r}
-#| eval: false
-res <- plot_cor_cross(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab)
-res$plot
-tbl_cor_cross(res)
-cat(res$note)        # note complète sur les variables binaires
+tbl_cor(cor_compute(d, biomarkers, scores, covariates = c("age", "sex"), labels = lab, p_adjust = "BH"),
+        layout = "long")
 ```
 
 ## Kendall
 
-`meth = "kendall"` fonctionne partout ; les versions partielles demandent `ppcor`. Le test est alors un z (approximation normale) et la légende l'indique.
+`method = "kendall"` fonctionne partout ; les versions partielles demandent `ppcor`. Le test est alors un z (approximation normale) et la légende l'indique.
 
 ```{r}
 #| eval: !expr has_ppcor
 #| fig-height: 6
-plot_cor_cross(d, biomarkers, scores, covariates = "age", labels = lab, meth = "kendall")$plot
+plot(cor_compute(d, biomarkers, scores, covariates = "age", labels = lab, method = "kendall"))
 ```
 
 ## Références

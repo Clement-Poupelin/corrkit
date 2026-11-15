@@ -32,44 +32,125 @@
                   heading.subtitle.font.size = gt::px(12))
 
 
-#' Table of cross correlations X x Y (wide: one row per predictor, one column per score)
+#' Table of a correlation analysis
 #'
-#' Same content and same colour scale as [plot_cor_cross()]. Binary
-#' predictors are grouped under "Binary \[0/1\]" and carry a footnote.
+#' One function, three layouts, all built from the output of [cor_compute()]
+#' with the same colour scale as [plot_cor_heatmap()]:
+#' * `"matrix"`: lower triangle of a matrix analysis, as in the heatmap;
+#' * `"wide"`: one row per `x`, one column per `y` (cross analysis);
+#' * `"long"`: one row per pair, with n, coefficient, confidence interval, raw
+#'   p and (if requested) adjusted p; rows grouped by the family of the adjustment.
 #'
-#' @param x output of [cor_cross()] or [plot_cor_cross()]
-#' @param labels named vector variable -> label (default: those given to [cor_cross()])
+#' `layout = "auto"` gives `"matrix"` for a matrix analysis and `"wide"` for a
+#' cross analysis. The subtitle and the source notes state the method, the
+#' adjustment for covariates, N, the engine, the status of the p-values, the
+#' formula of the coefficient and the reading of binary variables.
+#'
+#' @param x output of [cor_compute()]
+#' @param layout `"auto"`, `"matrix"`, `"wide"` or `"long"`
+#' @param labels named vector variable -> label (default: the labels given to [cor_compute()])
 #' @param digits decimals of the coefficients
+#' @param use_adj stars on adjusted (`TRUE`) or raw p-values (`"matrix"` and `"wide"`)
+#' @param order `"matrix"` only: `"original"` or `"hclust"` (same ordering as the heatmap)
+#' @param alpha `"long"` only: rows with a p-value (adjusted if requested) below `alpha` in bold
+#' @param sort_by `"long"` only: `"none"` or `"abs"` (decreasing |coefficient| within groups)
 #' @param palette colours (named low / high); `NULL` = no colour
 #' @param show_note add the reading lines of binary variables
 #' @param title,subtitle override the automatic texts
-#' @param stub_label header of the row labels
 #' @return a `gt_tbl`
 #' @export
 #' @examples
-#' d  <- simulate_cor_data(150)
-#' cc <- cor_cross(d, c("CRP", "IL6", "BIN_CRP"), c("depression", "fatigue"),
-#'                 covariates = "age", labels = attr(d, "labels"))
-#' tbl_cor_cross(cc)
-tbl_cor_cross <- function(x, labels = NULL, digits = 2, palette = COR_PAL, show_note = TRUE,
-                          title = NULL, subtitle = NULL, stub_label = "Predictor") {
-  cc <- .as_cor_cross(x); tab <- cc$table; m <- cc$meta
+#' d   <- simulate_cor_data(150)
+#' lab <- attr(d, "labels")
+#' cm <- cor_compute(d, c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"), labels = lab)
+#' tbl_cor(cm)                    # matrix
+#' tbl_cor(cm, layout = "long")
+#' cc <- cor_compute(d, c("CRP", "IL6", "BIN_CRP"), c("depression", "fatigue"),
+#'                   covariates = "age", labels = lab)
+#' tbl_cor(cc)                    # wide
+tbl_cor <- function(x, layout = c("auto", "matrix", "wide", "long"), labels = NULL, digits = 2,
+                    use_adj = TRUE, order = c("original", "hclust"), alpha = 0.05,
+                    sort_by = c("none", "abs"), palette = COR_PAL, show_note = TRUE,
+                    title = NULL, subtitle = NULL) {
+  .check_result(x, "tbl_cor")
+  layout <- match.arg(layout); order <- match.arg(order); sort_by <- match.arg(sort_by)
+  m <- x$meta
   labels <- labels %||% m$labels
-  bin_mark <- m$bin_mark %||% " [0/1]"
-  x_vars <- m$x_vars; y_vars <- m$y_vars
-  x_lab <- mark_binary(get_label(x_vars, labels), m$x_types, bin_mark)
-  y_lab <- mark_binary(get_label(y_vars, labels), m$y_types, bin_mark)
-  fmt <- paste0("%.", digits, "f")
-  tab$lab <- ifelse(is.na(tab$rho), "", paste0(sprintf(fmt, tab$rho), p_to_stars(tab$p_adj, ns = "")))
+  if (layout == "auto") layout <- if (m$mode == "matrix") "matrix" else "wide"
+  if (layout == "matrix" && m$mode != "matrix")
+    stop("tbl_cor: layout = \"matrix\" needs a matrix analysis (cor_compute() without y); use \"wide\" or \"long\".",
+         call. = FALSE)
+  switch(layout,
+         matrix = .tbl_matrix(x, labels, use_adj, order, digits, palette, show_note, title, subtitle),
+         wide   = .tbl_wide(x, labels, use_adj, digits, palette, show_note, title, subtitle),
+         long   = .tbl_long(x, labels, digits, alpha, palette, show_note, title, subtitle, sort_by))
+}
 
+# Internal: CI line of the notes
+.tbl_ci_line <- function(m) {
+  if (identical(m$ci_engine, "correlation::correlation"))
+    return(sprintf("%g%% CI: as returned by the correlation package {correlation}.", 100 * (m$ci %||% 0.95)))
+  .cor_ci_line(m$ci, m$meth, m$ci_engine, m$partial)
+}
+
+# Internal: lower-triangular table of a matrix analysis
+.tbl_matrix <- function(x, labels, use_adj, order, digits, palette, show_note, title, subtitle) {
+  m <- x$meta; bin_mark <- m$bin_mark
+  R0 <- as.matrix(x, "r")
+  o <- .cor_order(R0, m$x_types, order, split = TRUE)
+  R <- R0[o, o]; P <- as.matrix(x, if (use_adj) "p_adj" else "p")[o, o]; types <- m$x_types[o]
+  k <- length(o)
+  lv <- mark_binary(get_label(o, labels), types, bin_mark)
+  fmt <- paste0("%.", digits, "f")
+  lab_cols <- paste0("lab__", seq_len(k)); r_cols <- paste0("r__", seq_len(k))
+  wide <- data.frame(row_lab = lv, stringsAsFactors = FALSE)
+  for (j in seq_len(k)) {
+    lab <- ifelse(is.na(R[, j]), "", paste0(sprintf(fmt, R[, j]), p_to_stars(P[, j], ns = "")))
+    rr  <- R[, j]
+    lab[seq_len(k) < j] <- ""; rr[seq_len(k) < j] <- NA     # upper triangle left empty
+    lab[j] <- "1"
+    wide[[lab_cols[j]]] <- lab; wide[[r_cols[j]]] <- rr
+  }
+  g <- gt::gt(wide, rowname_col = "row_lab")
+  if (!is.null(palette)) g <- .gt_colour(g, r_cols, lab_cols, palette)
+  g <- g %>%
+    gt::cols_hide(r_cols) %>%
+    gt::cols_label(.list = stats::setNames(as.list(lv), lab_cols)) %>%
+    gt::cols_align("center", columns = lab_cols) %>%
+    gt::tab_header(title = title %||% "Correlation matrix",
+                   subtitle = subtitle %||% .cor_subtitle(m, x$table, labels, newline = " | "))
+  is_bin <- types == "binary"
+  if (any(is_bin)) g <- gt::tab_footnote(g, footnote = paste0("Binary variable", bin_mark, ", coded 0/1 (upper level = 1)."),
+                                         locations = gt::cells_stub(rows = which(is_bin)))
+  g <- .gt_notes(g, list(
+    .cor_p_line(if (use_adj) m$p_adjust else "none", if (use_adj) m$family else NULL),
+    if (order == "hclust") sprintf("Order: hierarchical clustering (Ward D2, distance 1 \u2212 %s), within the continuous and binary blocks.",
+                                   .cor_sym_txt(m$meth)),
+    .cor_formula_lines(m$meth, m$partial, m$k),
+    if (show_note && any(is_bin)) .cor_binary_lines(m$meth, bin_mark),
+    "Confidence intervals: tbl_cor(layout = \"long\").",
+    .cor_ref_line()))
+  .gt_style(g)
+}
+
+# Internal: wide table of a cross analysis (one row per x, one column per y)
+.tbl_wide <- function(x, labels, use_adj, digits, palette, show_note, title, subtitle) {
+  m <- x$meta; tab <- x$table; bin_mark <- m$bin_mark
+  x_vars <- m$x_vars; y_vars <- m$y_vars
+  if (m$mode == "matrix") { x_vars <- m$x_vars; y_vars <- m$x_vars }
+  R <- as.matrix(x, "r"); P <- as.matrix(x, if (use_adj) "p_adj" else "p")
+  x_types <- m$x_types[x_vars]; y_types <- m$y_types[y_vars]
+  x_lab <- mark_binary(get_label(x_vars, labels), x_types, bin_mark)
+  y_lab <- mark_binary(get_label(y_vars, labels), y_types, bin_mark)
+  fmt <- paste0("%.", digits, "f")
   lab_cols <- paste0("lab__", seq_along(y_vars)); r_cols <- paste0("r__", seq_along(y_vars))
   wide <- data.frame(row_lab = x_lab, stringsAsFactors = FALSE)
   for (j in seq_along(y_vars)) {
-    sub <- tab[tab$Y == y_vars[j], ]
-    wide[[lab_cols[j]]] <- sub$lab[match(x_vars, sub$X)]
-    wide[[r_cols[j]]]   <- sub$rho[match(x_vars, sub$X)]
+    rr <- R[x_vars, y_vars[j]]; pp <- P[x_vars, y_vars[j]]
+    wide[[lab_cols[j]]] <- ifelse(is.na(rr), "", paste0(sprintf(fmt, rr), p_to_stars(pp, ns = "")))
+    wide[[r_cols[j]]]   <- unname(rr)
   }
-  is_bin <- m$x_types == "binary"
+  is_bin <- unname(x_types == "binary")
   bin_block <- paste0("Binary", bin_mark)
   wide$group <- ifelse(is_bin, bin_block, "Continuous")
   split_rows <- any(is_bin) && any(!is_bin)
@@ -84,83 +165,36 @@ tbl_cor_cross <- function(x, labels = NULL, digits = 2, palette = COR_PAL, show_
     gt::cols_hide(r_cols) %>%
     gt::cols_label(.list = stats::setNames(as.list(y_lab), lab_cols)) %>%
     gt::cols_align("center", columns = lab_cols) %>%
-    gt::tab_stubhead(stub_label) %>%
     gt::tab_header(title = title %||% sprintf("%s correlations", .meth_name(m$meth)),
-                   subtitle = subtitle %||% .cor_cross_subtitle(m, tab, labels, newline = " | "))
-  y_bin <- m$y_types == "binary"
+                   subtitle = subtitle %||% .cor_subtitle(m, tab, labels, newline = " | "))
+  y_bin <- unname(y_types == "binary")
   if (any(y_bin) && any(!y_bin))
     g <- g %>% gt::tab_spanner("Continuous", columns = lab_cols[!y_bin], id = "sp_cont") %>%
       gt::tab_spanner(bin_block, columns = lab_cols[y_bin], id = "sp_bin")
-  if (any(is_bin) && show_note)
+  if (any(is_bin) && show_note && m$meth %in% .core_methods)
     g <- gt::tab_footnote(g, footnote = cor_binary_note(m$meth, "en", short = TRUE, mark = bin_mark),
                           locations = gt::cells_stub(rows = which(is_bin)))
   g <- .gt_notes(g, list(
     paste0("Cells: ", .cor_sym_txt(m$meth), " and stars; colour = same scale as the heatmap (blue < 0 < red). ",
-           "Confidence intervals: tbl_cor_long()."),
-    .cor_p_line(m$p_adjust, m$family),
+           "Confidence intervals: tbl_cor(layout = \"long\")."),
+    .cor_p_line(if (use_adj) m$p_adjust else "none", if (use_adj) m$family else NULL),
     .cor_formula_lines(m$meth, m$partial, m$k),
-    if (show_note && any(c(m$x_types, m$y_types) == "binary")) .cor_binary_lines(m$meth, bin_mark),
+    if (show_note && any(c(x_types, y_types) == "binary")) .cor_binary_lines(m$meth, bin_mark),
     .cor_ref_line()))
   .gt_style(g)
 }
 
-
-#' Long table of correlations: one row per pair, with CI, raw and adjusted p
-#'
-#' Works for [cor_cross()] / [plot_cor_cross()] outputs (rows grouped by the
-#' family of the adjustment) and for [cor_test_matrix()] outputs (all pairs).
-#' Rows with a p-value (adjusted, if an adjustment was requested) below
-#' `alpha` are in bold; the adjusted column is hidden when p-values are raw.
-#'
-#' @param x output of [cor_cross()], [plot_cor_cross()] or [cor_test_matrix()]
-#' @param labels named vector variable -> label
-#' @param digits decimals of the coefficients
-#' @param alpha threshold for bold rows
-#' @param palette colours (named low / high) of the coefficient column; `NULL` = no colour
-#' @param title,subtitle override the automatic texts
-#' @param sort_by `"none"` (order of the variables) or `"abs"` (decreasing |coefficient| within groups)
-#' @return a `gt_tbl`
-#' @export
-#' @examples
-#' d  <- simulate_cor_data(150)
-#' cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "BIN_CRP"))
-#' tbl_cor_long(cm, labels = attr(d, "labels"))
-tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = COR_PAL,
-                         title = NULL, subtitle = NULL, sort_by = c("none", "abs")) {
-  sort_by <- match.arg(sort_by)
-  bin_mark <- " [0/1]"
-  if (inherits(x, "cor_matrix")) {
-    meth <- x$method; L <- x$long
-    d <- data.frame(var1 = L$Var1, var2 = L$Var2, type1 = L$type1, type2 = L$type2, n = L$n,
-                    r = L$r, ci_low = L$ci_low, ci_high = L$ci_high, p = L$p, p_adj = L$p_adj,
-                    group = "", stringsAsFactors = FALSE)
-    head1 <- "Variable 1"; head2 <- "Variable 2"
-    p_line <- .cor_p_line(x$p_adjust, sprintf("the %d distinct pairs", nrow(L)))
-    formula <- .cor_formula_lines(meth)
-    ci_line <- if (identical(x$ci_engine, "correlation::correlation"))
-      sprintf("%g%% CI: as returned by correlation::correlation() {correlation}.", 100 * (x$ci %||% 0.95))
-      else .cor_ci_line(x$ci, meth, x$ci_engine)
-    sub_default <- sprintf("%s correlation, all pairs | pairwise complete N = %s | Computed with %s",
-                           .meth_name(meth), .n_range_txt(L$n), .cor_engine_txt(x$engine))
-    title_default <- sprintf("%s correlations", .meth_name(meth))
-    has_bin <- any(x$types == "binary")
-  } else {
-    cc <- .as_cor_cross(x); tab <- cc$table; m <- cc$meta
-    labels <- labels %||% m$labels; bin_mark <- m$bin_mark %||% bin_mark
-    meth <- m$meth
-    d <- data.frame(var1 = tab$X, var2 = tab$Y, type1 = tab$x_type, type2 = tab$y_type, n = tab$n,
-                    r = tab$rho, ci_low = tab$ci_low, ci_high = tab$ci_high, p = tab$p, p_adj = tab$p_adj,
-                    stringsAsFactors = FALSE)
-    d$group <- switch(m$adjust_by, y = get_label(tab$Y, labels), x = get_label(tab$X, labels), "")
-    head1 <- "Predictor"; head2 <- "Score"
-    p_line <- .cor_p_line(m$p_adjust, m$family)
-    formula <- .cor_formula_lines(meth, m$partial, m$k)
-    ci_line <- .cor_ci_line(m$ci, meth, m$ci_engine, m$partial)
-    sub_default <- .cor_cross_subtitle(m, tab, labels, newline = " | ")
-    title_default <- sprintf("%s correlations", .meth_name(meth))
-    has_bin <- any(c(m$x_types, m$y_types) == "binary")
-  }
+# Internal: long table, one row per pair
+.tbl_long <- function(x, labels, digits, alpha, palette, show_note, title, subtitle, sort_by) {
+  m <- x$meta; tab <- x$table; bin_mark <- m$bin_mark
+  d <- data.frame(var1 = tab$X, var2 = tab$Y, type1 = tab$x_type, type2 = tab$y_type, n = tab$n,
+                  r = tab$r, ci_low = tab$ci_low, ci_high = tab$ci_high, p = tab$p, p_adj = tab$p_adj,
+                  stringsAsFactors = FALSE)
+  d$group <- if (m$mode == "cross") switch(m$adjust_by, y = get_label(tab$Y, labels), x = get_label(tab$X, labels), "")
+             else ""
   if (sort_by == "abs") d <- d[order(match(d$group, unique(d$group)), -abs(d$r)), , drop = FALSE]
+  head1 <- if (m$mode == "matrix") "Variable 1" else "x"
+  head2 <- if (m$mode == "matrix") "Variable 2" else "y"
   fmt <- paste0("%.", digits, "f")
   short_type <- function(t) ifelse(t == "binary", "bin", "cont")
   d$lab1 <- mark_binary(get_label(d$var1, labels), d$type1, bin_mark)
@@ -168,8 +202,8 @@ tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = C
   d$pair <- paste(short_type(d$type1), "\u00d7", short_type(d$type2))
   d$coef <- ifelse(is.na(d$r), "", sprintf(fmt, d$r))
   d$ci   <- ifelse(is.na(d$ci_low), "", sprintf(paste0("[", fmt, ", ", fmt, "]"), d$ci_low, d$ci_high))
-  d$p_txt    <- .fmt_p(d$p)
-  raw_only <- identical(if (inherits(x, "cor_matrix")) x$p_adjust else m$p_adjust, "none")
+  raw_only <- identical(m$p_adjust, "none")
+  d$p_txt <- .fmt_p(d$p)
   if (raw_only) d$p_txt <- paste0(d$p_txt, ifelse(is.na(d$p), "", paste0(" ", p_to_stars(d$p, ns = ""))))
   d$padj_txt <- paste0(.fmt_p(d$p_adj), ifelse(is.na(d$p_adj), "", paste0(" ", p_to_stars(d$p_adj, ns = ""))))
   grouped <- any(nzchar(d$group))
@@ -181,8 +215,8 @@ tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = C
   g <- if (grouped) gt::gt(show, groupname_col = "group") else gt::gt(show)
   if (!grouped) g <- gt::cols_hide(g, "group")
   if (!is.null(palette)) g <- .gt_colour(g, "r_num", "coef", palette)
-  ci_lab <- if (any(nzchar(d$ci))) sprintf("%g%% CI", 100 * ((if (inherits(x, "cor_matrix")) x$ci else m$ci) %||% 0.95)) else "CI"
-  labs <- list(pair = "Pair", n = "n", coef = .cor_sym_tbl(meth), ci = ci_lab,
+  ci_lab <- if (any(nzchar(d$ci))) sprintf("%g%% CI", 100 * (m$ci %||% 0.95)) else "CI"
+  labs <- list(pair = "Pair", n = "n", coef = .cor_sym_tbl(m$meth), ci = ci_lab,
                p_txt = "p (raw)", padj_txt = "p (adjusted)")
   if (!identical(drop_col, "lab1")) labs$lab1 <- head1
   if (!identical(drop_col, "lab2")) labs$lab2 <- head2
@@ -190,75 +224,18 @@ tbl_cor_long <- function(x, labels = NULL, digits = 2, alpha = 0.05, palette = C
     gt::cols_hide("r_num") %>%
     gt::cols_label(.list = labs) %>%
     gt::cols_align("center", columns = c("pair", "n", "coef", "ci", "p_txt", "padj_txt")) %>%
-    gt::tab_header(title = title %||% title_default, subtitle = subtitle %||% sub_default)
+    gt::tab_header(title = title %||% sprintf("%s correlations", .meth_name(m$meth)),
+                   subtitle = subtitle %||% .cor_subtitle(m, tab, labels, newline = " | "))
   sig <- which(!is.na(d$p_adj) & d$p_adj < alpha)
   if (length(sig)) g <- gt::tab_style(g, style = gt::cell_text(weight = "bold"), locations = gt::cells_body(rows = sig))
   if (!any(nzchar(d$ci))) g <- gt::cols_hide(g, "ci")
   if (raw_only) g <- gt::cols_hide(g, "padj_txt")
   g <- .gt_notes(g, list(
-    if (grouped) sprintf("Row groups = family of the p adjustment (%s).", if (!inherits(x, "cor_matrix")) m$family else ""),
+    if (grouped) sprintf("Row groups = family of the p adjustment (%s).", m$family),
     sprintf("Pair: cont = continuous, bin = binary%s. Bold = %s < %g.", trimws(bin_mark),
             if (raw_only) "p" else "adjusted p", alpha),
-    p_line, formula, ci_line,
-    if (has_bin) .cor_binary_lines(meth, bin_mark),
-    .cor_ref_line()))
-  .gt_style(g)
-}
-
-
-#' Table of a correlation matrix (lower triangle), same layout as the heatmap
-#'
-#' @param cm output of [cor_test_matrix()]
-#' @param labels named vector variable -> label
-#' @param use_adj stars on adjusted (`TRUE`) or raw p-values
-#' @param order `"original"` or `"hclust"` (same ordering as [plot_cor_heatmap()])
-#' @param digits decimals
-#' @param palette colours (named low / high); `NULL` = no colour
-#' @param bin_mark marker of binary variables
-#' @param title,subtitle override the automatic texts
-#' @return a `gt_tbl`
-#' @export
-#' @examples
-#' d  <- simulate_cor_data(150)
-#' cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"))
-#' tbl_cor_matrix(cm, labels = attr(d, "labels"))
-tbl_cor_matrix <- function(cm, labels = NULL, use_adj = TRUE, order = c("original", "hclust"), digits = 2,
-                           palette = COR_PAL, bin_mark = " [0/1]", title = NULL, subtitle = NULL) {
-  order <- match.arg(order)
-  o <- .cor_order(cm$r, cm$types, order, split = TRUE)
-  R <- cm$r[o, o]; P <- (if (use_adj) cm$p_adj else cm$p)[o, o]; types <- cm$types[o]
-  k <- length(o)
-  lv <- mark_binary(get_label(o, labels), types, bin_mark)
-  fmt <- paste0("%.", digits, "f")
-  lab_cols <- paste0("lab__", seq_len(k)); r_cols <- paste0("r__", seq_len(k))
-  wide <- data.frame(row_lab = lv, stringsAsFactors = FALSE)
-  for (j in seq_len(k)) {
-    lab <- ifelse(is.na(R[, j]), "", paste0(sprintf(fmt, R[, j]), p_to_stars(P[, j], ns = "")))
-    rr  <- R[, j]
-    lab[seq_len(k) < j] <- ""; rr[seq_len(k) < j] <- NA     # upper triangle left empty
-    lab[j] <- "1"
-    wide[[lab_cols[j]]] <- lab; wide[[r_cols[j]]] <- rr
-  }
-  meth <- cm$method
-  g <- gt::gt(wide, rowname_col = "row_lab")
-  if (!is.null(palette)) g <- .gt_colour(g, r_cols, lab_cols, palette)
-  g <- g %>%
-    gt::cols_hide(r_cols) %>%
-    gt::cols_label(.list = stats::setNames(as.list(lv), lab_cols)) %>%
-    gt::cols_align("center", columns = lab_cols) %>%
-    gt::tab_header(title = title %||% "Correlation matrix",
-                   subtitle = subtitle %||% sprintf("%s correlation | pairwise complete N = %s | Computed with %s",
-                                                    .meth_name(meth), .n_range_txt(cm$n[upper.tri(cm$n)]),
-                                                    .cor_engine_txt(cm$engine)))
-  is_bin <- types == "binary"
-  if (any(is_bin)) g <- gt::tab_footnote(g, footnote = paste0("Binary variable", bin_mark, ", coded 0/1 (upper level = 1)."),
-                                         locations = gt::cells_stub(rows = which(is_bin)))
-  g <- .gt_notes(g, list(
-    .cor_p_line(if (use_adj) cm$p_adjust else "none", sprintf("the %d distinct pairs", sum(upper.tri(cm$r)))),
-    if (order == "hclust") sprintf("Order: hierarchical clustering (Ward D2, distance 1 \u2212 %s), within the continuous and binary blocks.",
-                                   .cor_sym_txt(meth)),
-    .cor_formula_lines(meth),
-    if (any(is_bin) && meth %in% .core_methods) .cor_binary_lines(meth, bin_mark),
+    .cor_p_line(m$p_adjust, m$family), .cor_formula_lines(m$meth, m$partial, m$k), .tbl_ci_line(m),
+    if (show_note && any(c(d$type1, d$type2) == "binary")) .cor_binary_lines(m$meth, bin_mark),
     .cor_ref_line()))
   .gt_style(g)
 }

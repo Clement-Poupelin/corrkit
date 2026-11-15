@@ -123,9 +123,3 @@ partial_cor_test <- function(x, y, Z = NULL, meth = c("spearman", "pearson", "ke
   t  <- r * sqrt(df / max(1e-12, 1 - r^2))
   out(r, 2 * stats::pt(-abs(t), df), k, "residuals (base R)")
 }
-
-#' @rdname partial_cor_test
-#' @description `partial_rank_cor()` is the former name, kept for backward compatibility.
-#' @export
-partial_rank_cor <- function(x, y, Z = NULL, meth = c("spearman", "pearson"))
-  partial_cor_test(x, y, Z, match.arg(meth))

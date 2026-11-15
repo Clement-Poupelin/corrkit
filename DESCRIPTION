@@ -1,6 +1,6 @@
 Package: corrkit
 Title: Correlation Analyses with Annotated Heatmaps and Tables
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     person("Clément", "Poupelin", email = "clementjc.poupelin@gmail.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0005-7308-0368"))

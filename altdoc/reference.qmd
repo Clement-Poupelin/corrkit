@@ -7,23 +7,34 @@ toc: true
 
 ## Calculer
 
-Chaque fonction appelle un moteur existant (stats, ppcor, psych, correlation). Les p-values sont brutes par défaut ; un ajustement sur une famille explicite est disponible (`p_adjust`, `adjust_by`).
+Une seule fonction de calcul. Chaque coefficient vient d'un moteur existant (stats, ppcor, psych, correlation). Les p-values sont brutes par défaut ; un ajustement sur une famille explicite est disponible (`p_adjust`, `adjust_by`).
 
 | Fonction | Rôle |
 |---|---|
-| [`cor_test_matrix()`](man/cor_test_matrix.qmd) | Corrélations, p-values, effectifs et intervalles de toutes les paires d'un ensemble de variables |
-| [`cor_cross()`](man/cor_cross.qmd) | Corrélations croisées prédicteurs × scores, éventuellement partielles |
-| [`partial_cor_test()`](man/partial_cor_test.qmd) | Test d'une paire, simple ou partiel (`partial_rank_cor()` : ancien nom) |
+| [`cor_compute()`](man/cor_compute.qmd) | Corrélations d'une matrice (`y = NULL`), d'une analyse croisée `x` × `y` ou d'une paire, simples ou partielles (`covariates`) |
+| [`partial_cor_test()`](man/partial_cor_test.qmd) | Le moteur sous-jacent : test d'une paire de vecteurs, simple ou partiel |
 | [`cor_binary_effects()`](man/cor_binary_effects.qmd) | Tailles d'effet des variables binaires : différence de moyennes, r rang-bisérial |
+
+## Explorer le résultat
+
+Méthodes de l'objet renvoyé par `cor_compute()`.
+
+| Fonction | Rôle |
+|---|---|
+| `print()` | Coefficients et étoiles |
+| [`summary()`](man/summary.cor_result.qmd) | Caractéristiques de l'analyse, variables, paires les plus fortes, contenu de l'objet |
+| [`as.matrix()`](man/as.matrix.cor_result.qmd) | Matrice de `r`, `p`, `p_adj`, `n`, `ci_low` ou `ci_high` |
+| `as.data.frame()` | Tableau long, une ligne par paire |
 
 ## Graphiques
 
-Objets ggplot, avec un sous-titre (méthode, moteur, N) et une légende de lecture.
+Objets ggplot, avec un sous-titre (méthode, ajustement, N, moteur) et une légende de lecture.
 
 | Fonction | Rôle |
 |---|---|
-| [`plot_cor_heatmap()`](man/plot_cor_heatmap.qmd) | Heatmap triangulaire d'une matrice de corrélation |
-| [`plot_cor_cross()`](man/plot_cor_cross.qmd) | Heatmap des corrélations croisées |
+| [`plot()`, `autoplot()`](man/plot.cor_result.qmd) | `type = "heatmap"` (défaut), `"forest"` ou `"scatter"` |
+| [`plot_cor_heatmap()`](man/plot_cor_heatmap.qmd) | Heatmap : triangle pour une matrice, rectangle pour une analyse croisée |
+| [`plot_cor_forest()`](man/plot_cor_forest.qmd) | Chaque coefficient avec son intervalle de confiance |
 | [`plot_cor_pair()`](man/plot_cor_pair.qmd) | Une paire : nuage de points, valeurs par groupe ou graphique des résidus |
 
 ## Tableaux
@@ -32,9 +43,7 @@ Tableaux gt, avec la même échelle de couleurs que les heatmaps et des notes de
 
 | Fonction | Rôle |
 |---|---|
-| [`tbl_cor_matrix()`](man/tbl_cor_matrix.qmd) | Matrice de corrélation (triangle inférieur) |
-| [`tbl_cor_cross()`](man/tbl_cor_cross.qmd) | Corrélations croisées, une ligne par prédicteur |
-| [`tbl_cor_long()`](man/tbl_cor_long.qmd) | Une ligne par paire : coefficient, intervalle, p brute et ajustée |
+| [`tbl_cor()`](man/tbl_cor.qmd) | `layout = "matrix"`, `"wide"` ou `"long"` |
 | [`tbl_cor_binary()`](man/tbl_cor_binary.qmd) | Tailles d'effet des variables binaires |
 
 ## Notes de lecture et utilitaires

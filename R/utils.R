@@ -109,11 +109,11 @@ rotate_x <- function(angle = 45)
   as.character(sort(unique(stats::na.omit(x))))
 }
 
-#' ggplot2::labs() with a Latin-1-safe subtitle and caption (see .plot_text())
+#' ggplot2::labs() with Latin-1-safe texts: title, subtitle, caption, axis titles (see .plot_text())
 #' @noRd
 .labs_safe <- function(...) {
   a <- list(...)
-  for (k in intersect(c("subtitle", "caption"), names(a)))
-    if (!is.null(a[[k]])) a[[k]] <- .plot_text(a[[k]])
+  for (k in intersect(c("title", "subtitle", "caption", "x", "y"), names(a)))
+    if (is.character(a[[k]])) a[[k]] <- .plot_text(a[[k]])
   do.call(ggplot2::labs, a)
 }

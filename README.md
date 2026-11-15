@@ -41,34 +41,39 @@ lab <- attr(d, "labels")      # libellés des variables
 
 ## Démarrage rapide
 
+Une seule fonction calcule, `cor_compute()` ; son résultat se décrit, se dessine et se met en tableau.
+
 **Toutes les paires** d'un ensemble de variables :
 
 ```r
-cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"), method = "spearman")
-plot_cor_heatmap(cm, labels = lab)   # heatmap annotée (ggplot)
-tbl_cor_matrix(cm, labels = lab)     # même résultat en tableau (gt)
-tbl_cor_long(cm, labels = lab)       # une ligne par paire : IC, p brute, p ajustée
+cm <- cor_compute(d, x = c("CRP", "IL6", "BDNF", "NfL", "BIN_CRP"), labels = lab)
+cm                            # coefficients et étoiles
+summary(cm)                   # caractéristiques de l'analyse et contenu de l'objet
+plot(cm)                      # heatmap annotée (ggplot)
+plot(cm, type = "forest")     # chaque coefficient avec son intervalle de confiance
+tbl_cor(cm)                   # même résultat en tableau (gt)
+tbl_cor(cm, layout = "long")  # une ligne par paire : IC, p brute, p ajustée
 ```
 
 **Biomarqueurs × scores**, ajustés sur l'âge et le sexe :
 
 ```r
-cc <- cor_cross(d, c("CRP", "IL6", "NfL", "BIN_CRP"), c("depression", "fatigue", "cognition"),
-                covariates = c("age", "sex"), labels = lab)
-plot_cor_cross(cc)$plot
-tbl_cor_cross(cc)
+cc <- cor_compute(d, x = c("CRP", "IL6", "NfL", "BIN_CRP"), y = c("depression", "fatigue", "cognition"),
+                  covariates = c("age", "sex"), labels = lab)
+plot(cc)
+tbl_cor(cc)
 ```
 
 **Une paire**, et ce que mesure son coefficient :
 
 ```r
-plot_cor_pair(d, "NfL", "cognition", covariates = "age", meth = "pearson", labels = lab)
+plot(cc, type = "scatter", pair = c("NfL", "cognition"))
 ```
 
 **Variables binaires** : ce qu'il faut rapporter à la place de la corrélation :
 
 ```r
-tbl_cor_binary(cor_binary_effects(d, "BIN_CRP", c("depression", "fatigue")), labels = lab)
+tbl_cor_binary(cor_binary_effects(cc))
 ```
 
 ## Les coefficients de corrélation
@@ -99,7 +104,7 @@ $$\tau_{xy} = \frac{2}{n(n-1)} \sum_{i<j} \mathrm{sign}(x_i - x_j) \times \mathr
 | Corrélation de distance | Détecte les associations linéaires **et non linéaires**, même non monotones ; vaut 0 seulement en cas d'indépendance |
 | Blomqvist, Hoeffding, rangs gaussiens | Autres mesures de dépendance fondées sur les rangs |
 
-Ces coefficients sont disponibles dans `cor_test_matrix(method = ...)` via le moteur `correlation::correlation()`.
+Ces coefficients sont disponibles dans `cor_compute(method = ...)` via le package correlation.
 
 ### Variables binaires et ordinales
 
@@ -124,14 +129,14 @@ Pour Spearman, x, y et z sont d'abord remplacés par leurs rangs. `corrkit` calc
 
 | Coefficient | Dans corrkit | Moteur |
 |---|---|---|
-| Pearson, Spearman, Kendall | partout (paires, matrices, croisé, partiel) | `stats::cor.test()`, `psych::corr.test()`, `ppcor::pcor.test()` |
-| Robustes et non linéaires | `cor_test_matrix(method = ...)` | `correlation::correlation()` |
+| Pearson, Spearman, Kendall | partout dans `cor_compute()` (matrice, croisé, paire, partiel) | `stats::cor.test()`, `psych::corr.test()`, `ppcor::pcor.test()` |
+| Robustes et non linéaires | `cor_compute(method = ...)`, sans covariables | `correlation::correlation()`, `correlation::cor_test()` |
 | Point-bisérial, rang-bisérial | variables binaires, `cor_binary_effects()` | `stats::t.test()`, `stats::wilcox.test()`, `effectsize` |
 | Bisérial, polychorique, tétrachorique, multiniveau, bayésien | non repris | directement dans le package `correlation` |
 
 ## Pour aller plus loin
 
-* [Prise en main](https://clement-poupelin.github.io/corrkit/vignettes/corrkit.html) : `cor_test_matrix()` et la matrice de corrélation ;
+* [Prise en main](https://clement-poupelin.github.io/corrkit/vignettes/corrkit.html) : `cor_compute()`, son contenu et la matrice de corrélation ;
 * [Analyse complète d'une matrice](https://clement-poupelin.github.io/corrkit/vignettes/workflow.html) : options de la heatmap, tableaux, moteurs ;
 * [Corrections pour tests multiples](https://clement-poupelin.github.io/corrkit/vignettes/p-values.html) : quand et comment ajuster les p-values ;
 * [Comparer les coefficients](https://clement-poupelin.github.io/corrkit/vignettes/methods-comparison.html) : Pearson, Spearman, Kendall et les coefficients robustes, en théorie et sur données simulées ;

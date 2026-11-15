@@ -2,7 +2,6 @@
 % Please edit documentation in R/cor_pair.R
 \name{partial_cor_test}
 \alias{partial_cor_test}
-\alias{partial_rank_cor}
 \title{Correlation test between x and y, partial if covariates are given}
 \usage{
 partial_cor_test(
@@ -13,8 +12,6 @@ partial_cor_test(
   engine = c("ppcor", "base"),
   ci = 0.95
 )
-
-partial_rank_cor(x, y, Z = NULL, meth = c("spearman", "pearson"))
 }
 \arguments{
 \item{x, y}{numeric vectors (binary: 0/1, see \code{\link[=as_cor_numeric]{as_cor_numeric()}})}
@@ -40,8 +37,6 @@ n - 2 - k df. For Pearson this is exactly the slope test of
 \code{lm(y ~ x + Z)} (Frisch-Waugh-Lovell theorem). Kendall partial
 correlations need ppcor.
 }
-
-\code{partial_rank_cor()} is the former name, kept for backward compatibility.
 }
 \examples{
 d <- simulate_cor_data(100)

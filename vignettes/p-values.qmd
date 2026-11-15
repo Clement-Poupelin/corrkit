@@ -79,10 +79,10 @@ Avec les m p-values triées $p_{(1)} \le \dots \le p_{(m)}$, les p-values ajust�
 Sur les données d'exemple, les p ajustées par chaque méthode, en fonction des p brutes :
 
 ```{r}
-cm <- cor_test_matrix(d, vars)
+cm <- cor_compute(d, vars)
 meths <- c("bonferroni", "holm", "hochberg", "BH", "BY")
 pp <- do.call(rbind, lapply(meths, function(m)
-  data.frame(method = m, raw = cm$long$p, adjusted = p.adjust(cm$long$p, m))))
+  data.frame(method = m, raw = cm$table$p, adjusted = p.adjust(cm$table$p, m))))
 pp$method <- factor(pp$method, levels = meths)
 ggplot(pp, aes(raw, adjusted, colour = method)) +
   geom_abline(linetype = "dashed", colour = "grey60") +
@@ -98,7 +98,7 @@ ggplot(pp, aes(raw, adjusted, colour = method)) +
 
 ```{r}
 sapply(c(none = "none", setNames(meths, meths)),
-       function(m) sum(cor_test_matrix(d, vars, p_adjust = m)$long$p_adj < 0.05))
+       function(m) sum(cor_compute(d, vars, p_adjust = m)$table$p_adj < 0.05))
 ```
 
 ## Ce que l'on gagne et ce que l'on perd : simulation
@@ -110,8 +110,8 @@ set.seed(2026)
 sim_one <- function(n = 100, rho = 0.3) {
   X <- matrix(rnorm(n * 10), n, 10, dimnames = list(NULL, paste0("V", 1:10)))
   for (k in 1:5) X[, 2 * k] <- rho * X[, 2 * k - 1] + sqrt(1 - rho^2) * X[, 2 * k]   # pairs (1,2), (3,4)...
-  L <- cor_test_matrix(as.data.frame(X), colnames(X), method = "pearson", engine = "stats", ci = NULL)$long
-  truth <- paste(L$Var1, L$Var2) %in% paste0("V", 2 * (1:5) - 1, " V", 2 * (1:5))
+  L <- cor_compute(as.data.frame(X), colnames(X), method = "pearson", engine = "stats", ci = NULL)$table
+  truth <- paste(L$X, L$Y) %in% paste0("V", 2 * (1:5) - 1, " V", 2 * (1:5))
   do.call(rbind, lapply(c("none", "holm", "BH"), function(m) {
     sig <- p.adjust(L$p, m) < 0.05
     data.frame(method = m, true_pos = sum(sig & truth), false_pos = sum(sig & !truth))
@@ -148,18 +148,18 @@ Sans correction, on détecte le plus de vraies corrélations, mais presque chaqu
 
 ```{r}
 #| fig-height: 8
-plot_cor_heatmap(cor_test_matrix(d, vars, p_adjust = "BH"), labels = lab, title = "Correlation matrix, BH-adjusted p")
+plot(cor_compute(d, vars, p_adjust = "BH", labels = lab), title = "Correlation matrix, BH-adjusted p")
 ```
 
 `use_adj = FALSE` affiche les étoiles des p brutes d'un objet ajusté ; le tableau long montre les deux colonnes côte à côte :
 
 ```{r}
-tbl_cor_long(cor_test_matrix(d, vars, p_adjust = "holm"), labels = lab, sort_by = "abs")
+tbl_cor(cor_compute(d, vars, p_adjust = "holm", labels = lab), layout = "long", sort_by = "abs")
 ```
 
 ### Des prédicteurs × des scores : choisir la famille
 
-Pour `cor_cross()`, la question n'est pas seulement « quelle méthode ? » mais « **sur quel ensemble de tests ?** ». C'est l'argument `adjust_by` :
+Pour une analyse croisée (`cor_compute(d, x, y)`), la question n'est pas seulement « quelle méthode ? » mais « **sur quel ensemble de tests ?** ». C'est l'argument `adjust_by` :
 
 | `adjust_by` | Famille | Question |
 |---|---|---|
@@ -169,13 +169,13 @@ Pour `cor_cross()`, la question n'est pas seulement « quelle méthode ? » mais
 
 ```{r}
 bio <- c("CRP", "IL6", "BDNF", "NfL"); sc <- c("depression", "fatigue", "cognition")
-c(raw = sum(cor_cross(d, bio, sc)$table$p < 0.05),
+c(raw = sum(cor_compute(d, bio, sc)$table$p < 0.05),
   sapply(c(y = "y", x = "x", all = "all"),
-         function(a) sum(cor_cross(d, bio, sc, p_adjust = "holm", adjust_by = a)$table$p_adj < 0.05)))
+         function(a) sum(cor_compute(d, bio, sc, p_adjust = "holm", adjust_by = a)$table$p_adj < 0.05)))
 ```
 
 ```{r}
-tbl_cor_long(cor_cross(d, bio, sc, labels = lab, p_adjust = "BH", adjust_by = "y"))
+tbl_cor(cor_compute(d, bio, sc, labels = lab, p_adjust = "BH", adjust_by = "y"), layout = "long")
 ```
 
 ## En pratique

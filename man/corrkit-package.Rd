@@ -31,9 +31,13 @@ plots, a \verb{[0/1]} marker, a reading note (\code{\link[=cor_binary_note]{cor_
 effect sizes to report instead of the correlation (\code{\link[=cor_binary_effects]{cor_binary_effects()}});
 \item outputs whose subtitle, caption or source notes state the method, the
 engine, the formulas, the adjustment and how to read them:
-\code{\link[=plot_cor_heatmap]{plot_cor_heatmap()}}, \code{\link[=plot_cor_cross]{plot_cor_cross()}}, \code{\link[=plot_cor_pair]{plot_cor_pair()}},
-\code{\link[=tbl_cor_matrix]{tbl_cor_matrix()}}, \code{\link[=tbl_cor_cross]{tbl_cor_cross()}}, \code{\link[=tbl_cor_long]{tbl_cor_long()}}, \code{\link[=tbl_cor_binary]{tbl_cor_binary()}}.
+\code{\link[=plot_cor_heatmap]{plot_cor_heatmap()}}, \code{\link[=plot_cor_forest]{plot_cor_forest()}}, \code{\link[=plot_cor_pair]{plot_cor_pair()}} (or \code{plot()}),
+\code{\link[=tbl_cor]{tbl_cor()}}, \code{\link[=tbl_cor_binary]{tbl_cor_binary()}}.
 }
+
+\strong{One computing function}: \code{\link[=cor_compute]{cor_compute()}} (matrix, cross or single pair,
+simple or partial), whose result has \code{print()}, \code{summary()}, \code{plot()},
+\code{autoplot()}, \code{as.matrix()} and \code{as.data.frame()} methods.
 
 Start with \code{vignette("corrkit")}.
 }

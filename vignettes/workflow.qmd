@@ -27,7 +27,7 @@ Cette vignette reprend le début de [Prise en main](corrkit.qmd) et le détaille
 | Ajustement pour tests multiples (sur demande) | `stats::p.adjust()` | — |
 | Effets des variables binaires | `stats::t.test()`, `stats::wilcox.test()`, `effectsize::rank_biserial()` | IC de r_rb non calculé |
 
-Les fonctions suivent toutes le même schéma : `cor_*()` calcule, `plot_*()` dessine (un `ggplot`), `tbl_*()` met en forme (un tableau `gt`).
+Une seule fonction calcule, `cor_compute()` ; son résultat se dessine avec `plot()` (un `ggplot`), se met en tableau avec `tbl_cor()` (un tableau `gt`) et se décrit avec `summary()`.
 
 ## Données et calcul
 
@@ -45,28 +45,52 @@ str(d)
 
 ```{r}
 vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition", "BIN_CRP", "BIN_IL6")
-cm <- cor_test_matrix(d, vars, method = "spearman")
+cm <- cor_compute(d, vars, method = "spearman", labels = lab)
 cm
 ```
 
-Les arguments principaux de `cor_test_matrix()` :
+Les arguments principaux de `cor_compute()` :
 
 | Argument | Défaut | Rôle |
 |---|---|---|
+| `x`, `y` | — | `y = NULL` : toutes les paires de `x` (matrice) ; `y` donné : `x` × `y` (voir [Corrélations croisées et partielles](partial-cross.qmd)) |
+| `covariates` | `NULL` | covariables d'une corrélation partielle |
 | `method` | `"spearman"` | `"pearson"`, `"kendall"`, ou une méthode robuste du package correlation (voir [Comparer les coefficients](methods-comparison.qmd)) |
 | `p_adjust` | `"none"` | p-values brutes ; `"BH"`, `"holm"`, `"bonferroni"`… pour un ajustement sur les k(k − 1)/2 paires (voir [Corrections pour tests multiples](p-values.qmd)) |
-| `engine` | `"auto"` | `psych::corr.test()`, puis `correlation::correlation()`, puis `stats::cor.test()` |
+| `engine` | `"auto"` | sans covariables : `psych::corr.test()`, puis `correlation::correlation()`, puis `stats::cor.test()` ; avec covariables : `ppcor::pcor.test()` |
+| `labels` | `NULL` | libellés des variables, repris par toutes les sorties |
 | `ci` | `0.95` | niveau des intervalles de confiance (`NULL` = aucun) |
 
 ## Les sorties
 
-::: {.panel-tabset}
+Toutes les sorties partent du même objet `cm`.
 
+::: {.panel-tabset}
 
 ### Heatmap
 
+`plot(cm)` appelle `plot_cor_heatmap(cm)`.
+
 ```{r}
-plot_cor_heatmap(cm, labels = lab)
+plot(cm)
+```
+
+### Forest plot
+
+Chaque coefficient avec son intervalle de confiance : la heatmap montre la structure, le forest plot la précision. Point plein = p < 0,05.
+
+```{r}
+#| fig-height: 9
+plot(cm, type = "forest")
+```
+
+### Nuage de points
+
+Une paire, avec ce que mesure le coefficient ; par défaut la paire la plus corrélée.
+
+```{r}
+#| fig-height: 5
+plot(cm, type = "scatter", pair = c("IL6", "fatigue"))
 ```
 
 ### Tableau matrice
@@ -74,7 +98,7 @@ plot_cor_heatmap(cm, labels = lab)
 Le même résultat que la heatmap, avec la même échelle de couleurs.
 
 ```{r}
-tbl_cor_matrix(cm, labels = lab)
+tbl_cor(cm)
 ```
 
 ### Tableau long
@@ -82,21 +106,22 @@ tbl_cor_matrix(cm, labels = lab)
 Une ligne par paire, avec n, l'intervalle de confiance et la p-value ; lignes significatives en gras.
 
 ```{r}
-tbl_cor_long(cm, labels = lab, sort_by = "abs")
+tbl_cor(cm, layout = "long", sort_by = "abs")
 ```
 
 ### Console
 
 ```{r}
 print(cm)
+summary(cm)
 ```
 
 ### Données
 
-Le tableau long, pour filtrer, trier ou exporter (`write.csv(cm$long, ...)`).
+Le tableau long, pour filtrer, trier ou exporter (`write.csv(as.data.frame(cm), ...)`).
 
 ```{r}
-head(as.data.frame(cm$long), 10)
+head(as.data.frame(cm), 10)
 ```
 
 :::
@@ -120,7 +145,7 @@ Le sous-titre et les notes des tableaux sont construits par les mêmes fonctions
 Par défaut, les variables sont ordonnées par classification hiérarchique (Ward, distance 1 − r) à l'intérieur de chaque bloc, ce qui rapproche les variables qui se ressemblent. `order = "original"` garde l'ordre donné.
 
 ```{r}
-plot_cor_heatmap(cm, labels = lab, order = "original")
+plot(cm, order = "original")
 ```
 
 ### Séparateur simple
@@ -128,7 +153,7 @@ plot_cor_heatmap(cm, labels = lab, order = "original")
 `separator = "line"` remplace les facettes par deux traits et garde des cases carrées.
 
 ```{r}
-plot_cor_heatmap(cm, labels = lab, separator = "line")
+plot(cm, separator = "line")
 ```
 
 ### Sans valeurs
@@ -136,7 +161,7 @@ plot_cor_heatmap(cm, labels = lab, separator = "line")
 `show_values = FALSE` ne garde que les couleurs, pour une vue d'ensemble d'une grande matrice.
 
 ```{r}
-plot_cor_heatmap(cm, labels = lab, show_values = FALSE)
+plot(cm, show_values = FALSE)
 ```
 
 ### Palette et titre
@@ -144,7 +169,7 @@ plot_cor_heatmap(cm, labels = lab, show_values = FALSE)
 `palette` (couleurs des corrélations négatives et positives), `title`, `base_size`, `value_size` et `caption_width` règlent l'apparence. Le résultat est un `ggplot` : on peut lui ajouter des couches et des thèmes.
 
 ```{r}
-plot_cor_heatmap(cm, labels = lab, palette = c(low = "#1B7837", high = "#762A83"),
+plot(cm, palette = c(low = "#1B7837", high = "#762A83"),
                  title = "Biomarqueurs et scores", base_size = 11)
 ```
 
@@ -155,24 +180,24 @@ plot_cor_heatmap(cm, labels = lab, palette = c(low = "#1B7837", high = "#762A83"
 Les moteurs donnent les mêmes coefficients ; on peut le vérifier :
 
 ```{r}
-a <- cor_test_matrix(d, vars, engine = "stats")
-b <- cor_test_matrix(d, vars, engine = "auto")    # psych si installé
-all.equal(a$r, b$r)
+a <- cor_compute(d, vars, engine = "stats")
+b <- cor_compute(d, vars, engine = "auto")    # psych si installé
+all.equal(as.matrix(a), as.matrix(b))
 ```
 
 Pour Kendall, `psych` n'est pas utilisé (il teste τ avec la formule t de r) : `engine = "auto"` passe par `correlation::correlation()` ou `stats::cor.test()`.
 
 ```{r}
-ck <- cor_test_matrix(d, vars, method = "kendall")
-plot_cor_heatmap(ck, labels = lab, title = "Kendall correlations")
+ck <- cor_compute(d, vars, method = "kendall", labels = lab)
+plot(ck, title = "Kendall correlations")
 ```
 
 ## Récapitulatif des fonctions
 
 | Je veux… | Fonction |
 |---|---|
-| toutes les paires d'un ensemble de variables | `cor_test_matrix()` → `plot_cor_heatmap()`, `tbl_cor_matrix()`, `tbl_cor_long()` |
-| des prédicteurs × des scores, éventuellement ajustés | `cor_cross()` → `plot_cor_cross()`, `tbl_cor_cross()`, `tbl_cor_long()` |
+| toutes les paires d'un ensemble de variables | `cor_compute(d, x)` → `plot()`, `tbl_cor()`, `summary()` |
+| des prédicteurs × des scores, éventuellement ajustés | `cor_compute(d, x, y, covariates)` → `plot()`, `tbl_cor()`, `summary()` |
 | voir une paire et ce que mesure son coefficient | `plot_cor_pair()` |
 | un test pour une paire | `partial_cor_test()` |
 | les effets des variables binaires | `cor_binary_effects()` → `tbl_cor_binary()` |

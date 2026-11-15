@@ -1,4 +1,4 @@
----
+# ---
 title: "Variables binaires dans une analyse de corrélation"
 vignette: >
   %\VignetteIndexEntry{Variables binaires dans une analyse de corrélation}
@@ -127,11 +127,17 @@ Les cases qui font intervenir une variable binaire sont regroupées dans un bloc
 
 ```{r}
 #| fig-height: 6
-res <- plot_cor_cross(d, c("CRP", "IL6", "BIN_CRP", "BIN_IL6"), c("depression", "fatigue"), labels = lab)
-res$plot
+res <- cor_compute(d, c("CRP", "IL6", "BIN_CRP", "BIN_IL6"), c("depression", "fatigue"), labels = lab)
+plot(res)
 ```
 
-`res$note` contient la note complète, et `cor_binary_note()` la fournit en anglais (légendes, notes de tableau) ou en français (encadrés d'un rapport), en version courte ou complète :
+Les tailles d'effet de toutes les variables binaires d'une analyse s'obtiennent directement depuis le résultat :
+
+```{r}
+tbl_cor_binary(cor_binary_effects(res))
+```
+
+`cor_binary_note()` fournit la note de lecture en anglais (légendes, notes de tableau) ou en français (encadrés d'un rapport), en version courte ou complète :
 
 ```{r}
 cor_binary_note("spearman", lang = "fr", short = TRUE)

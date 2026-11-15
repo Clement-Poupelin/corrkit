@@ -17,7 +17,8 @@
 #'
 #' Group 1 = upper level of the binary variable (as in [as_cor_numeric()]). p-values are raw.
 #'
-#' @param data data frame
+#' @param data data frame, or the output of [cor_compute()] (then `bin_vars` and
+#'   `y_vars` default to its binary variables and the continuous variables paired with them)
 #' @param bin_vars binary variables (non-binary ones are dropped with a warning)
 #' @param y_vars continuous outcomes
 #' @param labels named vector variable -> display label (kept for the tables)
@@ -30,7 +31,22 @@
 #' @examples
 #' d <- simulate_cor_data(150)
 #' cor_binary_effects(d, c("BIN_CRP", "BIN_IL6"), c("depression", "fatigue"))
+#' res <- cor_compute(d, c("BIN_CRP", "BIN_IL6"), c("depression", "fatigue"))
+#' cor_binary_effects(res)
 cor_binary_effects <- function(data, bin_vars, y_vars, labels = NULL, ci = 0.95) {
+  if (inherits(data, "cor_result")) {
+    # every binary variable of the analysis, with the continuous variables it is paired with
+    m <- data$meta; tab <- data$table
+    one_bin <- xor(tab$x_type == "binary", tab$y_type == "binary")
+    if (!any(one_bin)) stop("cor_binary_effects: no pair binary x continuous in this analysis.", call. = FALSE)
+    if (missing(bin_vars)) bin_vars <- unique(c(tab$X[one_bin & tab$x_type == "binary"],
+                                                tab$Y[one_bin & tab$y_type == "binary"]))
+    if (missing(y_vars)) y_vars <- unique(c(tab$Y[one_bin & tab$x_type == "binary"],
+                                            tab$X[one_bin & tab$y_type == "binary"]))
+    labels <- labels %||% m$labels
+    if (!is.null(m$ci)) ci <- m$ci
+    data <- data$data
+  }
   bin_vars <- keep_existing(bin_vars, names(data), "cor_binary_effects")
   y_vars   <- keep_existing(y_vars, names(data), "cor_binary_effects")
   types <- vapply(bin_vars, function(v) cor_var_type(data[[v]]), character(1))

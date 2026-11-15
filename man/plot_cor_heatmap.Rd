@@ -2,19 +2,18 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{plot_cor_heatmap}
 \alias{plot_cor_heatmap}
-\title{Lower-triangular heatmap of a correlation matrix}
+\title{Heatmap of a correlation analysis}
 \usage{
 plot_cor_heatmap(
-  cm,
+  x,
   labels = NULL,
   use_adj = TRUE,
   order = c("hclust", "original"),
   show_values = TRUE,
   base_size = 10,
   title = NULL,
-  value_size = 2.6,
+  value_size = NULL,
   show_note = TRUE,
-  bin_mark = " [0/1]",
   split_binary = TRUE,
   palette = COR_PAL,
   caption_width = 110,
@@ -22,42 +21,57 @@ plot_cor_heatmap(
 )
 }
 \arguments{
-\item{cm}{output of \code{\link[=cor_test_matrix]{cor_test_matrix()}}}
+\item{x}{output of \code{\link[=cor_compute]{cor_compute()}}}
 
-\item{labels}{named vector variable -> display label}
+\item{labels}{named vector variable -> display label (default: the labels given to \code{\link[=cor_compute]{cor_compute()}})}
 
 \item{use_adj}{stars on adjusted (\code{TRUE}) or raw p-values}
 
-\item{order}{\code{"hclust"} (within each block if \code{split_binary}) or \code{"original"}}
+\item{order}{matrix only: \code{"hclust"} (within each block if \code{split_binary}) or \code{"original"}}
 
 \item{show_values}{print the coefficient and the stars in each cell}
 
 \item{base_size}{base font size}
 
-\item{title}{title (default "Correlation matrix")}
+\item{title}{title (default "Correlation matrix" or "\if{html}{\out{<Method>}} correlations")}
 
 \item{value_size}{size of the values}
 
 \item{show_note}{add the binary-variable line to the caption}
 
-\item{bin_mark}{marker appended to the labels of binary variables}
-
-\item{split_binary}{binary variables in a separate block (last rows / columns)}
+\item{split_binary}{binary variables in a separate block}
 
 \item{palette}{colours of the negative / positive correlations (named low / high)}
 
 \item{caption_width}{wrap the caption lines at this number of characters (\code{NULL} = no wrapping)}
 
-\item{separator}{\code{"facet"} (2 x 2 panels with strips, default) or \code{"line"} (separator lines, square tiles)}
+\item{separator}{matrix only: \code{"facet"} (panels with strips, default) or
+\code{"line"} (separator lines, square tiles)}
 }
 \value{
 a ggplot
 }
 \description{
-Lower-triangular heatmap of a correlation matrix
+\itemize{
+\item matrix analysis (\code{cor_compute(y = NULL)}): lower triangle, diagonal included;
+\item cross analysis: one row per \code{x}, one column per \code{y}.
+}
+}
+\details{
+Each cell shows the coefficient and the stars of its p-value (adjusted if an
+adjustment was requested); the subtitle gives the method, the adjustment
+for covariates, N and the engine; the caption gives the status of the
+p-values, the formula of the coefficient and the reading of binary cells.
 }
 \examples{
 d  <- simulate_cor_data(150)
-cm <- cor_test_matrix(d, c("CRP", "IL6", "BDNF", "NfL", "depression", "BIN_CRP", "BIN_IL6"))
-plot_cor_heatmap(cm, labels = attr(d, "labels"))
+cm <- cor_compute(d, c("CRP", "IL6", "BDNF", "NfL", "depression", "BIN_CRP", "BIN_IL6"),
+                  labels = attr(d, "labels"))
+plot_cor_heatmap(cm)
+cc <- cor_compute(d, x = c("CRP", "IL6", "NfL", "BIN_CRP"), y = c("depression", "cognition"),
+                  covariates = "age", labels = attr(d, "labels"))
+plot_cor_heatmap(cc)
+}
+\seealso{
+\code{plot()} on a \code{\link[=cor_compute]{cor_compute()}} result, which calls this function for \code{type = "heatmap"}.
 }

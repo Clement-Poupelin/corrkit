@@ -191,7 +191,7 @@ sapply(c(pearson = "pearson", spearman = "spearman", kendall = "kendall"), funct
 
 ## Dans corrkit
 
-Toutes les méthodes passent par `cor_test_matrix(method = ...)`. Pearson, Spearman et Kendall sont disponibles partout (paires, matrices, corrélations croisées et partielles) ; les autres passent par le moteur `correlation::correlation()` et sont réservées aux matrices.
+Toutes les méthodes passent par `cor_compute(method = ...)`. Pearson, Spearman et Kendall sont disponibles partout, y compris pour les corrélations partielles ; les autres passent par le package correlation et n'ont pas de version partielle.
 
 ```{r}
 #| eval: !expr has_cor
@@ -200,8 +200,8 @@ lab  <- attr(d, "labels")
 vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition")
 ms <- c(pearson = "pearson", spearman = "spearman", kendall = "kendall", biweight = "biweight")
 all_r <- do.call(rbind, lapply(names(ms), function(m) {
-  L <- cor_test_matrix(d, vars, method = ms[[m]])$long
-  data.frame(pair = paste(L$Var1, L$Var2), method = m, r = L$r)
+  L <- cor_compute(d, vars, method = ms[[m]])$table
+  data.frame(pair = paste(L$X, L$Y), method = m, r = L$r)
 }))
 wide <- reshape(all_r, idvar = "pair", timevar = "method", direction = "wide")
 cmp <- rbind(data.frame(pair = wide$pair, pearson = wide$r.pearson, other = wide$r.spearman, method = "Spearman r_s"),
@@ -221,7 +221,7 @@ Sur ces données, Spearman et biweight restent proches de Pearson, et Kendall es
 ```{r}
 #| eval: !expr has_cor
 #| fig-height: 7
-plot_cor_heatmap(cor_test_matrix(d, vars, method = "biweight"), labels = lab,
+plot(cor_compute(d, vars, method = "biweight", labels = lab),
                  title = "Robust correlations (biweight midcorrelation)")
 ```
 

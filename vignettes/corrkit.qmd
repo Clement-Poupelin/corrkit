@@ -12,7 +12,7 @@ fig-width: 8
 fig-height: 8
 ---
 
-Tout `corrkit` part d'un seul objet : le résultat de `cor_test_matrix()`. Il contient les coefficients, les p-values, les effectifs et les intervalles de confiance de toutes les paires de variables. Les graphiques et les tableaux ne font que le mettre en forme.
+Tout `corrkit` passe par **une seule fonction de calcul**, `cor_compute()`. Elle renvoie un objet qui contient les coefficients, les p-values, les effectifs et les intervalles de confiance de toutes les paires demandées. Les graphiques et les tableaux ne font que le mettre en forme.
 
 ```{r}
 #| label: setup
@@ -21,11 +21,20 @@ d   <- simulate_cor_data(n = 200)     # biomarqueurs, scores et covariables simu
 lab <- attr(d, "labels")              # libellés des variables
 ```
 
+## Une fonction, trois usages
+
+| Appel | Ce qui est calculé |
+|---|---|
+| `cor_compute(d, x = vars)` | toutes les paires de `vars` : une **matrice** de corrélation |
+| `cor_compute(d, x = biomarqueurs, y = scores)` | chaque biomarqueur × chaque score : une analyse **croisée** |
+| `cor_compute(d, x = "IL6", y = "fatigue")` | **une paire** |
+| `..., covariates = c("age", "sex")` | dans tous les cas : des corrélations **partielles** |
+
 ## Calculer toutes les corrélations
 
 ```{r}
 vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition", "BIN_CRP", "BIN_IL6")
-cm <- cor_test_matrix(d, vars, method = "spearman")
+cm <- cor_compute(d, vars, labels = lab)
 cm
 ```
 
@@ -36,57 +45,64 @@ Corrélation de Spearman, observations complètes paire par paire, **p-values br
 
 ## Ce que contient le résultat
 
+`summary()` décrit l'analyse et le contenu de l'objet :
+
+```{r}
+summary(cm)
+```
+
+Et chaque élément s'obtient directement :
+
 ::: {.panel-tabset}
 
+### Tableau `$table`
 
-### Coefficients `$r`
-
-La matrice des coefficients, symétrique, avec 1 sur la diagonale.
-
-```{r}
-round(cm$r, 2)
-```
-
-### p-values `$p`
-
-Les p-values brutes du test de chaque coefficient (`$p_adj` contient les p-values ajustées ; elles sont égales à `$p` quand `p_adjust = "none"`).
+Une ligne par paire de variables : coefficient `r`, intervalle de confiance, p-value brute et ajustée, effectif. C'est le format le plus pratique pour filtrer, trier ou exporter (`as.data.frame(cm)`).
 
 ```{r}
-signif(cm$p, 2)
+head(as.data.frame(cm), 10)
 ```
 
-### Effectifs `$n`
+### Coefficients
+
+`as.matrix()` remet le tableau sous forme de matrice : symétrique, avec 1 sur la diagonale.
+
+```{r}
+round(as.matrix(cm), 2)
+```
+
+### p-values
+
+`what = "p"` pour les p-values brutes, `what = "p_adj"` pour les p-values ajustées (égales aux brutes quand `p_adjust = "none"`).
+
+```{r}
+signif(as.matrix(cm, what = "p"), 2)
+```
+
+### Effectifs
 
 Le nombre d'individus utilisés pour chaque paire : il varie avec les valeurs manquantes.
 
 ```{r}
-cm$n
+as.matrix(cm, what = "n")
 ```
 
-### Intervalles `$ci_low`, `$ci_high`
+### Intervalles
 
 Bornes de l'intervalle de confiance à 95 % de chaque coefficient (transformation z de Fisher).
 
 ```{r}
-round(cm$ci_low, 2)
-round(cm$ci_high, 2)
+round(as.matrix(cm, what = "ci_low"), 2)
+round(as.matrix(cm, what = "ci_high"), 2)
 ```
 
-### Tableau long `$long`
-
-Une ligne par paire de variables : c'est le format le plus pratique pour filtrer, trier ou exporter.
-
-```{r}
-head(as.data.frame(cm$long), 10)
-```
-
-### Types et paramètres
+### Paramètres `$meta`
 
 Le type de chaque variable (les binaires sont traitées à part) et les paramètres du calcul, repris automatiquement dans les légendes.
 
 ```{r}
-cm$types
-str(unclass(cm)[c("method", "engine", "p_adjust", "ci", "ci_engine")])
+cm$meta$x_types
+str(cm$meta[c("mode", "meth", "partial", "p_adjust", "ci", "engine")])
 ```
 
 :::
@@ -94,17 +110,29 @@ str(unclass(cm)[c("method", "engine", "p_adjust", "ci", "ci_engine")])
 ## La matrice de corrélation
 
 ```{r}
-plot_cor_heatmap(cm, labels = lab)
+plot(cm)
 ```
 
-* **Sous-titre** : méthode, effectif, fonction qui a fait le calcul.
+* **Sous-titre** : méthode, ajustement, effectif, fonction qui a fait le calcul.
 * **Cases** : coefficient et étoiles ; couleur de −1 (bleu) à +1 (rouge).
 * **Bloc du bas** : les variables binaires `[0/1]`, dont le coefficient n'est pas sur la même échelle que celui des variables continues.
 * **Légende** : statut des p-values, ordre des variables, formule du coefficient et lecture des cases binaires.
 
+## Ce que l'on peut faire de l'objet
+
+| Fonction | Résultat |
+|---|---|
+| `print(res)` | les coefficients et leurs étoiles |
+| `summary(res)` | les caractéristiques de l'analyse et le contenu de l'objet |
+| `plot(res)` ou `autoplot(res)` | un `ggplot` : `type = "heatmap"` (défaut), `"forest"` ou `"scatter"` |
+| `tbl_cor(res)` | un tableau `gt` : `layout = "matrix"`, `"wide"` ou `"long"` |
+| `as.matrix(res, what = )` | une matrice de `r`, `p`, `p_adj`, `n`, `ci_low` ou `ci_high` |
+| `as.data.frame(res)` | le tableau long, une ligne par paire |
+| `cor_binary_effects(res)` | les tailles d'effet des variables binaires |
+
 ## Et ensuite
 
-* [Analyse complète d'une matrice](workflow.qmd) : la même analyse en détail, avec les options de la heatmap et les tableaux ;
+* [Analyse complète d'une matrice](workflow.qmd) : la même analyse en détail, avec toutes les sorties et leurs options ;
 * [Corrections pour tests multiples](p-values.qmd) : quand et comment ajuster les p-values ;
 * [Comparer les coefficients](methods-comparison.qmd) : Pearson, Spearman, Kendall et les coefficients robustes ;
 * [Corrélations croisées et partielles](partial-cross.qmd) : biomarqueurs × scores, corrélations partielles ;
