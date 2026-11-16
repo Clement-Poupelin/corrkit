@@ -16,7 +16,7 @@
 
 \item{pair}{\code{type = "scatter"}: the two variables of the pair}
 
-\item{...}{passed to the plotting function (\code{labels}, \code{title}, \code{base_size}, \code{palette}...)}
+\item{...}{passed to the plotting function (\code{labels}, \code{title}, \code{base_size}, \code{palette} for the heatmap and the forest plot; \code{smooth}, \code{point_colour}... for the scatter plot)}
 }
 \value{
 a ggplot

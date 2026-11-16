@@ -13,10 +13,15 @@ plot_cor_pair(
   meth = c("spearman", "pearson", "kendall"),
   engine = c("ppcor", "base"),
   ci = 0.95,
+  smooth = NULL,
+  smooth_args = list(),
+  se = TRUE,
+  point_colour = "#0072B2",
+  line_colour = "#D55E00",
+  group_colours = c("#56B4E9", "#E69F00"),
   bin_mark = " [0/1]",
   base_size = 11,
-  title = NULL,
-  palette = COR_PAL
+  title = NULL
 )
 }
 \arguments{
@@ -34,13 +39,27 @@ plot_cor_pair(
 
 \item{ci}{confidence level of the interval (\code{NULL} = none); Fisher z on n - k}
 
+\item{smooth}{fitted curve, passed to \code{ggplot2::geom_smooth(method = )}:
+\code{"lm"}, \code{"loess"}, \code{"gam"}, \code{"glm"}, a function, or \code{"none"} for no curve.
+\code{NULL} (default) = \code{"lm"} for Pearson and partial correlations, \code{"loess"}
+for Spearman and Kendall.}
+
+\item{smooth_args}{list of other arguments of \code{ggplot2::geom_smooth()},
+e.g. \code{list(span = 0.5)} for LOESS or \code{list(formula = y ~ poly(x, 2))}}
+
+\item{se}{draw the confidence band of the curve}
+
+\item{point_colour}{colour of the points (scatter plots)}
+
+\item{line_colour}{colour of the curve and its band}
+
+\item{group_colours}{colours of the two groups (binary variable), lower level first}
+
 \item{bin_mark}{marker appended to the label of a binary variable}
 
 \item{base_size}{base font size}
 
 \item{title}{title (default "\if{html}{\out{<y>}} vs \if{html}{\out{<x>}}")}
-
-\item{palette}{colours (named low / high); \code{high} is used for the line and the means}
 }
 \value{
 a ggplot
@@ -48,19 +67,26 @@ a ggplot
 \description{
 What is drawn is what the coefficient measures:
 \itemize{
-\item two continuous variables, unadjusted: scatter plot of the raw values,
-least-squares line (Pearson) or LOESS curve (Spearman, Kendall: monotonic trend);
+\item two continuous variables, unadjusted: scatter plot of the raw values with
+a fitted curve; by default a least-squares line for Pearson (r measures a
+straight line) and a LOESS curve for Spearman and Kendall (monotonic trend);
 \item one binary variable, unadjusted: the continuous variable by group (box,
 points, diamond = mean), with r_rb and the difference in means
 (\code{\link[=cor_binary_effects]{cor_binary_effects()}});
 \item with covariates: added-variable plot, i.e. residuals of y against
 residuals of x on the covariates (ranks for Spearman), whose correlation
-IS the partial correlation.
+IS the partial correlation; by default a least-squares line.
 }
+}
+\details{
+Default colours come from the Okabe-Ito palette, readable with the common
+colour-vision deficiencies.
 }
 \examples{
 d <- simulate_cor_data(150)
 plot_cor_pair(d, "IL6", "fatigue", labels = attr(d, "labels"))
+plot_cor_pair(d, "IL6", "fatigue", smooth = "lm")
+plot_cor_pair(d, "IL6", "fatigue", smooth = "loess", smooth_args = list(span = 0.5))
 plot_cor_pair(d, "BIN_CRP", "depression", labels = attr(d, "labels"))
 plot_cor_pair(d, "NfL", "cognition", covariates = "age", meth = "pearson")
 }
