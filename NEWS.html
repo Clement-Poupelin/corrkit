@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -182,6 +182,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>One computing function, <code>cor_compute()</code></strong>, replaces <code>cor_test_matrix()</code> and <code>cor_cross()</code>: <code>y = NULL</code> gives every pair of <code>x</code> (matrix), <code>y</code> gives the cross analysis <code>x</code> x <code>y</code>, one <code>x</code> and one <code>y</code> a single pair; <code>covariates</code> works in every case (partial correlation matrices are new). One result class, <code>cor_result</code>.</li>
 <li>Methods of <code>cor_result</code>: <code>print()</code>, <code>summary()</code> (settings, variables, strongest pairs, content of the object), <code>plot()</code> and <code>autoplot()</code> with <code>type = "heatmap"</code>, <code>"forest"</code> or <code>"scatter"</code>, <code>as.matrix(what = )</code>, <code>as.data.frame()</code>.</li>
 <li>New <code>plot_cor_forest()</code>: each coefficient with its confidence interval.</li>
+<li><code>plot_cor_pair()</code>: choice of the fitted curve (<code>smooth = "lm"</code>, <code>"loess"</code>, <code>"gam"</code>, <code>"glm"</code>, a function or <code>"none"</code>, plus <code>smooth_args</code> and <code>se</code>; default <code>"lm"</code> for Pearson and partial correlations, <code>"loess"</code> for Spearman and Kendall), colour-blind-safe default colours (Okabe-Ito: <code>point_colour</code>, <code>line_colour</code>, <code>group_colours</code>), shorter axis titles for the added-variable plot. The <code>palette</code> argument is removed.</li>
 <li><code>tbl_cor(layout = "matrix" | "wide" | "long")</code> replaces <code>tbl_cor_matrix()</code>, <code>tbl_cor_cross()</code> and <code>tbl_cor_long()</code>.</li>
 <li><code>plot_cor_heatmap()</code> takes a <code>cor_result</code> and draws a triangle (matrix) or a rectangle (cross); <code>plot_cor_cross()</code> is removed.</li>
 <li><code>cor_binary_effects()</code> also accepts a <code>cor_result</code>.</li>

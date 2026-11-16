@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5de16f5e46225c21e2daa90d340bf64f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0f5a7f8b0895f6d4163aee984048f85.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a670daba4d2f49eaa6a8c07304dd7f9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -189,6 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+  <li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
   <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul>
@@ -201,13 +202,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>What is drawn is what the coefficient measures:</p>
 <ul>
 <li>
-<p>two continuous variables, unadjusted: scatter plot of the raw values, least-squares line (Pearson) or LOESS curve (Spearman, Kendall: monotonic trend);</p>
+<p>two continuous variables, unadjusted: scatter plot of the raw values with a fitted curve; by default a least-squares line for Pearson (r measures a straight line) and a LOESS curve for Spearman and Kendall (monotonic trend);</p>
 </li>
 <li>
 <p>one binary variable, unadjusted: the continuous variable by group (box, points, diamond = mean), with r_rb and the difference in means (<code><a href="https://clement-poupelin.github.io/corrkit/man/cor_binary_effects.html">cor_binary_effects()</a></code>);</p>
 </li>
 <li>
-<p>with covariates: added-variable plot, i.e.&nbsp;residuals of y against residuals of x on the covariates (ranks for Spearman), whose correlation IS the partial correlation.</p>
+<p>with covariates: added-variable plot, i.e.&nbsp;residuals of y against residuals of x on the covariates (ranks for Spearman), whose correlation IS the partial correlation; by default a least-squares line.</p>
 </li>
 </ul></section><section id="usage" class="level3"><h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">plot_cor_pair(
@@ -219,10 +220,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   meth = c("spearman", "pearson", "kendall"),
   engine = c("ppcor", "base"),
   ci = 0.95,
+  smooth = NULL,
+  smooth_args = list(),
+  se = TRUE,
+  point_colour = "#0072B2",
+  line_colour = "#D55E00",
+  group_colours = c("#56B4E9", "#E69F00"),
   bin_mark = " [0/1]",
   base_size = 11,
-  title = NULL,
-  palette = COR_PAL
+  title = NULL
 )
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
@@ -285,6 +291,54 @@ confidence level of the interval (<code>NULL</code> = none); Fisher z on n - k
 </tr>
 <tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="smooth">smooth</code>
+</td>
+<td>
+fitted curve, passed to <code>ggplot2::geom_smooth(method = )</code>: <code>“lm”</code>, <code>“loess”</code>, <code>“gam”</code>, <code>“glm”</code>, a function, or <code>“none”</code> for no curve. <code>NULL</code> (default) = <code>“lm”</code> for Pearson and partial correlations, <code>“loess”</code> for Spearman and Kendall.
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="smooth_args">smooth_args</code>
+</td>
+<td>
+list of other arguments of <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">ggplot2::geom_smooth()</a></code>, e.g.&nbsp;<code>list(span = 0.5)</code> for LOESS or <code>list(formula = y ~ poly(x, 2))</code>
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="se">se</code>
+</td>
+<td>
+draw the confidence band of the curve
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="point_colour">point_colour</code>
+</td>
+<td>
+colour of the points (scatter plots)
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="line_colour">line_colour</code>
+</td>
+<td>
+colour of the curve and its band
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
+<code id="group_colours">group_colours</code>
+</td>
+<td>
+colours of the two groups (binary variable), lower level first
+</td>
+</tr>
+<tr>
+<td style="white-space: collapse; font-family: monospace; vertical-align: top">
 <code id="bin_mark">bin_mark</code>
 </td>
 <td>
@@ -308,15 +362,9 @@ title (default "<y> vs <x>")
 </x></y>
 </td>
 </tr>
-<tr>
-<td style="white-space: collapse; font-family: monospace; vertical-align: top">
-<code id="palette">palette</code>
-</td>
-<td>
-colours (named low / high); <code>high</code> is used for the line and the means
-</td>
-</tr>
-</tbody></table></section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
+</tbody></table></section><section id="details" class="level3"><h3 class="anchored" data-anchor-id="details">Details</h3>
+<p>Default colours come from the Okabe-Ito palette, readable with the common colour-vision deficiencies.</p>
+</section><section id="value" class="level3"><h3 class="anchored" data-anchor-id="value">Value</h3>
 <p>a ggplot</p>
 </section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
@@ -330,17 +378,31 @@ colours (named low / high); <code>high</code> is used for the line and the means
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"depression"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"IL6"</span>, <span class="st">"fatigue"</span>, smooth <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"IL6"</span>, <span class="st">"fatigue"</span>, smooth <span class="op">=</span> <span class="st">"loess"</span>, smooth_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"BIN_CRP"</span>, <span class="st">"depression"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://clement-poupelin.github.io/corrkit/man/plot_cor_pair.html">plot_cor_pair</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"NfL"</span>, <span class="st">"cognition"</span>, covariates <span class="op">=</span> <span class="st">"age"</span>, meth <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="plot_cor_pair_files/figure-html/unnamed-chunk-1-5.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
