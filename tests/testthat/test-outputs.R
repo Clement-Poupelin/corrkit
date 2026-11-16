@@ -74,3 +74,14 @@ test_that("the notation is converted to subscripts, function names are left alon
   expect_match(out, "cor\\_to\\_ci", fixed = TRUE)
   expect_false(grepl("<sub>to", out, fixed = TRUE))
 })
+
+test_that("plot_cor_pair(): choice of the fitted curve", {
+  for (s in list("lm", "loess", "glm", "none")) expect_s3_class(plot_cor_pair(d, "IL6", "fatigue", smooth = s), "ggplot")
+  expect_s3_class(plot_cor_pair(d, "IL6", "fatigue", smooth = "loess", smooth_args = list(span = 0.5)), "ggplot")
+  expect_s3_class(plot_cor_pair(d, "IL6", "fatigue", smooth = "lm", smooth_args = list(formula = y ~ poly(x, 2))), "ggplot")
+  expect_s3_class(plot(cc, type = "scatter", pair = c("IL6", "fatigue"), smooth = "loess", se = FALSE), "ggplot")
+  p <- plot_cor_pair(d, "IL6", "fatigue")
+  expect_true(any(vapply(p$layers, function(l) inherits(l$geom, "GeomSmooth"), logical(1))))
+  p0 <- plot_cor_pair(d, "IL6", "fatigue", smooth = "none")
+  expect_false(any(vapply(p0$layers, function(l) inherits(l$geom, "GeomSmooth"), logical(1))))
+})

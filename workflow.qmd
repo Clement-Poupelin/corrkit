@@ -1,0 +1,236 @@
+---
+title: "Analyse complète d'une matrice de corrélation"
+vignette: >
+  %\VignetteIndexEntry{Analyse complète d'une matrice de corrélation}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+fig-width: 8
+fig-height: 8
+---
+
+Cette vignette reprend le début de [Prise en main](corrkit.qmd) et le détaille : d'où viennent les calculs, toutes les sorties d'une matrice de corrélation, leurs options et leur lecture.
+
+## L'idée : ne rien recalculer, tout expliquer
+
+`corrkit` ne contient **aucun nouvel estimateur**. Chaque coefficient, chaque p-value et chaque intervalle vient d'une fonction existante et validée ; le package ajoute par-dessus une manière de travailler et des sorties qui disent ce qu'elles montrent.
+
+| Ce qui est calculé | Fonction utilisée | Repli si le package manque |
+|---|---|---|
+| Une paire, sans ajustement | `stats::cor.test()` | — |
+| Une paire, partielle | `ppcor::pcor.test()` (Kim 2015) | corrélation des résidus de `stats::lm.fit()` |
+| Toutes les paires (matrice) | `psych::corr.test(adjust = "none")` ou `correlation::correlation(p_adjust = "none")` (Makowski et al. 2020) | `stats::cor.test()` paire par paire |
+| Intervalle de confiance | `correlation::cor_to_ci()` | transformation z de Fisher en R de base |
+| Ajustement pour tests multiples (sur demande) | `stats::p.adjust()` | — |
+| Effets des variables binaires | `stats::t.test()`, `stats::wilcox.test()`, `effectsize::rank_biserial()` | IC de r_rb non calculé |
+
+Une seule fonction calcule, `cor_compute()` ; son résultat se dessine avec `plot()` (un `ggplot`), se met en tableau avec `tbl_cor()` (un tableau `gt`) et se décrit avec `summary()`.
+
+## Données et calcul
+
+`simulate_cor_data()` génère des données dont on connaît la structure : une inflammation latente qui pilote CRP, IL-6, BDNF et le score de dépression ; IL-6 qui pilote la fatigue ; l'âge qui pilote à la fois NfL et la cognition ; et deux versions binaires des marqueurs (CRP coupée à la médiane, IL-6 coupée au 80^e^ percentile).
+
+```{r}
+#| label: setup
+library(corrkit)
+options(corrkit.unicode = TRUE)   # PNG figures: keep the mathematical symbols
+d   <- simulate_cor_data(n = 200)
+lab <- attr(d, "labels")
+str(d)
+```
+
+`lab` est un vecteur nommé variable → libellé ; toutes les fonctions l'acceptent via `labels`.
+
+```{r}
+vars <- c("CRP", "IL6", "BDNF", "NfL", "depression", "fatigue", "cognition", "BIN_CRP", "BIN_IL6")
+cm <- cor_compute(d, vars, method = "spearman", labels = lab)
+cm
+```
+
+Les arguments principaux de `cor_compute()` :
+
+| Argument | Défaut | Rôle |
+|---|---|---|
+| `x`, `y` | — | `y = NULL` : toutes les paires de `x` (matrice) ; `y` donné : `x` × `y` (voir [Corrélations croisées et partielles](partial-cross.qmd)) |
+| `covariates` | `NULL` | covariables d'une corrélation partielle |
+| `method` | `"spearman"` | `"pearson"`, `"kendall"`, ou une méthode robuste du package correlation (voir [Comparer les coefficients](methods-comparison.qmd)) |
+| `p_adjust` | `"none"` | p-values brutes ; `"BH"`, `"holm"`, `"bonferroni"`… pour un ajustement sur les k(k − 1)/2 paires (voir [Corrections pour tests multiples](p-values.qmd)) |
+| `engine` | `"auto"` | sans covariables : `psych::corr.test()`, puis `correlation::correlation()`, puis `stats::cor.test()` ; avec covariables : `ppcor::pcor.test()` |
+| `labels` | `NULL` | libellés des variables, repris par toutes les sorties |
+| `ci` | `0.95` | niveau des intervalles de confiance (`NULL` = aucun) |
+
+## Les sorties
+
+Toutes les sorties partent du même objet `cm`.
+
+::: {.panel-tabset}
+
+### Heatmap
+
+`plot(cm)` appelle `plot_cor_heatmap(cm)`.
+
+```{r}
+plot(cm)
+```
+
+### Forest plot
+
+Chaque coefficient avec son intervalle de confiance : la heatmap montre la structure, le forest plot la précision. Point plein = p < 0,05.
+
+```{r}
+#| fig-height: 9
+plot(cm, type = "forest")
+```
+
+### Nuage de points
+
+Une paire, avec ce que mesure le coefficient ; par défaut la paire la plus corrélée.
+
+```{r}
+#| fig-height: 5
+plot(cm, type = "scatter", pair = c("IL6", "fatigue"))
+```
+
+La courbe est une LOESS pour Spearman et Kendall, une droite des moindres carrés pour Pearson et les corrélations partielles ; `smooth` la change (`"lm"`, `"loess"`, `"gam"`, `"glm"`, `"none"`), `smooth_args` règle ses paramètres :
+
+```{r}
+#| fig-height: 5
+plot(cm, type = "scatter", pair = c("IL6", "fatigue"), smooth = "lm")
+```
+
+### Tableau matrice
+
+Le même résultat que la heatmap, avec la même échelle de couleurs.
+
+```{r}
+tbl_cor(cm)
+```
+
+### Tableau long
+
+Une ligne par paire, avec n, l'intervalle de confiance et la p-value ; lignes significatives en gras.
+
+```{r}
+tbl_cor(cm, layout = "long", sort_by = "abs")
+```
+
+### Console
+
+```{r}
+print(cm)
+summary(cm)
+```
+
+### Données
+
+Le tableau long, pour filtrer, trier ou exporter (`write.csv(as.data.frame(cm), ...)`).
+
+```{r}
+head(as.data.frame(cm), 10)
+```
+
+:::
+
+## Lire une heatmap
+
+* **le sous-titre** donne la méthode, l'effectif (complet par paire : il varie avec les valeurs manquantes) et la fonction qui a fait le calcul ;
+* **chaque case** affiche le coefficient et les étoiles de la p-value ; la couleur suit une échelle unique de −1 (bleu) à +1 (rouge) ;
+* **les variables binaires** sont regroupées dans un bloc à part, car leur coefficient n'est pas sur la même échelle (voir [Variables binaires](binary-variables.qmd)) ;
+* **la légende du bas** rappelle le statut des p-values (brutes, ou ajustées et sur quelle famille), l'ordre des variables, la formule du coefficient et la lecture des cases binaires.
+
+Le sous-titre et les notes des tableaux sont construits par les mêmes fonctions internes que la légende de la heatmap : un graphique et son tableau ne peuvent pas se contredire.
+
+## Options de la heatmap
+
+::: {.panel-tabset}
+
+
+### Ordre d'origine
+
+Par défaut, les variables sont ordonnées par classification hiérarchique (Ward, distance 1 − r) à l'intérieur de chaque bloc, ce qui rapproche les variables qui se ressemblent. `order = "original"` garde l'ordre donné.
+
+```{r}
+plot(cm, order = "original")
+```
+
+### Séparateur simple
+
+`separator = "line"` remplace les facettes par deux traits et garde des cases carrées.
+
+```{r}
+plot(cm, separator = "line")
+```
+
+### Sans valeurs
+
+`show_values = FALSE` ne garde que les couleurs, pour une vue d'ensemble d'une grande matrice.
+
+```{r}
+plot(cm, show_values = FALSE)
+```
+
+### Palette et titre
+
+`palette` (couleurs des corrélations négatives et positives), `title`, `base_size`, `value_size` et `caption_width` règlent l'apparence. Le résultat est un `ggplot` : on peut lui ajouter des couches et des thèmes.
+
+```{r}
+plot(cm, palette = c(low = "#1B7837", high = "#762A83"),
+                 title = "Biomarqueurs et scores", base_size = 11)
+```
+
+:::
+
+## Rendu des formules
+
+Les sous-titres, légendes et titres d'axes utilisent la notation de Makowski et al. (2020). Si le package **ggtext** est installé, elle est composée comme en LaTeX : *r*<sub>s</sub>, *r*<sub>xy.z</sub>, *e*<sub>x.z</sub>, *r*<sub>rb</sub>. Deux options règlent ce rendu :
+
+| Option | Défaut | Effet |
+|---|---|---|
+| `corrkit.markdown` | `TRUE` | avec ggtext : indices et italiques ; `FALSE` : texte simple |
+| `corrkit.unicode` | `FALSE` | `TRUE` garde les vrais symboles (√, −, τ, ≤) |
+
+Le device `pdf()` de R (celui de `ggsave("figure.pdf")` et de `R CMD check`) ne sait pas dessiner √, − ou τ : par défaut, ils sont donc écrits `sqrt`, `-` et `tau`. Pour des figures en PNG, ou en PDF avec `ggsave(..., device = cairo_pdf)`, activez-les ; c'est ce que font ces vignettes :
+
+```{r}
+#| eval: false
+options(corrkit.unicode = TRUE)
+ggplot2::ggsave("heatmap.pdf", plot(cm), width = 8, height = 8, device = cairo_pdf)
+```
+
+La légende de l'échelle de couleur (*r*<sub>s</sub>, τ) est toujours composée, quel que soit le device.
+
+## Choisir le moteur
+
+Les moteurs donnent les mêmes coefficients ; on peut le vérifier :
+
+```{r}
+a <- cor_compute(d, vars, engine = "stats")
+b <- cor_compute(d, vars, engine = "auto")    # psych si installé
+all.equal(as.matrix(a), as.matrix(b))
+```
+
+Pour Kendall, `psych` n'est pas utilisé (il teste τ avec la formule t de r) : `engine = "auto"` passe par `correlation::correlation()` ou `stats::cor.test()`.
+
+```{r}
+ck <- cor_compute(d, vars, method = "kendall", labels = lab)
+plot(ck, title = "Kendall correlations")
+```
+
+## Récapitulatif des fonctions
+
+| Je veux… | Fonction |
+|---|---|
+| toutes les paires d'un ensemble de variables | `cor_compute(d, x)` → `plot()`, `tbl_cor()`, `summary()` |
+| des prédicteurs × des scores, éventuellement ajustés | `cor_compute(d, x, y, covariates)` → `plot()`, `tbl_cor()`, `summary()` |
+| voir une paire et ce que mesure son coefficient | `plot_cor_pair()` |
+| un test pour une paire | `partial_cor_test()` |
+| les effets des variables binaires | `cor_binary_effects()` → `tbl_cor_binary()` |
+| une note de lecture des variables binaires (en ou fr) | `cor_binary_note()` |
+
+## Références
+
+* Makowski D, Ben-Shachar MS, Patil I, Lüdecke D (2020). Methods and algorithms for correlation analysis in R. *Journal of Open Source Software* 5(51):2306. doi:10.21105/joss.02306
+* Kim S (2015). ppcor: an R package for a fast calculation to semi-partial correlation coefficients. *Communications for Statistical Applications and Methods* 22(6):665-674. doi:10.5351/CSAM.2015.22.6.665

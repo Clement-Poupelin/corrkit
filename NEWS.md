@@ -8,6 +8,11 @@
   content of the object), `plot()` and `autoplot()` with `type = "heatmap"`, `"forest"`
   or `"scatter"`, `as.matrix(what = )`, `as.data.frame()`.
 * New `plot_cor_forest()`: each coefficient with its confidence interval.
+* `plot_cor_pair()`: choice of the fitted curve (`smooth = "lm"`, `"loess"`, `"gam"`, `"glm"`,
+  a function or `"none"`, plus `smooth_args` and `se`; default `"lm"` for Pearson and partial
+  correlations, `"loess"` for Spearman and Kendall), colour-blind-safe default colours
+  (Okabe-Ito: `point_colour`, `line_colour`, `group_colours`), shorter axis titles for the
+  added-variable plot. The `palette` argument is removed.
 * `tbl_cor(layout = "matrix" | "wide" | "long")` replaces `tbl_cor_matrix()`,
   `tbl_cor_cross()` and `tbl_cor_long()`.
 * `plot_cor_heatmap()` takes a `cor_result` and draws a triangle (matrix) or a rectangle

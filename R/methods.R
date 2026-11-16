@@ -25,7 +25,7 @@
 #' @param x,object output of [cor_compute()]
 #' @param type `"heatmap"`, `"forest"` or `"scatter"`
 #' @param pair `type = "scatter"`: the two variables of the pair
-#' @param ... passed to the plotting function (`labels`, `title`, `base_size`, `palette`...)
+#' @param ... passed to the plotting function (`labels`, `title`, `base_size`, `palette` for the heatmap and the forest plot; `smooth`, `point_colour`... for the scatter plot)
 #' @return a ggplot
 #' @export
 #' @examples
